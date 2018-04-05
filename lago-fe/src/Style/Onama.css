@@ -1,0 +1,36 @@
+.container-image  {
+	background-image: url('../Images/var2.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+	min-height: 100vh;
+
+}
+
+.about{
+transform: rotate(0deg);
+position:absolute;
+background: rgba(220,230,255,0.2);
+z-index: 3;
+width: 41%;
+height: 50%;
+margin-left: 55%;
+margin-top: 8%;
+}
+.about h1{
+  padding-top: 30px;
+  padding-left: 8px;
+  font-size: 4em;
+  color: white;
+}
+.about p{
+  padding-left: 8px;
+  font-size: 1.5em;
+  color: white;
+}

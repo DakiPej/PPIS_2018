@@ -1,0 +1,138 @@
+.LoginPage  {
+	background-image: url('../Images/login.jpeg');
+	background-position: center;
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	position: relative;
+	min-height: 100vh;
+
+}
+
+.container-fluid {
+	transform: rotate(0deg);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+	pointer-events: all;
+	background: rgba(91,192,222,0.3);
+}
+
+.forma{
+transform: rotate(0deg);
+background: rgba(220,230,241,0.7);
+width: 40%;
+height: 40%;
+margin-left: 30%;
+margin-right: 30%;
+margin-top: 10%;
+
+}
+
+.v-center{
+	width: 100%;
+	padding-left: 20%;
+	padding-right: 20%;
+	padding-bottom: 20%;
+	padding-top: 10%;
+	margin: 0;
+}
+h1, h2, h4,h5 {
+	font-family: 'Open Sans', sans-serif;
+	color: #white;
+}
+
+strong {
+	letter-spacing: 1px;
+}
+
+
+.login-input-wrapper
+{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.login-input::focus::-webkit-input-placeholder
+{
+	display: none;
+}
+
+.login-input
+{
+	width: 100%;
+	height: 50px;
+	font-size: 1.2em;
+	background-color: transparent;
+	border-style: none;
+	border-bottom: 1px solid #293b70;
+	color: #293b70;
+	text-align: center;
+}
+::-webkit-input-placeholder {
+    color:    #293b70;
+		opacity: 0.9!important;
+}
+.login-input:focus
+{
+
+	outline: none!important;
+	color: #293b70;
+
+}
+.glyphicon{
+	color: #293b70;
+}
+input[type="submit"] {
+	float: right;
+	padding: .5em 2em;
+}
+
+.naslov{
+	padding-bottom: 2em;
+}
+
+.dno {
+	margin-bottom: 2em;
+}
+
+.footer-wrapper {
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+.footer-wrapper span:first-child {
+	float: left;
+}
+
+.footer-wrapper span:last-child {
+	float: right;
+}
+
+.btn-login
+{
+  margin: 1%;
+	width: 70%;
+	height: 20px;
+	background-color:#29aaf4 !important;
+	color: white;
+  border-color: #29aaf4 !important;
+	text-decoration-style: bold;
+  transition: all .5s!important;
+  height: 50px;
+  font-size: 1.6em;
+  border-radius: 3px;
+	font-weight: 600!important;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.btn-primary.btn-outline:hover
+ {
+    background-color: #5bc0de!important;
+    border-color: #fff!important;
+}
