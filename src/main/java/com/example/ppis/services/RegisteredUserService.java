@@ -6,14 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ppis.controllers.forms.LoginUserForm;
+import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.repositories.RegisteredUserRepository;
 
 @Service
 public class RegisteredUserService {
 	
+	RegisteredUserDAO registeredUserDao; 
+	
 	@Autowired
-	RegisteredUserRepository registeredUserRepository;
+	public void setRegisteredUserDAO (RegisteredUserDAO registeredUserDao)	{
+		this.registeredUserDao = registeredUserDao;
+	}
 
 	public String login(LoginUserForm loginUser) throws ServletException{
 		if(loginUser.getUsername() == null || loginUser.getUsername().isEmpty())
@@ -22,7 +27,7 @@ public class RegisteredUserService {
 			throw new ServletException("Password polje ne smije biti prazno.");
 		
 		try {
-			String userEmail = registeredUserRepository.findUser(loginUser.getUsername(), loginUser.getPassword());
+			String userEmail = registeredUserDao.findUser(loginUser.getUsername(), loginUser.getPassword());
 			return userEmail;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
