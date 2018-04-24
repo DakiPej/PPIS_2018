@@ -34,7 +34,6 @@ public class Incident {
 	@ManyToOne
 	private Services services;
 	
-	@NotNull
 	@ManyToOne
 	private Department department;
 	
@@ -46,9 +45,9 @@ public class Incident {
 	@Size(max = 2000)
 	private String description;
 	
-	@NotNull
 	private Integer priority;
 	
+	@NotNull
 	private Integer urgency;
 	
 	@NotNull

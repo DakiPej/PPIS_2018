@@ -1,10 +1,14 @@
 package com.example.ppis.models;
 
+import java.sql.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,7 +21,11 @@ public class IncidentMessage {
 	
 	@NotNull
 	@ManyToOne
-	private RegisteredUser registeredUser;
+	private RegisteredUser sender;
+	
+	@NotNull
+	@ManyToOne
+	private RegisteredUser reciever;
 	
 	@NotNull
 	@ManyToOne
@@ -27,6 +35,10 @@ public class IncidentMessage {
 	@Size(max = 2000)
 	private String message;
 
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date date;
+
 	public Long getId() {
 		return id;
 	}
@@ -35,12 +47,20 @@ public class IncidentMessage {
 		this.id = id;
 	}
 
-	public RegisteredUser getRegisteredUser() {
-		return registeredUser;
+	public RegisteredUser getSender() {
+		return sender;
 	}
 
-	public void setRegisteredUser(RegisteredUser registeredUser) {
-		this.registeredUser = registeredUser;
+	public void setSender(RegisteredUser sender) {
+		this.sender = sender;
+	}
+
+	public RegisteredUser getReciever() {
+		return reciever;
+	}
+
+	public void setReciever(RegisteredUser reciever) {
+		this.reciever = reciever;
 	}
 
 	public Incident getIncident() {
@@ -57,5 +77,13 @@ public class IncidentMessage {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

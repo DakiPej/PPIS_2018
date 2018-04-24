@@ -31,7 +31,6 @@ public class Request {
 	@ManyToOne
 	private ContactMethod contactMethod;
 	
-	@NotNull
 	@ManyToOne
 	private Department department;
 	
@@ -43,9 +42,9 @@ public class Request {
 	@Size(max = 2000)
 	private String description;
 	
-	@NotNull
 	private Integer priority;
 	
+	@NotNull
 	private Integer urgency;
 	
 	@NotNull
