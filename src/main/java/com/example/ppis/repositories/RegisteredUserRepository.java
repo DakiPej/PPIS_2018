@@ -13,4 +13,6 @@ public interface RegisteredUserRepository extends CrudRepository<RegisteredUser,
 	
 	@Query("SELECT u FROM RegisteredUser u WHERE u.username = :username")
 	RegisteredUser findByUsername(@Param("username") String username);
+	
+	RegisteredUser findDistinctRegisteredUserByUsername(String username);
 }

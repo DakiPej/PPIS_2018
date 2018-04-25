@@ -7,5 +7,11 @@ import com.example.ppis.repositories.UserTypeRepository;
 
 @Repository
 public class UserTypeDAO extends BaseDAO<UserType, UserTypeRepository>{
-
+	public Long count() {
+		return this.repo.count();
+	}
+	
+	public UserType findUserTypeByName(String typeName) {
+		return this.repo.findDistinctUserTypeByTypeName(typeName);
+	}
 }

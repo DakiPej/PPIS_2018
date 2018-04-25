@@ -8,4 +8,7 @@ import com.example.ppis.repositories.ServicesRepository;
 @Repository
 public class ServicesDAO extends BaseDAO<Services, ServicesRepository>{
 
+	public Long count() {
+		return this.repo.count();
+	}
 }
