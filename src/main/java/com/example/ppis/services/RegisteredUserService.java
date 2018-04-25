@@ -33,7 +33,11 @@ public class RegisteredUserService {
 			System.out.println(e.getMessage());
 			throw new ServletException("RegiseredUserService Login exception");
 		}
-
+	}
+	
+	public String createRegisteredUser()	{
+		
+		return ""; 
 	}
 
 	

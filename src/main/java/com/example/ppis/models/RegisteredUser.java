@@ -1,10 +1,13 @@
 package com.example.ppis.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -42,6 +45,10 @@ public class RegisteredUser {
 	@Size(min = 8, max = 20)
 	@NotNull
 	private String password;
+	
+	@NotNull
+	@ManyToMany
+	private List<Services> servisi; 
 
 	public Long getId() {
 		return id;
@@ -97,5 +104,13 @@ public class RegisteredUser {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<Services> getServisi() {
+		return servisi;
+	}
+
+	public void setServisi(List<Services> servisi) {
+		this.servisi = servisi;
 	}
 }

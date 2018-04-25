@@ -1,9 +1,12 @@
 package com.example.ppis.models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,6 +20,9 @@ public class Services {
 	@NotNull
 	@Size(max = 30)
 	private String departmentName;
+	
+	@ManyToMany
+	private List<RegisteredUser> korisnici; 
 
 	public Long getId() {
 		return id;
@@ -32,5 +38,13 @@ public class Services {
 
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
+	}
+
+	public List<RegisteredUser> getKorisnici() {
+		return korisnici;
+	}
+
+	public void setKorisnici(List<RegisteredUser> korisnici) {
+		this.korisnici = korisnici;
 	}
 }
