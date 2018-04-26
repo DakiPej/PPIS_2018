@@ -56,7 +56,7 @@ class UserProfile extends Component {
                 </Sidebar>
                 <div id="inner-content-wrapper">
                   <Route path="/profile" component={Details}/>
-                  
+
                 </div>
               </div>
             </Router>

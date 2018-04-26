@@ -14,52 +14,34 @@ class Details extends Component {
 				<div className="row">
 			<h1 className="main-naslov">Pregled korisničkog profila</h1>
 			</div>
-	<div className="form-horizontal profil-forma center-block">
+			<div className="form-horizontal profil-forma center-block">
+
 					<div className="form-group profil-form-group">
-						<label  className="col-sm-2 control-label">Korisničko ime:</label>
+						<label  className="col-sm-8  ">Korisničko ime:</label>
 								<span>sbecirovic</span>
 				 	</div>
 					<hr className="separator"/>
 			  <div className="form-group profil-form-group">
-			    <label  className="col-sm-2 control-label">Ime:</label>
-							<span>Šeila</span>
+			    <label  className="col-sm-8  ">Ime i prezime:</label>
+							<span>Šeila Bećirović</span>
 			 </div>
-			<hr className="separator"/>
-			 <div className="form-group profil-form-group">
-				 <label  className="col-sm-2 control-label">Prezime:</label>
-						 <span>Bećirović</span>
-			</div>
-			<hr className="separator"/>
-			<div className="form-group profil-form-group">
-				<label  className="col-sm-2 control-label">JMBG:</label>
-						<span>0112995177652</span>
-		 </div>
-		 <hr className="separator"/>
-		 <div className="form-group profil-form-group">
-			 <label  className="col-sm-2 control-label">Datum rođenja:</label>
-					 <span>01.12.1995.</span>
-		</div>
 		<hr className="separator"/>
 		<div className="form-group profil-form-group">
-		 <label  className="col-sm-2 control-label">Broj kartice:</label>
+		 <label  className="col-sm-8  ">Broj računa:</label>
 				 <span>0120984029840</span>
+
 	 </div>
-	 <hr className="separator"/>
-	 <div className="form-group profil-form-group">
-		 <label  className="col-sm-2 control-label">Adresa:</label>
-				 <span>R Boskovica 384</span>
-	</div>
 	<hr className="separator"/>
 	<div className="form-group profil-form-group">
- 	 <label  className="col-sm-2 control-label">Telefon:</label>
+ 	 <label  className="col-sm-8  ">Telefon:</label>
  			 <span>061451122</span>
  	 </div>
 	 <hr className="separator"/>
  	<div className="form-group profil-form-group">
-		<label  className="col-sm-2 control-label">Email:</label>
+		<label  className="col-sm-8  ">Email:</label>
 				<span>seilabecirovic</span>
  	</div>
-	<hr className="separator"/>
+	 <hr className="separator"/>
 </div>
 
 </div>
