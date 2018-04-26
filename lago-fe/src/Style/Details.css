@@ -4,21 +4,31 @@
 .main-naslov {
   margin: 0;
   padding: 1em 0;
-  color: #293b70;
+  color: #117a8b!important;
   font-family: 'Open Sans', sans-serif;
 }
 
-.podnaslov {
-  margin: 0;
-  padding: 0.1em 0 1em 0;
-  text-align: left;
-  color: #126796;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 24px;
-}
 
 @media (min-width: 768px){
   .content{
     padding-right: 30px;
   }
+}
+
+.profil-form-group{
+  padding: 0;
+  margin-bottom:  0;
+}
+.form-group{
+  color: #343a40;
+  padding-bottom: 0;
+  margin-bottom:  0.1rem!important;
+    font-size: 1.4em;
+}
+
+.separator{
+  margin-top: 0;
+  padding:0;
+  height: 1px;
+	border-color: #73A2A6!important;
 }

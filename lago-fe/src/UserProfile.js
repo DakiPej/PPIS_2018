@@ -60,6 +60,7 @@ class UserProfile extends Component {
                   <Route path="/profile" component={Details}/>
                   <Route path="/zahtjevi" component= {Zahtjevi }/>
                   <Route path="/incidenti" component={Incidenti}/>
+
                 </div>
               </div>
             </Router>
