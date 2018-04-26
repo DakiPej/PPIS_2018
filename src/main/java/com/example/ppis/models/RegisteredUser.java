@@ -46,7 +46,6 @@ public class RegisteredUser {
 	@NotNull
 	private String password;
 	
-	@NotNull
 	@ManyToMany
 	private List<Services> services; 
 

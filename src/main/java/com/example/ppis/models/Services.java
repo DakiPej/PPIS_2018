@@ -19,11 +19,8 @@ public class Services {
 	
 	@NotNull
 	@Size(max = 30)
-	private String departmentName;
+	private String serviceName;
 	
-	@ManyToMany
-	private List<RegisteredUser> korisnici; 
-
 	public Long getId() {
 		return id;
 	}
@@ -32,19 +29,11 @@ public class Services {
 		this.id = id;
 	}
 
-	public String getDepartmentName() {
-		return departmentName;
+	public String getServiceName() {
+		return serviceName;
 	}
 
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-
-	public List<RegisteredUser> getKorisnici() {
-		return korisnici;
-	}
-
-	public void setKorisnici(List<RegisteredUser> korisnici) {
-		this.korisnici = korisnici;
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 }

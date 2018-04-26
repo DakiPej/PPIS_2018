@@ -11,6 +11,10 @@ import com.example.ppis.repositories.RegisteredUserRepository;
 @Repository
 public class RegisteredUserDAO extends BaseDAO<RegisteredUser, RegisteredUserRepository>{
 	
+	public Long count() {
+		return this.repo.count();
+	}
+	
 	public String findUser(String username, String password)	{
 		String email; 
 		try {
@@ -26,12 +30,19 @@ public class RegisteredUserDAO extends BaseDAO<RegisteredUser, RegisteredUserRep
 		try {
 			user = this.repo.findByUsername(username);
 		} catch (Exception e) {
-			return null; 
+			throw e;  
 		}
 		return user; 
 	}
 	
-	public List<Service> getAllByServices(Services service)	{
-		
+	public List<Services> getAllServices(String username)	{
+		List<Services> services ; 
+		try {
+			services = this.repo.findByUsername(username).getServices();
+		} catch (Exception e) {
+			throw e; 
+		}
+		return services; 
 	}
+	
 }
