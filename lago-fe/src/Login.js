@@ -8,8 +8,14 @@ import './Style/Login.css';
 class Login extends Component {
   constructor(props){
     super(props);
+    this.state = {username: '', password: ''};
+    this.onLogin = this.onLogin.bind(this);
+
   }
 
+  onLogin(){
+      this.state.ulogovan=true;
+  }
 
   render() {
     return (
@@ -33,7 +39,7 @@ class Login extends Component {
                   </div>
                </div>
                 <div className="form-group">
-                  <button type="button" className="btn btn-primary btn-outline btn-login" >PRIJAVITE SE</button>
+                  <button type="button" className="btn btn-primary btn-outline btn-login" onClick={this.onLogin}>PRIJAVITE SE</button>
                 </div>
 
               </form>

@@ -13,6 +13,7 @@ import Pocetna from './Pocetna';
 import Login from './Login';
 import Onama from './Onama';
 import Ponuda from './Ponuda';
+import UserProfile from './UserProfile';
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
               <Route exact path="/ponuda" component={Ponuda}/>
               <Route exact path="/onama" component={Onama}/>
               <Route exact path="/prijava" component={Login}/>
+              <Route exact path="/profile" component={UserProfile}/>
             </div>
           </Router>
 
