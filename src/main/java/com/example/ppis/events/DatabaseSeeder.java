@@ -139,7 +139,7 @@ public class DatabaseSeeder {
 			s.setServiceName("proba");
 			servicesDAO.create(s);
 
-			RegisteredUser ru = registeredUserDAO.findByUsername("hamster");
+			RegisteredUser ru = registeredUserDAO.findUserByUsername("hamster");
 			List<Services> ss = Arrays.asList(s);
 			
 			ru.setServices(ss);

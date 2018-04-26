@@ -16,6 +16,7 @@ import logo from './Images/lago.png';
 class Navi extends React.Component {
   constructor(props) {
     super(props);
+
     this.toggle = this.toggle.bind(this);
         this.state = {
           isOpen: false
@@ -44,9 +45,14 @@ class Navi extends React.Component {
               <NavItem>
                 <NavLink className="text-white h4" href="/onama">O nama</NavLink>
               </NavItem>
+              {this.state.ulogovan ?
+                <NavItem>
+                  <NavLink className="text-info h4" href="/prijava">Ma nemoj</NavLink>
+                </NavItem> :
               <NavItem>
                 <NavLink className="text-info h4" href="/prijava">Prijava</NavLink>
               </NavItem>
+            }
             </Nav>
           </Collapse>
         </Navbar>
