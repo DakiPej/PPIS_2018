@@ -48,7 +48,7 @@ public class RegisteredUser {
 	
 	@NotNull
 	@ManyToMany
-	private List<Services> servisi; 
+	private List<Services> services; 
 
 	public Long getId() {
 		return id;
@@ -106,11 +106,11 @@ public class RegisteredUser {
 		this.password = password;
 	}
 
-	public List<Services> getServisi() {
-		return servisi;
+	public List<Services> getServices() {
+		return services;
 	}
 
-	public void setServisi(List<Services> servisi) {
-		this.servisi = servisi;
+	public void setServices(List<Services> services) {
+		this.services = services;
 	}
 }
