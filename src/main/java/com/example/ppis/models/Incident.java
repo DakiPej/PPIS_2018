@@ -92,7 +92,8 @@ public class Incident {
 		this.urgency = urgency; 
 		this.contactInfo = contactInfo; 
 		this.createdDate = new Date(); 
-		this.closed = null; 
+		this.closedDate = null; 
+		this.closed = false; 
 		this.resolved = false; 
 	}
 	public Boolean getResolved() {
