@@ -2,6 +2,7 @@ package com.example.ppis.models;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class Services {
 	
 	@NotNull
 	@Size(max = 30)
+	@Column(unique=true)
 	private String serviceName;
 	
 	public Long getId() {

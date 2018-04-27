@@ -7,5 +7,7 @@ import com.example.ppis.repositories.DepartmentRepository;
 
 @Repository
 public class DepartmentDAO extends BaseDAO<Department, DepartmentRepository>{
-
+    public Department getDepartmentByName(String departmentName) {
+        return this.repo.findDepartmentByDepartmentName(departmentName);
+    }
 }
