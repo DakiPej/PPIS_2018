@@ -1,5 +1,6 @@
 package com.example.ppis.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -48,7 +49,27 @@ public class RegisteredUser {
 	
 	@ManyToMany
 	private List<Services> services; 
-
+	
+	public RegisteredUser()	{
+		
+	}
+	public RegisteredUser(UserType userType
+			, String firstname
+			, String lastname
+			, String email
+			, String username
+			, String password)	{
+		
+		this.userType = userType; 
+		this.firstname = firstname; 
+		this.lastname = lastname; 
+		this.email = email; 
+		this.username = username; 
+		this.password = password; 
+		
+		this.services = new ArrayList<Services> (); 
+	}
+	
 	public Long getId() {
 		return id;
 	}

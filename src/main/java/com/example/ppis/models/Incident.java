@@ -64,6 +64,37 @@ public class Incident {
 	@Column(columnDefinition="BIT")
 	private Boolean resolved;
 	
+	public Incident()	{
+		
+	}
+	
+	public Incident(RegisteredUser registeredUser
+			//, RegisteredUser resolverUser
+			, ContactMethod contactMethod
+			, Services services 
+			, Department department
+			, String title
+			, String description
+			, int priority 
+			, int urgency
+			, String contactInfo
+			//, Date createDate
+			//, Date closedDate)	
+				)	{
+		
+		this.resolverUser = new RegisteredUser(); 
+		this.contactMethod = contactMethod; 
+		this.services = services; 
+		this.department = department; 
+		this.title = title; 
+		this.description = description; 
+		this.priority = priority; 
+		this.urgency = urgency; 
+		this.contactInfo = contactInfo; 
+		this.createdDate = new Date(); 
+		this.closed = null; 
+		this.resolved = false; 
+	}
 	public Boolean getResolved() {
 		return resolved;
 	}
