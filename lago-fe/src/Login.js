@@ -28,7 +28,7 @@ class Login extends Component {
 
                 <div className="login-input-wrapper">
                   <div className="form-group has-feedback">
-                      <input className=" colors login-input" placeholder="Korisničko ime" onfocus="{this.placeholder = ''}" onblur="{this.placeholder = 'Korisničko ime'}"
+                      <input className=" colors login-input" placeholder="Korisničko ime" onFocus="{this.placeholder = ''}" onBur="{this.placeholder = 'Korisničko ime'}"
                           type="text"  />
                       <i className="glyphicon glyphicon-user form-control-feedback pull-left" aria-hidden="true" />
                   </div>

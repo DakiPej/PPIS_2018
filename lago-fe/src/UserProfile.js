@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Sidebar, SidebarItem } from 'react-responsive-sidebar';
+import Zahtjevi from './Forms/Zahtjevi';
+import Incidenti from './Forms/Incidenti';
 import './Style/UserProfile.css';
 
 
@@ -56,7 +58,9 @@ class UserProfile extends Component {
                 </Sidebar>
                 <div id="inner-content-wrapper">
                   <Route path="/profile" component={Details}/>
-                  
+                  <Route path="/zahtjevi" component= {Zahtjevi }/>
+                  <Route path="/incidenti" component={Incidenti}/>
+
                 </div>
               </div>
             </Router>
