@@ -38,7 +38,23 @@ public class RequestMessage {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
-
+	
+	public RequestMessage ()	{
+		
+	}
+	
+	public RequestMessage (RegisteredUser sender
+			, RegisteredUser receiver
+			, Request request
+			, String message
+			)	{
+		
+		this.sender = sender ;
+		this.reciever = receiver ; 
+		this.request = request ; 
+		this.message = message ; 
+		date = new Date() ; 
+	}
 	public Long getId() {
 		return id;
 	}

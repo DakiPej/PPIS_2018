@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.ppis.models.ContactMethod;
+import com.example.ppis.models.Department;
 import com.example.ppis.models.Incident;
 import com.example.ppis.models.RegisteredUser;
 
@@ -24,6 +25,8 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	
 	public List<Incident> findAllByContactMethod(ContactMethod contactMethod);
 	
-	public Incident findByTitle(String title); 
+	public List<Incident> findAllByDepartment(Department department);
+	
+	public List<Incident> findAllByTitle(String title); 
 	
 }
