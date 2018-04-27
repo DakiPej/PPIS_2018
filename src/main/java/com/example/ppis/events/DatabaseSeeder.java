@@ -1,13 +1,11 @@
 package com.example.ppis.events;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.example.ppis.dao.RegisteredUserDAO;
@@ -23,7 +21,7 @@ public class DatabaseSeeder {
 	UserTypeDAO userTypeDAO;
 	RegisteredUserDAO registeredUserDAO;
 	ServicesDAO servicesDAO;
-	
+
 	@Autowired
 	public void setServicesDAO(ServicesDAO servicesDAO) {
 		this.servicesDAO = servicesDAO;
@@ -74,6 +72,8 @@ public class DatabaseSeeder {
 			ru.setLastname("Hammond");
 			ru.setPassword("password");
 			ru.setUsername("hamster");
+			ru.setAccountNumber("1234123412341234");
+			ru.setPhoneNumber("+38761123123");
 			ru.setUserType(userTypeDAO.findUserTypeByName("Korisnik"));
 			registeredUserDAO.create(ru);
 			
@@ -83,6 +83,8 @@ public class DatabaseSeeder {
 			ru.setLastname("Clarkson");
 			ru.setPassword("password");
 			ru.setUsername("clarkson");
+			ru.setAccountNumber("4321432143214321");
+			ru.setPhoneNumber("+38762555888");
 			ru.setUserType(userTypeDAO.findUserTypeByName("Korisnik"));
 			registeredUserDAO.create(ru);
 			
@@ -92,6 +94,8 @@ public class DatabaseSeeder {
 			ru.setLastname("May");
 			ru.setPassword("password");
 			ru.setUsername("captainSlow");
+			ru.setAccountNumber("1111222233334444");
+			ru.setPhoneNumber("+38761123123");
 			ru.setUserType(userTypeDAO.findUserTypeByName("Korisnik"));
 			registeredUserDAO.create(ru);
 			
@@ -120,7 +124,10 @@ public class DatabaseSeeder {
 		if(servicesDAO.count() == 0) {
 			
 			/*
-			 * 
+			 * pregled racuna
+			 * otvaranje racuna debitnog
+			 * otvaranje racuna kreditni
+			 * ugl paketi (student)...
 			 * 
 			 * */
 			

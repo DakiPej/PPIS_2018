@@ -75,14 +75,15 @@ public class Incident {
 			, Department department
 			, String title
 			, String description
-			, int priority 
-			, int urgency
+			, Integer priority 
+			, Integer urgency
 			, String contactInfo
 			//, Date createDate
 			//, Date closedDate)	
 				)	{
 		
-		this.resolverUser = new RegisteredUser(); 
+		this.registeredUser = registeredUser;
+		this.resolverUser = null; 
 		this.contactMethod = contactMethod; 
 		this.services = services; 
 		this.department = department; 

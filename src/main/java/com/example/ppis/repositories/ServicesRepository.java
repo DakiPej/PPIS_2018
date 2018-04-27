@@ -6,4 +6,5 @@ import com.example.ppis.models.Services;
 
 public interface ServicesRepository extends CrudRepository<Services, Long>{
 
+    Services findByServiceName(String serviceName);
 }

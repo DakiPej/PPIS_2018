@@ -47,6 +47,28 @@ public class RegisteredUser {
 	@NotNull
 	private String password;
 	
+	@Column(unique = true)
+	@Size(min = 16, max = 16)
+	private String accountNumber;
+	
+	private String phoneNumber;
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	@ManyToMany
 	private List<Services> services; 
 	
