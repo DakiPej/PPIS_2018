@@ -19,7 +19,9 @@
 }
 
 #inner-content-wrapper {
+  height: 100vh;
   margin-left: 10%;
+  padding-top: 8vh;
   padding-left:12%;
   width: 80%;
   padding-bottom: 5em;
