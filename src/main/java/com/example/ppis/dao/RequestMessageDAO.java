@@ -12,6 +12,9 @@ import com.example.ppis.repositories.RequestMessageRepository;
 @Repository
 public class RequestMessageDAO extends BaseDAO<RequestMessage, RequestMessageRepository>{
 	
+	public boolean existsByRequest(Request request)	{
+		return this.repo.existsByRequest(request) ; 
+	}
 	public List<RequestMessage> getRequestMessagesByReceiver(RegisteredUser receiver)	{
 		
 		List<RequestMessage> requestMessages ; 

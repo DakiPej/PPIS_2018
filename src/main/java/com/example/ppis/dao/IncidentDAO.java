@@ -39,12 +39,12 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents; 
 	}
 	
-	public List<Incident> getIncidentsByGreaterPriority(int priority)	{
+	public List<Incident> getIncidentsByResolverUserAndGreaterPriority(RegisteredUser resolverUser, int priority)	{
 		
 		List<Incident> incidents ;
 		
 		try {
-			incidents = this.repo.findAllByPriorityGreaterThan(priority); 
+			incidents = this.repo.findAllByResolverUserAndPriorityGreaterThan(resolverUser, priority) ;
 		} catch (Exception e) {
 			throw e; 
 		}
@@ -52,12 +52,12 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents; 
 	}
 	
-	public List<Incident> getIncidentsByLowerPriority(int priority)	{
+	public List<Incident> getIncidentsByResolverUserAndLowerPriority(RegisteredUser resolverUser, int priority)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByPriorityLessThan(priority); 
+			incidents = this.repo.findAllByResolverUserAndPriorityLessThan(resolverUser, priority); 
 		} catch (Exception e) {
 			throw e; 
 		}
@@ -65,12 +65,12 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents ; 
 	}
 
-	public List<Incident> getIncidentsByGreaterUrgency(int urgency)	{
+	public List<Incident> getIncidentsByRegisteredUserAndGreaterUrgency(RegisteredUser registeredUser, int urgency)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByUrgencyGreaterThan(urgency); 
+			incidents = this.repo.findAllByRegisteredUserAndUrgencyGreaterThan(registeredUser, urgency) ; 
 		} catch (Exception e) {
 			throw e; 
 		}
@@ -78,12 +78,38 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents ; 
 	}
 	
-	public List<Incident> getIncidentsByLowerUrgency(int urgency)	{
+	public List<Incident> getIncidentsByRegisteredUserAndLowerUrgency(RegisteredUser registeredUser, int urgency)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByUrgencyLessThan(urgency); 
+			incidents = this.repo.findAllByRegisteredUserAndUrgencyLessThan(registeredUser, urgency); 
+		} catch (Exception e) {
+			throw e; 
+		}
+		
+		return incidents ; 
+	}
+
+	public List<Incident> getIncidentsByResolverUserAndGreaterUrgency(RegisteredUser resolverUser, int urgency)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByResolverUserAndUrgencyGreaterThan(resolverUser, urgency) ; 
+		} catch (Exception e) {
+			throw e; 
+		}
+		
+		return incidents ; 
+	}
+	
+	public List<Incident> getIncidentsByResolverUserAndLowerUrgency(RegisteredUser resolverUser, int urgency)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByResolverUserAndUrgencyLessThan(resolverUser, urgency); 
 		} catch (Exception e) {
 			throw e; 
 		}

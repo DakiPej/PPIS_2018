@@ -8,6 +8,8 @@ import com.example.ppis.models.RegisteredUser;
 
 public interface RegisteredUserRepository extends CrudRepository<RegisteredUser, Long>{
 	
+	public boolean existsByUsername(String username) ; 
+	
 	@Query("SELECT u.email FROM RegisteredUser u WHERE u.username = :username AND u.password = :password")
 	String findUser(@Param("username") String username, @Param("password") String password);
 	

@@ -18,4 +18,8 @@ public class ContactMethodDAO extends BaseDAO<ContactMethod, ContactMethodReposi
 		}
 		return contactMethod; 
 	}
+	
+	public boolean existsByContactMethodName (String contactMethodName)	{
+		return this.repo.existsByContactMethodName(contactMethodName) ; 
+	}
 }

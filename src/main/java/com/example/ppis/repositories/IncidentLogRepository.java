@@ -8,5 +8,7 @@ import com.example.ppis.models.Incident;
 import com.example.ppis.models.IncidentLog;
 
 public interface IncidentLogRepository extends CrudRepository<IncidentLog, Long>{
+	
 	public List<IncidentLog> getAllByIncident (Incident incident);
+	public boolean existsByIncident (Incident incident) ; 
 }

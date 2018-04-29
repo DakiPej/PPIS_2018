@@ -10,6 +10,8 @@ import com.example.ppis.models.RequestMessage;
 
 public interface RequestMessageRepository extends CrudRepository<RequestMessage, Long>{
 	
+	public boolean existsByRequest(Request request) ; 
+	
 	public List<RequestMessage> findAllByReceiverOrderByDateDesc(RegisteredUser receiver) ; 
 	public List<RequestMessage> findAllBySenderOrderByDateDesc(RegisteredUser sender)	; 
 	

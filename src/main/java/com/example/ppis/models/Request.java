@@ -66,23 +66,20 @@ public class Request {
 	}
 	
 	public Request (RegisteredUser registeredUser
-			, RegisteredUser resolverUser
 			, ContactMethod contactMethod
-			, Department department 
 			, String title
 			, String description
-			, int priority
-			, int urgency
+			, Integer urgency
 			, String contactInfo
 			)	{
 		
 		this.registeredUser = registeredUser ; 
-		this.resolverUser = resolverUser ; 
+		this.resolverUser = null ; 
 		this.contactMethod = contactMethod ; 
-		this.department = department ; 
+		this.department = null ; 
 		this.title = title ; 
 		this.description = description ; 
-		this.priority = priority ; 
+		this.priority = -1 ; 
 		this.urgency = urgency ; 
 		this.contactInfo = contactInfo ; 
 		

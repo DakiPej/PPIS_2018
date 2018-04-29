@@ -6,5 +6,6 @@ import com.example.ppis.models.ContactMethod;
 
 public interface ContactMethodRepository extends CrudRepository<ContactMethod, Long>{
 	
-	public ContactMethod getByContactMethodName	(String contactMethodName); 
+	public ContactMethod getByContactMethodName	(String contactMethodName) ; 
+	public boolean existsByContactMethodName (String contactMethodName) ; 
 }

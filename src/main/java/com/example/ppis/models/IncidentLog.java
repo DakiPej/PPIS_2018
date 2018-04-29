@@ -26,6 +26,14 @@ public class IncidentLog {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date resolveDate;
 
+	public IncidentLog()	{
+		
+	}
+	
+	public IncidentLog(Incident incident)	{
+		this.incident = incident ; 
+		this.resolveDate = new Date() ; 
+	}
 	public Long getId() {
 		return id;
 	}

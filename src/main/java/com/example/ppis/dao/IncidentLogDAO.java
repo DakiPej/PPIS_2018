@@ -20,4 +20,8 @@ public class IncidentLogDAO extends BaseDAO<IncidentLog, IncidentLogRepository>{
 		}
 		return incidentLogs; 
 	}
+	
+	public boolean existsByIncident(Incident incident)	{
+		return this.repo.existsByIncident(incident) ; 
+	}
 }

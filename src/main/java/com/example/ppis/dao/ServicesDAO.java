@@ -8,6 +8,9 @@ import com.example.ppis.repositories.ServicesRepository;
 @Repository
 public class ServicesDAO extends BaseDAO<Services, ServicesRepository>{
 
+	public boolean existsByServiceName(String serviceName)	{
+		return this.repo.existsByServiceName(serviceName) ;
+	}
 	public Long count() {
 		return this.repo.count();
 	}

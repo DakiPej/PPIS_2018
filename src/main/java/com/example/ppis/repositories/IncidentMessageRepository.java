@@ -10,6 +10,8 @@ import com.example.ppis.models.RegisteredUser;
 
 public interface IncidentMessageRepository extends CrudRepository<IncidentMessage, Long>{
 	
+	public boolean existsByIncident(Incident incident) ; 
+	
 	public List<IncidentMessage> findAllByReceiverOrderByDateDesc(RegisteredUser receiver) ; 
 	public List<IncidentMessage> findAllBySenderOrderByDateDesc(RegisteredUser sender)	; 
 	
