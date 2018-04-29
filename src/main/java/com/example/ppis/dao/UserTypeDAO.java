@@ -9,7 +9,7 @@ import com.example.ppis.repositories.UserTypeRepository;
 public class UserTypeDAO extends BaseDAO<UserType, UserTypeRepository>{
 	
 	public boolean existsByTypeName(String typeName)	{
-		return this.repo.existsByTamePane(typeName) ;
+		return this.repo.existsByTypeName(typeName) ;
 	}
 	public Long count() {
 		return this.repo.count();

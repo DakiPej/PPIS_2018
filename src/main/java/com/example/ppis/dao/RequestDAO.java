@@ -25,7 +25,18 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		
 		return requests ; 
 	}
-	
+	public List<Request> getRequestsByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser)	{
+		
+		List<Request> requests ; 
+		
+		try {
+			requests = this.repo.findAllByRegisteredUserAndResolverUser(registeredUser, resolverUser) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return requests ; 
+	}
 	public List<Request> getRequestsByResolver(RegisteredUser resolverUser)	{
 		
 		List<Request> requests ; 
@@ -113,7 +124,7 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		return requests ; 
 	}
 
-	public List<Request> getRequestsByRegisteredUserAndResolved(RegisteredUser registeredUser, boolean resolved)	{
+	/*public List<Request> getRequestsByRegisteredUserAndResolved(RegisteredUser registeredUser, Boolean resolved)	{
 		
 		List<Request> requests ; 
 		
@@ -125,7 +136,7 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		
 		return requests ; 
 	}
-	public List<Request> getRequestsByResolverUserAndResolved(RegisteredUser resolverUser, boolean resolved)	{
+	public List<Request> getRequestsByResolverUserAndResolved(RegisteredUser resolverUser, Boolean resolved)	{
 		
 		List<Request> requests ; 
 		
@@ -136,9 +147,9 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		}
 		
 		return requests ; 
-	}
+	}*/
 	
-	public List<Request> getRequestsByRegisteredUserAndClosed(RegisteredUser registeredUser, boolean closed)	{
+	public List<Request> getRequestsByRegisteredUserAndClosed(RegisteredUser registeredUser, Boolean closed)	{
 		
 		List<Request> requests ; 
 		
@@ -150,7 +161,7 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		
 		return requests ; 
 	}
-	public List<Request> getRequestsByResolverUserAndClosed(RegisteredUser resolverUser, boolean closed)	{
+	public List<Request> getRequestsByResolverUserAndClosed(RegisteredUser resolverUser, Boolean closed)	{
 		
 		List<Request> requests ; 
 		

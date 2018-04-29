@@ -25,6 +25,20 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents; 
 	}
+	
+	public List<Incident> getIncidentsByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser)	{
+		
+		List<Incident> incidents; 
+		
+		try {
+			incidents = this.repo.findAllByRegisteredUserAndResolverUser(registeredUser, resolverUser) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ; 		
+	}
+	
 	public List<Incident> getIncidentsByResolver(RegisteredUser resolverUser)	{
 		
 		List<Incident> incidents ; 
@@ -112,7 +126,7 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents ; 
 	}
 
-	public List<Incident> getIncidentsByRegisteredUserAndResolved(RegisteredUser registeredUser, boolean resolved)	{
+	public List<Incident> getIncidentsByRegisteredUserAndResolved(RegisteredUser registeredUser, Boolean resolved)	{
 		
 		List<Incident> incidents ; 
 		
@@ -124,7 +138,7 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
-	public List<Incident> getIncidentsByResolverUserAndResolved(RegisteredUser resolverUser, boolean resolved)	{
+	public List<Incident> getIncidentsByResolverUserAndResolved(RegisteredUser resolverUser, Boolean resolved)	{
 		
 		List<Incident> incidents ; 
 		
@@ -138,7 +152,7 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 
 	}
 	
-	public List<Incident> getIncidentsByRegisteredUserAndClosed(RegisteredUser registeredUser, boolean closed)	{
+	public List<Incident> getIncidentsByRegisteredUserAndClosed(RegisteredUser registeredUser, Boolean closed)	{
 		
 		List<Incident> incidents ; 
 		
@@ -150,7 +164,7 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
-	public List<Incident> getIncidentByResolveUserAndClosed(RegisteredUser resolverUser, boolean closed)	{
+	public List<Incident> getIncidentByResolveUserAndClosed(RegisteredUser resolverUser, Boolean closed)	{
 		
 		List<Incident> incidents ; 
 		

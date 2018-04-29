@@ -25,7 +25,7 @@ public class RequestMessage {
 
 	@NotNull
 	@ManyToOne
-	private RegisteredUser reciever;
+	private RegisteredUser receiver;
 
 	@NotNull
 	@ManyToOne
@@ -50,7 +50,7 @@ public class RequestMessage {
 			)	{
 		
 		this.sender = sender ;
-		this.reciever = receiver ; 
+		this.receiver = receiver ; 
 		this.request = request ; 
 		this.message = message ; 
 		date = new Date() ; 
@@ -71,12 +71,12 @@ public class RequestMessage {
 		this.sender = sender;
 	}
 
-	public RegisteredUser getReciever() {
-		return reciever;
+	public RegisteredUser getReceiver() {
+		return receiver;
 	}
 
-	public void setReciever(RegisteredUser reciever) {
-		this.reciever = reciever;
+	public void setReceiver(RegisteredUser receiver) {
+		this.receiver = receiver;
 	}
 
 	public Request getRequest() {

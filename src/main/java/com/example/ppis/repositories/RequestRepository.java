@@ -12,6 +12,7 @@ import com.example.ppis.models.Request;
 public interface RequestRepository extends CrudRepository<Request, Long>{
 	
 	public List<Request> findAllByRegisteredUser(RegisteredUser registeredUser);
+	public List<Request> findAllByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser) ; 
 	public List<Request> findAllByResolverUser(RegisteredUser resolverUser); 
 	
 	public List<Request> findAllByResolverUserAndPriorityGreaterThan(RegisteredUser resolverUser, int priority) ; 
@@ -22,11 +23,11 @@ public interface RequestRepository extends CrudRepository<Request, Long>{
 	public List<Request> findAllByResolverUserAndUrgencyGreaterThan(RegisteredUser resolverUser, int urgency) ; 
 	public List<Request> findAllByResolverUserAndUrgencyLessThan(RegisteredUser resolverUser, int urgency) ; 
 	
-	public List<Request> findAllByRegisteredUserAndResolved(RegisteredUser registeredUSer, boolean resolved) ;
-	public List<Request> findAllByResolverUserAndResolved(RegisteredUser resolverUser, boolean resolved) ; 
+	//public List<Request> findAllByRegisteredUserAndResolved(RegisteredUser registeredUSer, Boolean resolved) ;
+	//public List<Request> findAllByResolverUserAndResolved(RegisteredUser resolverUser, Boolean resolved) ; 
 	
-	public List<Request> findAllByRegisteredUserAndClosed(RegisteredUser registeredUser, boolean closed) ;
-	public List<Request> findAllByResolverUserAndClosed(RegisteredUser resolveruser, boolean closed) ; 
+	public List<Request> findAllByRegisteredUserAndClosed(RegisteredUser registeredUser, Boolean closed) ;
+	public List<Request> findAllByResolverUserAndClosed(RegisteredUser resolveruser, Boolean closed) ; 
 	
 	public List<Request> findAllByResolverUserAndContactMethod(RegisteredUser resolverUser, ContactMethod contactMethod);
 	

@@ -2,6 +2,7 @@ package com.example.ppis.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ppis.dao.ContactMethodDAO;
@@ -19,6 +20,7 @@ public class RequestService {
 	ContactMethodDAO contactMethodDao ; 
 	DepartmentDAO departmentDao ; 
 	
+	@Autowired
 	public void setDAOs(RequestDAO requestDao
 			, RegisteredUserDAO registeredUserDao
 			, ContactMethodDAO contactMethodDao
@@ -29,6 +31,8 @@ public class RequestService {
 		this.contactMethodDao = contactMethodDao ; 
 		this.departmentDao = departmentDao ; 
 	}
+	
+	
 	
 	private boolean validateNewRequest(String registeredUserUsername
 			, String contactMethod
@@ -307,6 +311,7 @@ public class RequestService {
 
 	}
 
+	/*
 	public List<Request> getRequestsByRegisteredUserAndResolved(String registeredUser, boolean resolved)	{
 		
 		List<Request> requests ; 
@@ -336,7 +341,7 @@ public class RequestService {
 		}
 		
 		return requests ; 
-	}
+	}*/
 
 	public List<Request> getRequestsByRegisteredUserAndClosed(String registeredUser, boolean closed)	{
 		

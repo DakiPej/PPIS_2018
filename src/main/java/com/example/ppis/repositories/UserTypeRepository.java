@@ -6,7 +6,7 @@ import com.example.ppis.models.UserType;
 
 public interface UserTypeRepository extends CrudRepository<UserType, Long>{
 	
-	public boolean existsByTamePane(String typeName) ; 
+	public boolean existsByTypeName(String typeName) ; 
 	public UserType findDistinctUserTypeByTypeName(String typeName);
 	
 }

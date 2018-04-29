@@ -14,6 +14,7 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	
 	
 	public List<Incident> findAllByRegisteredUser(RegisteredUser registeredUser);
+	public List<Incident> findAllByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser) ; 
 	public List<Incident> findAllByResolverUser(RegisteredUser resolverUser); 
 	
 	public List<Incident> findAllByResolverUserAndPriorityGreaterThan(RegisteredUser resolverUser, int priority) ; 
@@ -24,11 +25,11 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	public List<Incident> findAllByResolverUserAndUrgencyGreaterThan(RegisteredUser resolverUser, int urgency) ; 
 	public List<Incident> findAllByResolverUserAndUrgencyLessThan(RegisteredUser resolverUser, int urgency) ; 
 	
-	public List<Incident> findAllByRegisteredUserAndResolved(RegisteredUser registeredUSer, boolean resolved) ;
-	public List<Incident> findAllByResolverUserAndResolved(RegisteredUser resolverUser, boolean resolved) ; 
+	public List<Incident> findAllByRegisteredUserAndResolved(RegisteredUser registeredUSer, Boolean resolved) ;
+	public List<Incident> findAllByResolverUserAndResolved(RegisteredUser resolverUser, Boolean resolved) ; 
 	
-	public List<Incident> findAllByRegisteredUserAndClosed(RegisteredUser registeredUser, boolean closed) ;
-	public List<Incident> findAllByResolverUserAndClosed(RegisteredUser resolveruser, boolean closed) ; 
+	public List<Incident> findAllByRegisteredUserAndClosed(RegisteredUser registeredUser, Boolean closed) ;
+	public List<Incident> findAllByResolverUserAndClosed(RegisteredUser resolveruser, Boolean closed) ; 
 	
 	public List<Incident> findAllByResolverUserAndContactMethod(RegisteredUser resolverUser, ContactMethod contactMethod);
 	
