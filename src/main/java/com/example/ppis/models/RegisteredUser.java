@@ -1,5 +1,6 @@
 package com.example.ppis.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -46,9 +47,51 @@ public class RegisteredUser {
 	@NotNull
 	private String password;
 	
+	@Column(unique = true)
+	@Size(min = 16, max = 16)
+	private String accountNumber;
+	
+	private String phoneNumber;
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	@ManyToMany
 	private List<Services> services; 
-
+	
+	public RegisteredUser()	{
+		
+	}
+	public RegisteredUser(UserType userType
+			, String firstname
+			, String lastname
+			, String email
+			, String username
+			, String password)	{
+		
+		this.userType = userType; 
+		this.firstname = firstname; 
+		this.lastname = lastname; 
+		this.email = email; 
+		this.username = username; 
+		this.password = password; 
+		
+		this.services = new ArrayList<Services> (); 
+	}
+	
 	public Long getId() {
 		return id;
 	}

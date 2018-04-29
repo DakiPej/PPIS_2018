@@ -11,6 +11,10 @@ import com.example.ppis.repositories.RegisteredUserRepository;
 @Repository
 public class RegisteredUserDAO extends BaseDAO<RegisteredUser, RegisteredUserRepository>{
 	
+	public boolean existsByUsername(String username)	{
+		return this.repo.existsByUsername(username) ; 
+	}
+	
 	public Long count() {
 		return this.repo.count();
 	}

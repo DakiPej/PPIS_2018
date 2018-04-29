@@ -25,7 +25,7 @@ public class IncidentMessage {
 	
 	@NotNull
 	@ManyToOne
-	private RegisteredUser reciever;
+	private RegisteredUser receiver;
 	
 	@NotNull
 	@ManyToOne
@@ -38,6 +38,21 @@ public class IncidentMessage {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
+	
+	public IncidentMessage()	{
+		
+	}
+	
+	public IncidentMessage(RegisteredUser sender
+			, RegisteredUser receiver
+			, Incident incident
+			, String message)	{
+		
+		this.sender = sender ; 
+		this.receiver = receiver ; 
+		this.incident = incident ; 
+		this.message = message ; 
+	}
 
 	public Long getId() {
 		return id;
@@ -55,12 +70,12 @@ public class IncidentMessage {
 		this.sender = sender;
 	}
 
-	public RegisteredUser getReciever() {
-		return reciever;
+	public RegisteredUser getReceiver() {
+		return receiver;
 	}
 
-	public void setReciever(RegisteredUser reciever) {
-		this.reciever = reciever;
+	public void setReceiver(RegisteredUser reciever) {
+		this.receiver = reciever;
 	}
 
 	public Incident getIncident() {

@@ -60,6 +60,33 @@ public class Request {
 	
 	@Column(columnDefinition="BIT")
 	private Boolean closed;
+	
+	public Request ()	{
+		
+	}
+	
+	public Request (RegisteredUser registeredUser
+			, ContactMethod contactMethod
+			, String title
+			, String description
+			, Integer urgency
+			, String contactInfo
+			)	{
+		
+		this.registeredUser = registeredUser ; 
+		this.resolverUser = null ; 
+		this.contactMethod = contactMethod ; 
+		this.department = null ; 
+		this.title = title ; 
+		this.description = description ; 
+		this.priority = -1 ; 
+		this.urgency = urgency ; 
+		this.contactInfo = contactInfo ; 
+		
+		this.createdDate = new Date() ; 
+		this.closedDate = null ; 
+		this.closed = false ; 
+	}
 
 	public Long getId() {
 		return id;
