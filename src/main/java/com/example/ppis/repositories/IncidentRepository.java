@@ -25,5 +25,5 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	public List<Incident> findAllByContactMethod(ContactMethod contactMethod);
 	
 	public Incident findByTitle(String title); 
-	
+	public Incident findByID(Long id);
 }

@@ -22,7 +22,7 @@ import com.example.ppis.models.Services;
 @Service
 public class IncidentService {
 	
-	IncidentDAO incidentDao; 
+	IncidentDAO incidentDAO; 
 	RegisteredUserDAO registeredUserDAO;
 	ServicesDAO serviceDAO;
 	ContactMethodDAO contactMethodDAO;
@@ -43,8 +43,8 @@ public class IncidentService {
 	}
 
 	@Autowired
-	public void setIncidentDAO(IncidentDAO incidentDao)	{
-		this.incidentDao = incidentDao;
+	public void setIncidentDAO(IncidentDAO incidentDAO)	{
+		this.incidentDAO = incidentDAO;
 	}
 
 	public Boolean createIncident(CreateIncidentForm createIncidentForm) throws ServletException{
@@ -94,5 +94,9 @@ public class IncidentService {
 		} catch (Exception e) {
 			throw new ServletException(e.getMessage());
 		}
+	}
+
+	public Incident getIncidentByID(Long id){
+		return incidentDAO.getIncidentByID(id);
 	}
 }

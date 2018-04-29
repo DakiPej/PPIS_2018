@@ -9,5 +9,7 @@ import com.example.ppis.repositories.IncidentRepository;
 @Repository
 public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 	
-	
+	public Incident getIncidentByID(Long id) {
+        return this.repo.findByID(id);
+    }
 }
