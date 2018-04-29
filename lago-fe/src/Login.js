@@ -39,7 +39,7 @@ class Login extends Component {
                   </div>
                </div>
                 <div className="form-group">
-                  <button type="button" className="btn btn-primary btn-outline btn-login" onClick={this.onLogin}>PRIJAVITE SE</button>
+                  <button type="button" className="btn btn-primary btn-outline btn-login" onClick={this.onLogin}>LOGIN</button>
                 </div>
 
               </form>

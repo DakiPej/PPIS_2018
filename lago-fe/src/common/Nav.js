@@ -11,7 +11,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
-import logo from './Images/lago.png';
+import logo from '../Images/lago.png';
 
 class Navi extends React.Component {
   constructor(props) {
@@ -31,26 +31,26 @@ class Navi extends React.Component {
     return (
       <div>
         <Navbar color="dark" className="navbar-dark navbar-expand-md">
-          <NavbarBrand href="/" > <img src={logo}/>
+          <NavbarBrand href="/" > <img height="50px"src={logo}/>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink className="text-white h4" href="/">Početna</NavLink>
+                <NavLink className="text-white 18px" href="/"><b>Početna</b></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink className="text-white h4" href="/ponuda">Ponuda</NavLink>
+                <NavLink className="text-white 18px" href="/ponuda"><b>Ponuda</b></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink className="text-white h4" href="/onama">O nama</NavLink>
+                <NavLink className="text-white 18px" href="/onama"><b>O nama</b></NavLink>
               </NavItem>
               {this.state.ulogovan ?
                 <NavItem>
-                  <NavLink className="text-info h4" href="/prijava">Ma nemoj</NavLink>
+                  <NavLink className="text-info 18px" href="/prijava"><b>Ma nemoj</b></NavLink>
                 </NavItem> :
               <NavItem>
-                <NavLink className="text-info h4" href="/prijava">Prijava</NavLink>
+                <NavLink className="text-info 18px" href="/prijava"><b>Prijava</b></NavLink>
               </NavItem>
             }
             </Nav>
