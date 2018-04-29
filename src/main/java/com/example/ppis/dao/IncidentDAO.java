@@ -25,7 +25,6 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents; 
 	}
-	
 	public List<Incident> getIncidentsByResolver(RegisteredUser resolverUser)	{
 		
 		List<Incident> incidents ; 
@@ -51,7 +50,6 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents; 
 	}
-	
 	public List<Incident> getIncidentsByResolverUserAndLowerPriority(RegisteredUser resolverUser, int priority)	{
 		
 		List<Incident> incidents ; 
@@ -77,7 +75,6 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
-	
 	public List<Incident> getIncidentsByRegisteredUserAndLowerUrgency(RegisteredUser registeredUser, int urgency)	{
 		
 		List<Incident> incidents ; 
@@ -90,7 +87,6 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
-
 	public List<Incident> getIncidentsByResolverUserAndGreaterUrgency(RegisteredUser resolverUser, int urgency)	{
 		
 		List<Incident> incidents ; 
@@ -103,7 +99,6 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
-	
 	public List<Incident> getIncidentsByResolverUserAndLowerUrgency(RegisteredUser resolverUser, int urgency)	{
 		
 		List<Incident> incidents ; 
@@ -117,38 +112,64 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents ; 
 	}
 
-	public List<Incident> getIncidentsByResolved(boolean resolved)	{
+	public List<Incident> getIncidentsByRegisteredUserAndResolved(RegisteredUser registeredUser, boolean resolved)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByResolved(resolved); 
+			incidents = this.repo.findAllByRegisteredUserAndResolved(registeredUser, resolved); 
 		} catch (Exception e) {
 			throw e ; 
 		}
 		
 		return incidents ; 
 	}
-	
-	public List<Incident> getIncidentsByClosed(boolean closed)	{
+	public List<Incident> getIncidentsByResolverUserAndResolved(RegisteredUser resolverUser, boolean resolved)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByClosed(closed); 
+			incidents = this.repo.findAllByRegisteredUserAndResolved(resolverUser, resolved); 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ; 
+
+	}
+	
+	public List<Incident> getIncidentsByRegisteredUserAndClosed(RegisteredUser registeredUser, boolean closed)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByRegisteredUserAndClosed(registeredUser, closed); 
 		} catch (Exception e) {
 			throw e; 
 		}
 		
 		return incidents ; 
 	}
-	
-	public List<Incident> getIncidentsByContactMethod(ContactMethod contactMethod)	{
+	public List<Incident> getIncidentByResolveUserAndClosed(RegisteredUser resolverUser, boolean closed)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByContactMethod(contactMethod); 
+			incidents = this.repo.findAllByResolverUserAndClosed(resolverUser, closed); 
+		} catch (Exception e) {
+			throw e; 
+		}
+		
+		return incidents ; 
+		
+	}
+	
+	public List<Incident> getIncidentsByResolverUserAndContactMethod(RegisteredUser resolverUser, ContactMethod contactMethod)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByResolverUserAndContactMethod(resolverUser, contactMethod); 
 		} catch (Exception e) {
 			throw e ; 
 		}
@@ -168,12 +189,12 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		return incidents ; 
 	}
 	
-	public List<Incident> getIncidentsByTitle(String title)	{
+	public List<Incident> getIncidentsByResolverUserAndTitle(RegisteredUser resolverUser, String title)	{
 		
 		List<Incident> incidents ; 
 		
 		try {
-			incidents = this.repo.findAllByTitle(title); 
+			incidents = this.repo.findAllByResolverUserAndTitle(resolverUser, title); 
 		} catch (Exception e) {
 			throw e ; 
 		}

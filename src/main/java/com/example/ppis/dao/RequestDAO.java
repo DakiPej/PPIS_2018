@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
-import com.example.ppis.models.Incident;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.repositories.RequestRepository;
