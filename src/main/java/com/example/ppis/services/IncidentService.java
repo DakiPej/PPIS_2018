@@ -23,9 +23,10 @@ import com.example.ppis.models.Services;
 public class IncidentService {
 	
 	IncidentDAO incidentDao; 
-	RegisteredUserDAO registeredUserDAO;
+	RegisteredUserDAO registeredUserDao;
 	ServicesDAO serviceDAO;
 	ContactMethodDAO contactMethodDAO;
+	DepartmentDAO departmentDao; 
 
 	@Autowired
 	public void setContactMethodDAO(ContactMethodDAO contactMethodDAO) {
@@ -38,16 +39,87 @@ public class IncidentService {
 	}
 
 	@Autowired
-	public void setRegisteredUserDAO(RegisteredUserDAO registeredUserDAO) {
-		this.registeredUserDAO = registeredUserDAO;
+	public void setregisteredUserDao(RegisteredUserDAO registeredUserDao) {
+		this.registeredUserDao = registeredUserDao;
 	}
 
 	@Autowired
 	public void setIncidentDAO(IncidentDAO incidentDao)	{
 		this.incidentDao = incidentDao;
 	}
-
-	public Boolean createIncident(CreateIncidentForm createIncidentForm) throws ServletException{
+	
+	@Autowired
+	public void setDepartmentDao(DepartmentDAO departmentDao)	{
+		this.departmentDao = departmentDao ; 
+	}
+	
+	private boolean validateNewIncident(String registeredUserUsername
+			, String contactMethod
+			, String service
+			, String title
+			, String description
+			, Integer urgency)	{
+		
+		if(registeredUserUsername.length() <= 0 || !this.registeredUserDao.existsByUsername(registeredUserUsername))
+			throw new IllegalArgumentException("The user was not specified or does not exists.") ;
+		
+		if(contactMethod.length() == 0 || this.contactMethodDAO.existsByContactMethodName(contactMethod))
+			throw new IllegalArgumentException("The contact method is unspecified or does not exist.") ;
+		if(service.length() == 0 || this.serviceDAO.existsByServiceName(service))
+			throw new IllegalArgumentException("The service is unspecified or does not exist.") ;
+		
+		if(title.length() == 0)
+			throw new IllegalArgumentException("The title is not specified.") ;
+		
+		if(description.length() == 0)
+			throw new IllegalArgumentException("The description is not specivfied.") ; 
+		
+		if(urgency == null || urgency <= 0)
+			throw new IllegalArgumentException("The urgency is not specified or is a negative number.") ; 
+			
+		return true ; 
+	}
+	
+	public String saveNewIncident(String registeredUserUsername
+			, String contactMethod
+			, String service
+			, String title
+			, String description
+			, Integer urgency
+			, String contactInfo)	{
+		
+		Incident incident ; 
+		
+		try {
+			if(validateNewIncident(registeredUserUsername
+					, contactMethod
+					, title
+					, service
+					, description 
+					, urgency))	{
+				incident = new Incident(this.registeredUserDao.findUserByUsername(registeredUserUsername)
+						, this.contactMethodDAO.getContactMethodByName(contactMethod)
+						, this.serviceDAO.getServiceByName(service)
+						, title
+						, description
+						, urgency
+						, contactInfo) ;
+						
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return "A new incident has been created." ; 
+	}
+	
+	
+	
+	
+	
+	
+	
+	/*public Boolean createIncident(CreateIncidentForm createIncidentForm) throws ServletException{
 
 		try {
 			if(createIncidentForm.getContactMethodName() == null || createIncidentForm.getContactMethodName().isEmpty() == true)
@@ -63,7 +135,7 @@ public class IncidentService {
 			if(createIncidentForm.getUsername() == null || createIncidentForm.getUsername().isEmpty())
 				throw new ServletException("Korisnicko ime nije specificirano.");
 				
-			RegisteredUser registeredUser = registeredUserDAO.findUserByUsername(createIncidentForm.getUsername());
+			RegisteredUser registeredUser = registeredUserDao.findUserByUsername(createIncidentForm.getUsername());
 			if(registeredUser == null)
 				throw new ServletException("Korisnik sa korisnickim imenom " + createIncidentForm.getUsername() + " ne postoji.");
 
@@ -94,5 +166,5 @@ public class IncidentService {
 		} catch (Exception e) {
 			throw new ServletException(e.getMessage());
 		}
-	}
+	}*/
 }

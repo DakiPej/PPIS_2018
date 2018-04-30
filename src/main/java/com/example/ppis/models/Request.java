@@ -79,7 +79,7 @@ public class Request {
 		this.department = null ; 
 		this.title = title ; 
 		this.description = description ; 
-		this.priority = -1 ; 
+		this.priority = null ; 
 		this.urgency = urgency ; 
 		this.contactInfo = contactInfo ; 
 		

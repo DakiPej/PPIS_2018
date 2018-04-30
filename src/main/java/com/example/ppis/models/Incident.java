@@ -72,10 +72,10 @@ public class Incident {
 			//, RegisteredUser resolverUser
 			, ContactMethod contactMethod
 			, Services services 
-			, Department department
+			//, Department department
 			, String title
 			, String description
-			, Integer priority 
+			//, Integer priority 
 			, Integer urgency
 			, String contactInfo
 			//, Date createDate
@@ -86,12 +86,13 @@ public class Incident {
 		this.resolverUser = null; 
 		this.contactMethod = contactMethod; 
 		this.services = services; 
-		this.department = department; 
+		this.department = null; 
 		this.title = title; 
 		this.description = description; 
-		this.priority = priority; 
+		this.priority = null; 
 		this.urgency = urgency; 
 		this.contactInfo = contactInfo; 
+		
 		this.createdDate = new Date(); 
 		this.closedDate = null; 
 		this.closed = false; 

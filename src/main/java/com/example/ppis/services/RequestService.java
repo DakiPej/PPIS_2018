@@ -38,11 +38,10 @@ public class RequestService {
 			, String contactMethod
 			, String title
 			, String description
-			, Integer urgency
-			, String contactInfo)	{
+			, Integer urgency)	{
 		
-		if(!this.registeredUserDao.existsByUsername(registeredUserUsername))
-			throw new IllegalArgumentException("The user with the given username does not exist.") ;
+		if(registeredUserUsername.length() == 0 || !this.registeredUserDao.existsByUsername(registeredUserUsername))
+			throw new IllegalArgumentException("The user was not specified or does not exist.") ;
 		
 		if(contactMethod.length() == 0 || !this.contactMethodDao.existsByContactMethodName(contactMethod))
 			throw new IllegalArgumentException("The given contact method is either empty or is not supported.") ;
@@ -53,11 +52,8 @@ public class RequestService {
 		if(description.length() == 0)
 			throw new IllegalArgumentException("The description is not specivied.") ;
 		
-		if(urgency == null || urgency <= -1)
+		if(urgency == null || urgency <= 0)
 			throw new IllegalArgumentException("The urgency is either unspecified or is a negative number.") ;
-		
-		if(contactInfo.length() == 0)
-			throw new IllegalArgumentException("The contact information is unspecified.") ;
 		
 		return true ; 
 	}
@@ -101,7 +97,6 @@ public class RequestService {
 			, String title
 			, String description
 			, Integer urgency
-			, String contactInfo
 			)	{
 		
 		Request request ; 
@@ -112,15 +107,22 @@ public class RequestService {
 					, contactMethod
 					, title
 					, description
-					, urgency
-					, contactInfo))	{
+					, urgency))	{
 			
-			request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
-					, this.contactMethodDao.getContactMethodByName(contactMethod)
-					, title
-					, description
-					, urgency
-					, contactInfo) ; 
+			if(contactMethod.equals("email"))
+				request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
+						, this.contactMethodDao.getContactMethodByName(contactMethod)
+						, title
+						, description
+						, urgency
+						, this.registeredUserDao.findUserByUsername(registeredUserUsername).getEmail()) ;
+			
+			else request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
+						, this.contactMethodDao.getContactMethodByName(contactMethod)
+						, title
+						, description
+						, urgency
+						, this.registeredUserDao.findUserByUsername(registeredUserUsername).getPhoneNumber()) ;
 			
 			this.requestDao.create(request) ; 
 			
