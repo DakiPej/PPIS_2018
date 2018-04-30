@@ -52,7 +52,7 @@ public class IncidentService {
 	public void setDepartmentDao(DepartmentDAO departmentDao)	{
 		this.departmentDao = departmentDao ; 
 	}
-	
+	/*
 	private boolean validateNewIncident(String registeredUserUsername
 			, String contactMethod
 			, String service
@@ -65,6 +65,7 @@ public class IncidentService {
 		
 		if(contactMethod.length() == 0 || this.contactMethodDAO.existsByContactMethodName(contactMethod))
 			throw new IllegalArgumentException("The contact method is unspecified or does not exist.") ;
+		
 		if(service.length() == 0 || this.serviceDAO.existsByServiceName(service))
 			throw new IllegalArgumentException("The service is unspecified or does not exist.") ;
 		
@@ -111,7 +112,7 @@ public class IncidentService {
 		}
 		
 		return "A new incident has been created." ; 
-	}
+	}*/
 	
 	
 	
@@ -119,7 +120,7 @@ public class IncidentService {
 	
 	
 	
-	/*public Boolean createIncident(CreateIncidentForm createIncidentForm) throws ServletException{
+	public Boolean createIncident(CreateIncidentForm createIncidentForm) throws ServletException{
 
 		try {
 			if(createIncidentForm.getContactMethodName() == null || createIncidentForm.getContactMethodName().isEmpty() == true)
@@ -156,15 +157,13 @@ public class IncidentService {
 			Incident incident = new Incident(registeredUser, 
 											contactMethod, 
 											service, 
-											null, 
 											createIncidentForm.getTitle(), 
 											createIncidentForm.getDescription(), 
-											null, 
 											createIncidentForm.getUrgency(), 
 											contactInfo);
 			return true;
 		} catch (Exception e) {
 			throw new ServletException(e.getMessage());
 		}
-	}*/
+	}
 }
