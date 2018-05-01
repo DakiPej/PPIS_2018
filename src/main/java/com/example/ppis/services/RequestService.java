@@ -192,6 +192,8 @@ public class RequestService {
 				reassignedRequest.setDepartment(this.departmentDao.getDepartmentByName(departmentName)) ;
 				if(priority != null)	
 					reassignedRequest.setPriority(priority) ;
+				reassignedRequest.setResolverUser(null);
+				reassignedRequest.setEscalated(false);
 				
 				this.requestDao.create(reassignedRequest) ; 
 			}
@@ -202,7 +204,31 @@ public class RequestService {
 		
 		return "The request has been reassigned to the department : " + departmentName; 
 	}
-
+	public String escalateRequest(long requestId, String resolverUsername)	{
+		try {
+			if(requestId < 0 
+					|| !this.requestDao.existsById(requestId)
+					|| resolverUsername == null 
+					|| resolverUsername.length() == 0 
+					|| this.registeredUserDao.existsByUsername(resolverUsername)
+					|| this.requestDao.one(requestId).getResolverUser().equals(
+							this.registeredUserDao.findUserByUsername(resolverUsername)))
+				throw new IllegalArgumentException(
+						"The request id is negative or the request does not exist or the resolver username is not specified "
+						+ "or the user does not exist or the user does not have the permission to escalate the request.") ;
+			Request request = this.requestDao.one(requestId) ; 
+			request.setEscalated(true);
+			
+			this.requestDao.create(request) ;
+			
+			return "The request was successfully escalated." ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	
 	public List<Request> getRequestsByRegisteredUser(String registeredUserUsername)	{
 		
 		List<Request> requests ; 
@@ -226,7 +252,7 @@ public class RequestService {
 		List<Request> requests ; 
 		
 		try {
-			if(resolverUsername.length() > 0 && this.registeredUserDao.existsByUsername(resolverUsername))
+			if(resolverUsername == null || resolverUsername.length() > 0 && this.registeredUserDao.existsByUsername(resolverUsername))
 				requests = this.requestDao.getRequestsByResolver(
 						this.registeredUserDao.findUserByUsername(resolverUsername)) ;
 			else throw new IllegalArgumentException("The username is either unspecified or the user has no requests.") ;
@@ -236,7 +262,6 @@ public class RequestService {
 		
 		return requests ; 
 	}
-
 	public List<Request> getRequestsByResolverUserAndGreaterPriority(String resolverUsername, int priority)	{
 		
 		List<Request> requests ; 
@@ -402,7 +427,7 @@ public class RequestService {
 		List<Request> requests ;
 		
 		try {
-			if(department.length() > 0 && this.departmentDao.existsByDepartmentName(department))	
+			if(department == null || department.length() > 0 && this.departmentDao.existsByDepartmentName(department))	
 				requests = this.requestDao.getRequestsByDepartment(this.departmentDao.getDepartmentByName(department)) ;
 			else throw new IllegalArgumentException("The department name is either unspecified or does not exist.") ;
 		} catch (Exception e) {
