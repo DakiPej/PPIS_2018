@@ -12,6 +12,8 @@ import com.example.ppis.models.Request;
 public interface RequestRepository extends CrudRepository<Request, Long>{
 	
 	public List<Request> findAllByRegisteredUser(RegisteredUser registeredUser);
+	public List<Request> findAllByAdmin(RegisteredUser admin) ; 
+	public List<Request> findAllByResolverUserAndAdmin(RegisteredUser resolverUser, RegisteredUser admin) ;
 	public List<Request> findAllByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser) ; 
 	public List<Request> findAllByResolverUser(RegisteredUser resolverUser); 
 	

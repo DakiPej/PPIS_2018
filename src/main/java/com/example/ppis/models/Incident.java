@@ -26,6 +26,9 @@ public class Incident {
 	@ManyToOne
 	private RegisteredUser resolverUser;
 	
+	@ManyToOne
+	private RegisteredUser admin ;
+	
 	@NotNull
 	@ManyToOne
 	private ContactMethod contactMethod;
@@ -64,6 +67,9 @@ public class Incident {
 	@Column(columnDefinition="BIT")
 	private Boolean resolved;
 	
+	@Column(columnDefinition="BIT")
+	private Boolean escalated ; 
+	
 	public Incident()	{
 		
 	}
@@ -84,6 +90,7 @@ public class Incident {
 		
 		this.registeredUser = registeredUser;
 		this.resolverUser = null; 
+		this.admin = null ; 
 		this.contactMethod = contactMethod; 
 		this.services = services; 
 		this.department = null; 
@@ -97,13 +104,7 @@ public class Incident {
 		this.closedDate = null; 
 		this.closed = false; 
 		this.resolved = false; 
-	}
-	public Boolean getResolved() {
-		return resolved;
-	}
-
-	public void setResolved(Boolean resolved) {
-		this.resolved = resolved;
+		this.escalated = false ; 
 	}
 
 	@Column(columnDefinition="BIT")
@@ -219,5 +220,25 @@ public class Incident {
 
 	public void setServices(Services services) {
 		this.services = services;
+	}
+	public Boolean getEscalated()	{
+		return escalated ; 
+	}
+	public void setEscalated(Boolean escalated)	{
+		this.escalated = escalated ; 
+	}
+	
+	public Boolean getResolved() {
+		return resolved;
+	}
+
+	public void setResolved(Boolean resolved) {
+		this.resolved = resolved;
+	}
+	public RegisteredUser getAdmin() {
+		return admin ; 
+	}
+	public void setAdmin(RegisteredUser admin)	{
+		this.admin = admin ;
 	}
 }

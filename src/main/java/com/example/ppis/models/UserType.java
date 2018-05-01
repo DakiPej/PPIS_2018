@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,6 +21,9 @@ public class UserType {
 	@Size(max = 15)
 	private String typeName;
 	
+	@ManyToOne
+	Department department ; 
+	
 	public Long getId() {
 		return id;
 	}
@@ -32,4 +36,11 @@ public class UserType {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
+	public Department getDepartment()	{
+		return department ;
+	}
+	public void setDepartment(Department department)	{
+		this.department = department ; 
+	}
 }
+	

@@ -8,12 +8,13 @@ import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
 import com.example.ppis.models.Incident;
 import com.example.ppis.models.RegisteredUser;
-import com.example.ppis.models.Request;
 
 public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	
 	
 	public List<Incident> findAllByRegisteredUser(RegisteredUser registeredUser);
+	public List<Incident> findAllByAdmin(RegisteredUser admin) ; 
+	public List<Incident> findAllByResolverUserAndAdmin(RegisteredUser resolverUser, RegisteredUser admin) ;
 	public List<Incident> findAllByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser) ; 
 	public List<Incident> findAllByResolverUser(RegisteredUser resolverUser); 
 	

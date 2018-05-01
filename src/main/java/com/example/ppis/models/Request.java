@@ -27,6 +27,9 @@ public class Request {
 	@ManyToOne
 	private RegisteredUser resolverUser;
 	
+	@ManyToOne
+	private RegisteredUser admin ; 
+	
 	@NotNull
 	@ManyToOne
 	private ContactMethod contactMethod;
@@ -61,6 +64,9 @@ public class Request {
 	@Column(columnDefinition="BIT")
 	private Boolean closed;
 	
+	@Column(columnDefinition="BIT")
+	private Boolean escalated ; 
+	
 	public Request ()	{
 		
 	}
@@ -75,6 +81,7 @@ public class Request {
 		
 		this.registeredUser = registeredUser ; 
 		this.resolverUser = null ; 
+		this.admin = null ; 
 		this.contactMethod = contactMethod ; 
 		this.department = null ; 
 		this.title = title ; 
@@ -86,6 +93,7 @@ public class Request {
 		this.createdDate = new Date() ; 
 		this.closedDate = null ; 
 		this.closed = false ; 
+		this.escalated = false ; 
 	}
 
 	public Long getId() {
@@ -190,5 +198,18 @@ public class Request {
 
 	public void setClosed(Boolean closed) {
 		this.closed = closed;
+	}
+	
+	public RegisteredUser getAdmin() {
+		return admin ; 
+	}
+	public void setAdmin(RegisteredUser admin)	{
+		this.admin = admin ;
+	}
+	public Boolean getEscalated()	{
+		return escalated ; 
+	}
+	public void setEscalated(Boolean escalated)	{
+		this.escalated = escalated ; 
 	}
 }
