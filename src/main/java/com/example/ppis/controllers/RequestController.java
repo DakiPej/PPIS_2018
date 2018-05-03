@@ -10,18 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ppis.services.RequestLogService;
 import com.example.ppis.services.RequestService;
 import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.models.Request;
+import com.example.ppis.models.RequestLog;
 
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
 	RequestService requestService ; 
 	RegisteredUserDAO registeredUserDAO ; 
+	RequestLogService requestLogService ; 
 	@Autowired
-	public void setRequestService(RequestService requestService)	{
+	public void setServices(RequestService requestService, RequestLogService requestLogService)	{
 		this.requestService = requestService ; 
+		this.requestLogService = requestLogService ; 
 	}
 	@Autowired
 	public void setRegisteredUserDAO(RegisteredUserDAO registeredUserDao)	{
@@ -35,6 +39,11 @@ public class RequestController {
 		public String title ; 
 		public String description ; 
 		public Integer urgency ; 
+	}
+	private static class RequestStatus	{
+		public long requestId ; 
+		public String username ; 
+		public boolean workingOn ; 
 	}
 	private static class AssignRequestInfo {
 		public long requestId ; 
@@ -59,6 +68,7 @@ public class RequestController {
 		public boolean closed ; 
 	}
 	
+	
 	@RequestMapping(value="", method=RequestMethod.POST)	
 	public ResponseEntity createNewRequest(@RequestBody final NewRequest newRequest)	{
 		
@@ -80,8 +90,34 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
+	@RequestMapping(value="", method=RequestMethod.GET)
+	public ResponseEntity getRequests(@RequestBody final UserInformation info)	{
+		try {
+			List<Request> requests ; 
+			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	
+				requests = this.requestService.getRequestsByRegisteredUser(info.username) ; 
+			else requests = this.requestService.getRequestsByResolver(info.username) ; 
+			
+			return ResponseEntity.status(HttpStatus.OK).body(requests) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
 	
-	
+	@RequestMapping(value="/requestStatus", method=RequestMethod.GET)
+	public ResponseEntity getRequestStatuses(@RequestBody final RequestStatus reqStatus)	{
+		try {
+			List<Request> requests ; 
+			if(!reqStatus.workingOn)
+				requests = this.requestService.getRequestByRegisteredUserAndResolverUser(reqStatus.username, null) ;
+			else requests = this.requestService.getRequestByRegisteredUserAndResolverUser(reqStatus.username, "") ; 
+			
+			return ResponseEntity.status(HttpStatus.OK).body(requests) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+
 	@RequestMapping(value="unassignedRequests_ByDepartments", method=RequestMethod.POST)
 	public ResponseEntity assignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
@@ -126,6 +162,7 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ;
 		}
 	}
+	
 	
 	@RequestMapping(value="unassignedRequests_ToResolvers", method=RequestMethod.POST)
 	public ResponseEntity assignRequestToResolver(@RequestBody final RequestInformation info)	{
@@ -196,6 +233,25 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.OK).body(requests) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ;
+		}
+	}
+	
+	@RequestMapping(value="/RequestLogs", method=RequestMethod.GET)
+	public ResponseEntity getRequestLogsByRequest(@RequestBody final RequestInformation info)	{
+		try {
+			List<RequestLog> logs ;
+			if(!this.registeredUserDAO.existsByUsername(info.resolverUsername)
+					|| !this.registeredUserDAO.findUserByUsername(info.resolverUsername)
+						.getUserType()
+						.getTypeName()
+						.equals("Korisnik"))
+				logs = this.requestLogService.getRequstLogsByRequest(info.requestId) ;
+			
+			else throw new IllegalArgumentException("The user does not have the permission to access the logs.") ;
+				
+			return ResponseEntity.status(HttpStatus.OK).body(logs) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
 }

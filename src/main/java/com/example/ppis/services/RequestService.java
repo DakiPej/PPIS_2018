@@ -1,5 +1,6 @@
 package com.example.ppis.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,11 @@ import com.example.ppis.dao.ContactMethodDAO;
 import com.example.ppis.dao.DepartmentDAO;
 import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.dao.RequestDAO;
+import com.example.ppis.dao.RequestLogDAO;
 import com.example.ppis.models.ContactMethod;
+import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
+import com.example.ppis.models.RequestLog;
 
 @Service
 public class RequestService {
@@ -19,17 +23,20 @@ public class RequestService {
 	RegisteredUserDAO registeredUserDao ; 
 	ContactMethodDAO contactMethodDao ; 
 	DepartmentDAO departmentDao ; 
+	RequestLogDAO requestLogDao ; 
 	
 	@Autowired
 	public void setDAOs(RequestDAO requestDao
 			, RegisteredUserDAO registeredUserDao
 			, ContactMethodDAO contactMethodDao
-			, DepartmentDAO departmentDao)	{
+			, DepartmentDAO departmentDao
+			, RequestLogDAO requestLogDao)	{
 		
 		this.requestDao = requestDao ; 
 		this.registeredUserDao = registeredUserDao ; 
 		this.contactMethodDao = contactMethodDao ; 
-		this.departmentDao = departmentDao ; 
+		this.departmentDao = departmentDao ;
+		this.requestLogDao = requestLogDao ; 
 	}
 	
 	
@@ -131,7 +138,13 @@ public class RequestService {
 						, urgency
 						, this.registeredUserDao.findUserByUsername(registeredUserUsername).getPhoneNumber()) ;
 			
-			this.requestDao.create(request) ; 
+			
+			RequestLog log = new RequestLog(this.requestDao.create(request), 
+					new Date(), 
+					"Request created") ;
+			
+			this.requestLogDao.create(log) ; 
+			
 			
 			}
 			
@@ -154,7 +167,9 @@ public class RequestService {
 				unassignedRequest.setDepartment(this.departmentDao.getDepartmentByName(departmentName)) ;
 				unassignedRequest.setPriority(priority) ;
 				
-				this.requestDao.create(unassignedRequest) ; 
+				RequestLog log = new RequestLog(this.requestDao.create(unassignedRequest)
+						, new Date()
+						, "The request has been assigned to the department : " + departmentName) ;
 			}
 		} catch (Exception e) {
 			throw e ; 
@@ -170,12 +185,43 @@ public class RequestService {
 			Request unassignedRequest = this.requestDao.one(unassignedRequestId) ; 
 			
 			unassignedRequest.setResolverUser(this.registeredUserDao.findUserByUsername(resolverUsername));
-				
+			
+			RequestLog log = new RequestLog(this.requestDao.create(unassignedRequest)
+					, new Date()
+					, "The user : " + unassignedRequest.getResolverUser().getUsername() + " will handle the request.") ;
+			
+			this.requestLogDao.create(log) ; 
 			}
 		} catch (Exception e) {
 			throw e ; 
 		}
 		return "The request has been assigned to the user : " + resolverUsername ; 
+	}
+	public String escalateRequest(long requestId, String resolverUsername)	{
+		try {
+			if(requestId < 0 
+					|| !this.requestDao.existsById(requestId)
+					|| resolverUsername == null 
+					|| resolverUsername.length() == 0 
+					|| this.registeredUserDao.existsByUsername(resolverUsername)
+					|| this.requestDao.one(requestId).getResolverUser().equals(
+							this.registeredUserDao.findUserByUsername(resolverUsername)))
+				throw new IllegalArgumentException(
+						"The request id is negative or the request does not exist or the resolver username is not specified "
+						+ "or the user does not exist or the user does not have the permission to escalate the request.") ;
+			Request request = this.requestDao.one(requestId) ; 
+			request.setEscalated(true);
+			
+			RequestLog log = new RequestLog(this.requestDao.create(request)
+					, new Date()
+					, "The request has escalated.") ;
+			this.requestLogDao.create(log) ; 
+			
+			return "The request was successfully escalated." ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
 	}
 	public String reassignRequest(long requestId
 			, String departmentName
@@ -195,7 +241,9 @@ public class RequestService {
 				reassignedRequest.setResolverUser(null);
 				reassignedRequest.setEscalated(false);
 				
-				this.requestDao.create(reassignedRequest) ; 
+				RequestLog log = new RequestLog(this.requestDao.create(reassignedRequest)
+						, new Date()
+						, "The request has been reassigned to the department : " + departmentName ) ; 
 			}
 			
 		} catch (Exception e) {
@@ -204,30 +252,32 @@ public class RequestService {
 		
 		return "The request has been reassigned to the department : " + departmentName; 
 	}
-	public String escalateRequest(long requestId, String resolverUsername)	{
+	public String closeRequest(long requestId
+			, String registeredUsername)	{
 		try {
-			if(requestId < 0 
-					|| !this.requestDao.existsById(requestId)
-					|| resolverUsername == null 
-					|| resolverUsername.length() == 0 
-					|| this.registeredUserDao.existsByUsername(resolverUsername)
-					|| this.requestDao.one(requestId).getResolverUser().equals(
-							this.registeredUserDao.findUserByUsername(resolverUsername)))
+			if(requestId < 0
+					|| !this.requestDao.existsById(requestId) 
+					|| registeredUsername == null 
+					|| registeredUsername.length() == 0 
+					|| !this.registeredUserDao.existsByUsername(registeredUsername))
 				throw new IllegalArgumentException(
-						"The request id is negative or the request does not exist or the resolver username is not specified "
-						+ "or the user does not exist or the user does not have the permission to escalate the request.") ;
-			Request request = this.requestDao.one(requestId) ; 
-			request.setEscalated(true);
+						"The request id is negative or the request does not exist or the the username is not specified or does not exist.") ;
 			
-			this.requestDao.create(request) ;
+			Request closedRequest = this.requestDao.one(requestId) ; 
+			closedRequest.setClosedDate(new Date());
+			closedRequest.setClosed(true);
 			
-			return "The request was successfully escalated." ; 
+			RequestLog log = new RequestLog(this.requestDao.create(closedRequest)
+					, new Date()
+					, "The request has been closed.") ;
 			
+			this.requestLogDao.create(log) ; 
 		} catch (Exception e) {
-			throw e ; 
+			// TODO: handle exception
 		}
+		
+		return "The request has been closed." ; 
 	}
-	
 	
 	public List<Request> getRequestsByRegisteredUser(String registeredUserUsername)	{
 		
@@ -256,6 +306,26 @@ public class RequestService {
 				requests = this.requestDao.getRequestsByResolver(
 						this.registeredUserDao.findUserByUsername(resolverUsername)) ;
 			else throw new IllegalArgumentException("The username is either unspecified or the user has no requests.") ;
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return requests ; 
+	}
+	public List<Request> getRequestByRegisteredUserAndResolverUser(String registeredUsername, String resolverUsername)	{
+		List<Request> requests ; 
+		
+		try {
+			if(registeredUsername == null 
+					|| registeredUsername.length() == 0 
+					|| !this.registeredUserDao.existsByUsername(registeredUsername))
+				throw new IllegalArgumentException("The username is not specified or the user does not exist.") ;
+			
+			if(resolverUsername == null)	
+				requests = this.requestDao.getRequestsByRegisteredUserAndResolverUser(
+						this.registeredUserDao.findUserByUsername(registeredUsername), null); 
+			else requests =this.requestDao.getRequestsByRegisteredUserAndResolverUser(
+					this.registeredUserDao.findUserByUsername(registeredUsername), new RegisteredUser()) ;
 		} catch (Exception e) {
 			throw e ; 
 		}
