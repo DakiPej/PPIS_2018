@@ -7,6 +7,7 @@ import './Style/UserProfile.css';
 import Details from './Details';
 import Zahtjevi from './Forms/Zahtjevi';
 import Incidenti from './Incidenti/Incidenti'; 
+import IncidentForm from './Incidenti/IncidentForm';
 
 
 const navigationItems = [
@@ -30,7 +31,7 @@ const navigationItems = [
         <span className="nav-title">Novi zahtjev</span>
       </SidebarItem>
     </NavLink>,
-    <NavLink className="link" to="/" activeClassName="active">
+    <NavLink className="link" to="/dashboard/newIncident" activeClassName="active">
       <SidebarItem>
         <span className="nav-title" >Novi incident</span>
       </SidebarItem>
@@ -43,21 +44,27 @@ class Dashboard extends Component{
     render(){
         return(
             <div id="main-content-wrapper">
+                <div class="navigation">
                 <Sidebar  content={navigationItems}
                     margin-left="20px"
                     background="rgba(52,58,64,0.9)"
                     z-index="3"
                     color="white"
-                    width="200"
-                    height="100%">
+                    width="15%"
+                    height="100%"
+                    >
                 </Sidebar>
+                </div>
                 <div id="inner-content-wrapper">
+                <div id="content">
                 <Switch>
                     <Route exact path='/dashboard' component={Details}/>
                     <Route path="/dashboard/profile" component={Details}/>
                     <Route path="/dashboard/zahtjevi" component= {Zahtjevi}/>
                     <Route path="/dashboard/incidenti" component={Incidenti}/>
+                    <Route path="/dashboard/newIncident" component={IncidentForm}/>
                 </Switch>
+                </div>
                 </div>
             </div>
         );

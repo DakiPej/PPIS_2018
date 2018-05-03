@@ -13,6 +13,8 @@ import {
   DropdownItem } from 'reactstrap';
 import logo from '../Images/lago.png';
 
+
+
 class Navi extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,7 @@ class Navi extends React.Component {
   render() {
     return (
       <div>
-        <Navbar color="dark" className="navbar-dark navbar-expand-md">
+        <Navbar color="dark" className="navbar navbar-expand-md">
           <NavbarBrand href="/" > <img height="50px"src={logo}/>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
