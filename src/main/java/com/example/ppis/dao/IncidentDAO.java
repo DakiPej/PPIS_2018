@@ -25,7 +25,30 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents; 
 	}
-	
+	public List<Incident> getIncidentsByAdmin(RegisteredUser admin)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByAdmin(admin) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ; 
+	}
+	public List<Incident> getIncidentsByResolverUserAndAdmin(RegisteredUser resolverUser, RegisteredUser admin)	{
+		
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByResolverUserAndAdmin(resolverUser, admin) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ; 
+	}
 	public List<Incident> getIncidentsByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser)	{
 		
 		List<Incident> incidents; 

@@ -8,10 +8,16 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.example.ppis.dao.ContactMethodDAO;
+import com.example.ppis.dao.DepartmentDAO;
 import com.example.ppis.dao.RegisteredUserDAO;
+import com.example.ppis.dao.RequestDAO;
 import com.example.ppis.dao.ServicesDAO;
 import com.example.ppis.dao.UserTypeDAO;
+import com.example.ppis.models.ContactMethod;
+import com.example.ppis.models.Department;
 import com.example.ppis.models.RegisteredUser;
+import com.example.ppis.models.Request;
 import com.example.ppis.models.Services;
 import com.example.ppis.models.UserType;
 
@@ -21,6 +27,9 @@ public class DatabaseSeeder {
 	UserTypeDAO userTypeDAO;
 	RegisteredUserDAO registeredUserDAO;
 	ServicesDAO servicesDAO;
+	DepartmentDAO departmentDao ;
+	RequestDAO requestDao ; 
+	ContactMethodDAO contactMethodDao ; 
 
 	@Autowired
 	public void setServicesDAO(ServicesDAO servicesDAO) {
@@ -36,6 +45,19 @@ public class DatabaseSeeder {
 	public void setRegisteredUserDAO(RegisteredUserDAO registeredUserDAO) {
 		this.registeredUserDAO = registeredUserDAO;
 	}
+	@Autowired
+	public void setDepartmentDAO(DepartmentDAO departmentDao)	{
+		this.departmentDao = departmentDao ; 
+	}
+	@Autowired
+	public void setRequestDAO(RequestDAO requestDao)	{
+		this.requestDao = requestDao ; 
+	}
+	@Autowired
+	public void setContactMethodDAO(ContactMethodDAO contactMethodDao)	{
+		this.contactMethodDao = contactMethodDao ; 
+	}
+	
 	
 	@Autowired
 	public DatabaseSeeder(UserTypeDAO userTypeDAO,
@@ -44,20 +66,144 @@ public class DatabaseSeeder {
 	
 	@EventListener
 	public void seed(ContextRefreshedEvent event) {
+		DepartmentTableSeed() ;
 		UserTypeTableSeed();
+		ContactMethodTableSeed() ; 
 		RegisteredUserTableSeed();
 		ServicesTableSeed();
+		RequestsTableSeed() ;
+	}
+	
+	private void RequestsTableSeed()	{
+		if(!this.requestDao.existsById(0))	{
+			
+			Request r = new Request(this.registeredUserDAO.findUserByUsername("hamster")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Neki titl 1"
+					, "Neki opis 1"
+					, 5
+					, this.registeredUserDAO.findUserByUsername("hamster").getEmail()) ;
+			this.requestDao.create(r) ;
+			
+			r = new Request(this.registeredUserDAO.findUserByUsername("clarkson")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Neki titl 2"
+					, "Neki opis 2"
+					, 6
+					, this.registeredUserDAO.findUserByUsername("clarkson").getEmail()) ;
+			this.requestDao.create(r) ;
+
+			r = new Request(this.registeredUserDAO.findUserByUsername("captainSlow")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Neki titl 3"
+					, "Neki opis 3"
+					, 9
+					, this.registeredUserDAO.findUserByUsername("captainSlow").getEmail()) ;
+			this.requestDao.create(r) ;	
+			
+			r = new Request(this.registeredUserDAO.findUserByUsername("hamster")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Bice dodijeljen departmentu 1"
+					, "Neki opis 4"
+					, 5
+					, this.registeredUserDAO.findUserByUsername("hamster").getEmail()) ;
+			this.requestDao.create(r) ;
+			
+			r = new Request(this.registeredUserDAO.findUserByUsername("clarkson")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Bice dodijeljen departmentu 2"
+					, "Neki opis 5"
+					, 6
+					, this.registeredUserDAO.findUserByUsername("clarkson").getEmail()) ;
+			this.requestDao.create(r) ;
+
+			r = new Request(this.registeredUserDAO.findUserByUsername("captainSlow")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Bice dodijeljen resolveru 1"
+					, "Neki opis 6"
+					, 9
+					, this.registeredUserDAO.findUserByUsername("captainSlow").getEmail()) ;
+			this.requestDao.create(r) ;	
+
+			r = new Request(this.registeredUserDAO.findUserByUsername("clarkson")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Bice dodijeljen resolveru 2"
+					, "Neki opis 5"
+					, 6
+					, this.registeredUserDAO.findUserByUsername("clarkson").getEmail()) ;
+			this.requestDao.create(r) ;
+
+			r = new Request(this.registeredUserDAO.findUserByUsername("captainSlow")
+					, this.contactMethodDao.getContactMethodByName("email")
+					, "Bice dodijeljen resolveru 3"
+					, "Neki opis 6"
+					, 9
+					, this.registeredUserDAO.findUserByUsername("captainSlow").getEmail()) ;
+			this.requestDao.create(r) ;	
+
+		}
+	}
+	private void DepartmentTableSeed()	{
+		if(!this.departmentDao.existsById(0))	{
+			Department department = new Department() ;
+			department.setDepartmentName("Administracija");
+			this.departmentDao.create(department) ;
+			
+			department = new Department() ; 
+			department.setDepartmentName("Odjel1");
+			this.departmentDao.create(department) ;
+			
+			department = new Department() ; 
+			department.setDepartmentName("Odjel2");
+			this.departmentDao.create(department) ;
+			
+			department = new Department() ; 
+			department.setDepartmentName("Odjel3");
+			this.departmentDao.create(department) ;
+			
+		}
+	}
+	
+	private void ContactMethodTableSeed()	{
+		if(!this.contactMethodDao.existsById(0))	{
+			ContactMethod cm = new ContactMethod() ; 
+			cm.setContactMethodName("phone");
+			this.contactMethodDao.create(cm) ; 
+			
+			cm = new ContactMethod(); 
+			cm.setContactMethodName("email");
+			this.contactMethodDao.create(cm) ;
+		}
 	}
 	
 	private void UserTypeTableSeed() {
 		if(userTypeDAO.count() == 0) {
+			
 			UserType ut = new UserType();
 			ut.setTypeName("Korisnik");
+			ut.setDepartment(null);
 			userTypeDAO.create(ut);
 			
 			ut = new UserType();
 			ut.setTypeName("Administrator");
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			userTypeDAO.create(ut);
+			
+			ut = new UserType();
+			ut.setTypeName("Resolver1");
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			userTypeDAO.create(ut);
+			
+			ut = new UserType();
+			ut.setTypeName("Resolver2");
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel2"));
+			userTypeDAO.create(ut);
+			
+			ut = new UserType();
+			ut.setTypeName("Resolver3");
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel3"));
+			userTypeDAO.create(ut);
+			
 		}
 	}	
 	

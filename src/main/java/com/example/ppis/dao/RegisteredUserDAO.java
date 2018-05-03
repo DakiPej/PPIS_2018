@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.ppis.models.Department;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Services;
+import com.example.ppis.models.UserType;
 import com.example.ppis.repositories.RegisteredUserRepository;
 
 @Repository
@@ -47,6 +49,17 @@ public class RegisteredUserDAO extends BaseDAO<RegisteredUser, RegisteredUserRep
 			throw e; 
 		}
 		return services; 
+	}
+	
+	public List<RegisteredUser> getUsersByDepartment(UserType userType, Department department)	{
+		List<RegisteredUser> users ; 
+		try {
+			users = this.repo.getUsersByDepartment(userType, department) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return users ; 
 	}
 	
 }

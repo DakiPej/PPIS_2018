@@ -25,6 +25,29 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		
 		return requests ; 
 	}
+	public List<Request> getRequestsByAdmin(RegisteredUser admin)	{
+		List<Request> requests ; 
+		
+		try {
+			requests = this.repo.findAllByAdmin(admin)	; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return requests ; 
+	}
+	public List<Request> getRequestsByResolverUserAndAdmin(RegisteredUser resolverUser, RegisteredUser admin)	{
+		
+		List<Request> requests ; 
+		
+		try {
+			requests = this.repo.findAllByResolverUserAndAdmin(resolverUser, admin) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return requests ; 
+	}
 	public List<Request> getRequestsByRegisteredUserAndResolverUser(RegisteredUser registeredUser, RegisteredUser resolverUser)	{
 		
 		List<Request> requests ; 

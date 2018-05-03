@@ -38,11 +38,10 @@ public class RequestService {
 			, String contactMethod
 			, String title
 			, String description
-			, Integer urgency
-			, String contactInfo)	{
+			, Integer urgency)	{
 		
-		if(!this.registeredUserDao.existsByUsername(registeredUserUsername))
-			throw new IllegalArgumentException("The user with the given username does not exist.") ;
+		if(registeredUserUsername.length() == 0 || !this.registeredUserDao.existsByUsername(registeredUserUsername))
+			throw new IllegalArgumentException("The user was not specified or does not exist.") ;
 		
 		if(contactMethod.length() == 0 || !this.contactMethodDao.existsByContactMethodName(contactMethod))
 			throw new IllegalArgumentException("The given contact method is either empty or is not supported.") ;
@@ -53,24 +52,17 @@ public class RequestService {
 		if(description.length() == 0)
 			throw new IllegalArgumentException("The description is not specivied.") ;
 		
-		if(urgency == null || urgency <= -1)
+		if(urgency == null || urgency <= 0)
 			throw new IllegalArgumentException("The urgency is either unspecified or is a negative number.") ;
-		
-		if(contactInfo.length() == 0)
-			throw new IllegalArgumentException("The contact information is unspecified.") ;
 		
 		return true ; 
 	}
-	private boolean validateUnassignedRequest(long requestId
-			, String resolverUsername
+	private boolean validateUnassignedRequestToDepartment(long requestId
 			, String departmentName
 			, Integer priority)	{
 		
 		if(requestId < 0 || !this.requestDao.existsById(requestId))
 			throw new IllegalArgumentException("The request id is not valid or the request does not exist.") ;
-		
-		if(resolverUsername.length() == 0 || !this.registeredUserDao.existsByUsername(resolverUsername))
-			throw new IllegalArgumentException("The resolver username is unspecified or the user does not exist. ") ; 
 		
 		if(departmentName.length() == 0 ||  !this.departmentDao.existsByDepartmentName(departmentName))
 			throw new IllegalArgumentException("The department name is either unspecified or the department does not exist") ; 
@@ -81,17 +73,28 @@ public class RequestService {
 		return true ; 
 	}
 	private boolean validateReassign(long requestId
-			, String resolverUsername
-			, String departmentName)	{
+			, String departmentName
+			, Integer priority)	{
 		
 		if(requestId < 0 || !this.requestDao.existsById(requestId)) 
 			throw new IllegalArgumentException("The request id is either a negative number or the request does not exist.") ; 
 		
-		if(resolverUsername.length() == 0 || !this.registeredUserDao.existsByUsername(resolverUsername))
-			throw new IllegalArgumentException("The resolver username is not specified or the user does not exist.") ; 
-		
 		if(departmentName.length() == 0 || this.departmentDao.existsByDepartmentName(departmentName))	
 			throw new IllegalArgumentException("The department name is not specified or the department does not exist.") ; 
+		
+		if(priority < 0)	
+			throw new IllegalArgumentException("The priority is a negative number.") ;
+		
+		return true ; 
+	}
+	private boolean validateUnassignedRequestToResolver(long requestID
+			, String resolverUsername)	{
+		
+		if(requestID < 0 || !this.requestDao.existsById(requestID))
+			throw new IllegalArgumentException("The id is either negative or the request does not exist.") ; 
+		
+		if(resolverUsername.length() == 0 || !this.registeredUserDao.existsByUsername(resolverUsername)) 
+			throw new IllegalArgumentException("The resolver username is not either unspecified or the user does not exist.") ;
 		
 		return true ; 
 	}
@@ -101,7 +104,6 @@ public class RequestService {
 			, String title
 			, String description
 			, Integer urgency
-			, String contactInfo
 			)	{
 		
 		Request request ; 
@@ -112,15 +114,22 @@ public class RequestService {
 					, contactMethod
 					, title
 					, description
-					, urgency
-					, contactInfo))	{
+					, urgency))	{
 			
-			request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
-					, this.contactMethodDao.getContactMethodByName(contactMethod)
-					, title
-					, description
-					, urgency
-					, contactInfo) ; 
+			if(contactMethod.equals("email"))
+				request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
+						, this.contactMethodDao.getContactMethodByName(contactMethod)
+						, title
+						, description
+						, urgency
+						, this.registeredUserDao.findUserByUsername(registeredUserUsername).getEmail()) ;
+			
+			else request = new Request(this.registeredUserDao.findUserByUsername(registeredUserUsername)
+						, this.contactMethodDao.getContactMethodByName(contactMethod)
+						, title
+						, description
+						, urgency
+						, this.registeredUserDao.findUserByUsername(registeredUserUsername).getPhoneNumber()) ;
 			
 			this.requestDao.create(request) ; 
 			
@@ -132,19 +141,16 @@ public class RequestService {
 		
 		return "A new request has been created." ;
 	}
-	public String assignRequest(long unassignedrequestId
-			, String resolverUsername
+	public String assignRequestToDepartment(long unassignedRequestId
 			, String departmentName
 			, Integer priority)	{
 		
 		try {
-			if(validateUnassignedRequest(unassignedrequestId
-					, resolverUsername
+			if(validateUnassignedRequestToDepartment(unassignedRequestId
 					, departmentName
 					, priority))	{
-				Request unassignedRequest = this.requestDao.one(unassignedrequestId) ;
+				Request unassignedRequest = this.requestDao.one(unassignedRequestId) ;
 				
-				unassignedRequest.setResolverUser(this.registeredUserDao.findUserByUsername(resolverUsername)) ;
 				unassignedRequest.setDepartment(this.departmentDao.getDepartmentByName(departmentName)) ;
 				unassignedRequest.setPriority(priority) ;
 				
@@ -154,22 +160,40 @@ public class RequestService {
 			throw e ; 
 		}
 		
-		return "The request has been assigned to the user " + resolverUsername ; 
+		return "The request has been assigned to the department : " + departmentName; 
+	}
+	public String assignRequestToResolver(long unassignedRequestId
+			, String resolverUsername)	{
+		try {
+			if(validateUnassignedRequestToResolver(unassignedRequestId
+					, resolverUsername))	{
+			Request unassignedRequest = this.requestDao.one(unassignedRequestId) ; 
+			
+			unassignedRequest.setResolverUser(this.registeredUserDao.findUserByUsername(resolverUsername));
+				
+			}
+		} catch (Exception e) {
+			throw e ; 
+		}
+		return "The request has been assigned to the user : " + resolverUsername ; 
 	}
 	public String reassignRequest(long requestId
-			, String resolverUsername
-			, String departmentName)	{
+			, String departmentName
+			, Integer priority)	{
 		
 		try {
 			
 			if(validateReassign(requestId
-					, resolverUsername
-					, departmentName))	{
+					, departmentName
+					, priority))	{
 				
 				Request reassignedRequest = this.requestDao.one(requestId) ; 
 				
-				reassignedRequest.setResolverUser(this.registeredUserDao.findUserByUsername(resolverUsername)) ;
 				reassignedRequest.setDepartment(this.departmentDao.getDepartmentByName(departmentName)) ;
+				if(priority != null)	
+					reassignedRequest.setPriority(priority) ;
+				reassignedRequest.setResolverUser(null);
+				reassignedRequest.setEscalated(false);
 				
 				this.requestDao.create(reassignedRequest) ; 
 			}
@@ -178,9 +202,33 @@ public class RequestService {
 			throw e ; 
 		}
 		
-		return "The request has been reassigned to the user " + resolverUsername ; 
+		return "The request has been reassigned to the department : " + departmentName; 
 	}
-
+	public String escalateRequest(long requestId, String resolverUsername)	{
+		try {
+			if(requestId < 0 
+					|| !this.requestDao.existsById(requestId)
+					|| resolverUsername == null 
+					|| resolverUsername.length() == 0 
+					|| this.registeredUserDao.existsByUsername(resolverUsername)
+					|| this.requestDao.one(requestId).getResolverUser().equals(
+							this.registeredUserDao.findUserByUsername(resolverUsername)))
+				throw new IllegalArgumentException(
+						"The request id is negative or the request does not exist or the resolver username is not specified "
+						+ "or the user does not exist or the user does not have the permission to escalate the request.") ;
+			Request request = this.requestDao.one(requestId) ; 
+			request.setEscalated(true);
+			
+			this.requestDao.create(request) ;
+			
+			return "The request was successfully escalated." ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	
 	public List<Request> getRequestsByRegisteredUser(String registeredUserUsername)	{
 		
 		List<Request> requests ; 
@@ -204,7 +252,7 @@ public class RequestService {
 		List<Request> requests ; 
 		
 		try {
-			if(resolverUsername.length() > 0 && this.registeredUserDao.existsByUsername(resolverUsername))
+			if(resolverUsername == null || resolverUsername.length() > 0 && this.registeredUserDao.existsByUsername(resolverUsername))
 				requests = this.requestDao.getRequestsByResolver(
 						this.registeredUserDao.findUserByUsername(resolverUsername)) ;
 			else throw new IllegalArgumentException("The username is either unspecified or the user has no requests.") ;
@@ -214,7 +262,6 @@ public class RequestService {
 		
 		return requests ; 
 	}
-
 	public List<Request> getRequestsByResolverUserAndGreaterPriority(String resolverUsername, int priority)	{
 		
 		List<Request> requests ; 
@@ -380,7 +427,7 @@ public class RequestService {
 		List<Request> requests ;
 		
 		try {
-			if(department.length() > 0 && this.departmentDao.existsByDepartmentName(department))	
+			if(department == null || department.length() > 0 && this.departmentDao.existsByDepartmentName(department))	
 				requests = this.requestDao.getRequestsByDepartment(this.departmentDao.getDepartmentByName(department)) ;
 			else throw new IllegalArgumentException("The department name is either unspecified or does not exist.") ;
 		} catch (Exception e) {

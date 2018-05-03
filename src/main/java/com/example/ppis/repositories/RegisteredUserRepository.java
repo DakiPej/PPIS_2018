@@ -1,10 +1,14 @@
 package com.example.ppis.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.example.ppis.models.Department;
 import com.example.ppis.models.RegisteredUser;
+import com.example.ppis.models.UserType;
 
 public interface RegisteredUserRepository extends CrudRepository<RegisteredUser, Long>{
 	
@@ -17,4 +21,9 @@ public interface RegisteredUserRepository extends CrudRepository<RegisteredUser,
 	RegisteredUser findByUsername(@Param("username") String username);
 	
 	RegisteredUser findDistinctRegisteredUserByUsername(String username);
+	
+	public List<RegisteredUser> findAllByUserType(UserType userType) ; 
+	
+	@Query("SELECT ru FROM RegisteredUser ru, UserType ut where ru.userType =:userType AND ut.department =:department")
+	public List<RegisteredUser> getUsersByDepartment(@Param("userType") UserType userType, @Param("department") Department department) ;
 }
