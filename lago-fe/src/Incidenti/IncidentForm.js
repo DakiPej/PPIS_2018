@@ -36,16 +36,15 @@ class IncidentForm extends Component{
     }
 
     handleCheckbox(e){
-        this.setState
     }
 
     render(){
 
         return(
-            <form>
+            <form style={{padding:"2%"}}>
                 <Grid> 
                 <Row>
-                <Col md={10}>
+                <Col md={12}>
                 <FormGroup controlId="formIndicdent">
                     <ControlLabel> Naziv </ControlLabel>
                     <FormControl 
@@ -70,7 +69,7 @@ class IncidentForm extends Component{
                 </Row>
                 <br/>
                 <Row> 
-                <Col md={5}>
+                <Col md={6}>
                 <h6>
                         Način obavještavanja o razrješenju incidenta
                 </h6>
@@ -91,7 +90,7 @@ class IncidentForm extends Component{
                     </Checkbox>
 
                  </Col>
-                 <Col md={5}>
+                 <Col md={6} style={{textAlign:"right"}}>
                  <Button type="submit" bsStyle="info" bsSize="lg">Prijavi incident</Button>
                  </Col>
                  </Row>

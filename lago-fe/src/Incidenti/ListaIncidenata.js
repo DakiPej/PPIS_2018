@@ -11,8 +11,6 @@ import {
     Table,
     Glyphicon} from 'react-bootstrap';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils'
-import load from 'little-loader';
-load("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
 bootstrapUtils.addStyle(ListGroup, 'custom');
 
@@ -90,7 +88,7 @@ class IncidentItem extends Component{
                                 </FormControl>
                             </FormGroup>
                             </td>
-                            <td><Button bsStyle="danger" onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="trash" bsStyle="lg" /></Button></td>
+                            <td><Button bsStyle="info" style={{width:"100%"}} onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="eye-open" style={{color:"white", fontSize:"18px"}} /></Button></td>
                         </tr>
             break;
         }

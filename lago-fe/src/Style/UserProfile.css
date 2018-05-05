@@ -24,8 +24,8 @@
 #content{
   height: auto;
   width: auto;
-  background-color: #fff;
-  opacity: 0.9;
+  background-color: #babec4;
+  opacity: 0.95;
 }
 
 #inner-content-wrapper {
@@ -36,8 +36,8 @@
   padding-right: 15%;
   width: auto;
   padding-bottom: 5em;
-  background-image: url('../Images/var1.jpg');
-  }
+  background-image: url('../Images/var1.jpg');   
+}
 
   @media (min-width: 768px){
     .content{
