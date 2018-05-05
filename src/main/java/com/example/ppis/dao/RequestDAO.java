@@ -53,7 +53,9 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		List<Request> requests ; 
 		
 		try {
-			requests = this.repo.findAllByRegisteredUserAndResolverUser(registeredUser, resolverUser) ; 
+			if(resolverUser == null)
+				requests = this.repo.findAllByRegisteredUserAndResolverUserIsNull(registeredUser) ;
+			else requests = this.repo.findAllByRegisteredUserAndResolverUserNotNull(registeredUser) ; 
 		} catch (Exception e) {
 			throw e ; 
 		}
