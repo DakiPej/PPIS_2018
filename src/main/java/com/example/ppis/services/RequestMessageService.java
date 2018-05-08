@@ -30,7 +30,7 @@ public class RequestMessageService {
         return requestMessageDAO.getRequestMessagesByReceiver(registeredUserDAO.one(receiverId));
     }
 
-    public List<RequestMessage> getRequestMessagesBySender(Long senderId) {
+    public List<RequestMessage> getRequestMessagesBySenderId(Long senderId) {
         return requestMessageDAO.getRequestMessagesBySender(registeredUserDAO.one(senderId));
     }
 
