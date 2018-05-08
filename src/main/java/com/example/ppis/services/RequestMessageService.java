@@ -26,14 +26,14 @@ public class RequestMessageService {
     @Autowired
     RequestDAO requestDAO;
 
-    public List<RequestMessage> getRequestMessagesByReceiver(RegisteredUser receiver) {
-        return requestMessageDAO.getRequestMessagesByReceiver(receiver);
+    public List<RequestMessage> getRequestMessagesByReceiverId(Long receiverId) {
+        return requestMessageDAO.getRequestMessagesByReceiver(registeredUserDAO.one(receiverId));
     }
 
-    public List<RequestMessage> getRequestMessagesBySender(RegisteredUser sender) {
-        return requestMessageDAO.getRequestMessagesBySender(sender);
+    public List<RequestMessage> getRequestMessagesBySender(Long senderId) {
+        return requestMessageDAO.getRequestMessagesBySender(registeredUserDAO.one(senderId));
     }
-    
+
     public RequestMessage create(RequestMessageForm requestMessageForm, String senderType, String receiverType) throws ServletException {
 
         Request request = requestDAO.one(requestMessageForm.getRequestId());
