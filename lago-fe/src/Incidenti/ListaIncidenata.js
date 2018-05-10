@@ -9,7 +9,8 @@ import {
     FormGroup,
     FormControl,
     Table,
-    Glyphicon} from 'react-bootstrap';
+    Glyphicon,
+    Panel} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils';
 
@@ -181,7 +182,12 @@ class ListaIncidenata extends Component{
 
         return(
             <div>
-               {table}
+                <Panel bsStyle="primary">
+                    <Panel.Heading>
+                        <Panel.Title componentClass="h2">Lista incidenata</Panel.Title>
+                    </Panel.Heading>
+                        {table}
+                </Panel>
             </div>
         );
     

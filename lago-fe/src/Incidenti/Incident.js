@@ -32,7 +32,7 @@ class Incident extends Component{
         };
 
         return(
-            <Panel bsStyle="primary" style={{background:"#babec4"}}>
+            <Panel bsStyle="primary">
                 <Panel.Heading> 
                     <Panel.Heading componentClass="h2">{test.naziv}
                     <small>
