@@ -48,7 +48,7 @@ class Zahtjev extends Component{
                     <Panel.Body>{test.korisnik}</Panel.Body>
                 </Panel>
                 <Row>
-                    <Col md={2}>
+                    <Col md={3}>
                         <Panel bsStyle="info">
                             <Panel.Heading>
                                 <Panel.Title componentClass="h5">Kontakt</Panel.Title>
@@ -72,7 +72,7 @@ class Zahtjev extends Component{
                             <Panel.Body>{test.datumprijave}</Panel.Body>
                         </Panel>
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                         <Panel  bsStyle="success">
                             <Panel.Heading>
                                 <Panel.Title componentClass="h6">Datum R</Panel.Title>
@@ -80,7 +80,7 @@ class Zahtjev extends Component{
                             <Panel.Body>{test.datumprijave}</Panel.Body>
                         </Panel>
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                         <Panel bsStyle="success">
                             <Panel.Heading>
                                 <Panel.Title componentClass="h5">Status</Panel.Title>
