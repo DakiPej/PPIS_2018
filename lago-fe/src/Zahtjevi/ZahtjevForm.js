@@ -25,14 +25,19 @@ class ZahtjevForm extends Component{
     }
 
     handleChange(e) {
-        console.log(e.target.name + ' : ' + e.target.value);
-        if(e.target.name == "telefon" || e.target.name == "email"){
-            var tmp = 0;
-            if(e.target.value == 0) tmp = 1;
-            else tmp = 0;
-            console.log(tmp);
-            this.setState({ [e.target.name]: tmp });
-        }else this.setState({ [e.target.name]: e.target.value });
+      console.log(e.target.id + ' : ' + e.target.value);
+      if(e.target.name == "telefon" || e.target.name == "email"){
+          var name = 'email';
+          if(e.target.id == 'email') name = "telefon";
+          this.setState(
+              {
+                  [e.target.id]:true,
+                  [name]:false
+              }
+          );
+          console.log(e.target.id + ' ' +this.state.email);
+          console.log(name + ' ' +this.state.telefon);
+      }else this.setState({ [e.target.name]: e.target.value });
     }
 
     handleCheckbox(e){
@@ -73,21 +78,22 @@ class ZahtjevForm extends Component{
                 <h6>
                         Način obavještavanja o razrješenju zahtjeva
                 </h6>
-
-                    <Checkbox inline
+                <FormGroup>
+                    <Radio inline
+                        id = "email"
                         name="email"
-                        value={this.state.email}
-                        onChange={this.handleChange}
+                        onChange = {this.handleChange}
                     >
                         E-mail
-                    </Checkbox>{'   '}
-                    <Checkbox inline
-                        name="telefon"
-                        value={this.state.telefon}
-                        onChange={this.handleChange}
+                    </Radio>{'   '}
+                    <Radio inline
+                        id = "telefon"
+                        name="email"
+                        onChange = {this.handleChange}
                     >
                         Telefon
-                    </Checkbox>
+                    </Radio>
+                </FormGroup>
 
                  </Col>
                  <Col md={6} style={{textAlign:"right"}}>
