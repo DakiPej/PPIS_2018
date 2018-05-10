@@ -73,7 +73,8 @@ class ListaIncidenata extends Component{
                 status: 'Poslano',
                 korisnik: 'Korisnik 1',
                 odjel: 'Odjel 1',
-                prioritet: 1
+                prioritet: 1,
+                servis:'Servis'
             },
             {
                 id: 2,
@@ -82,7 +83,8 @@ class ListaIncidenata extends Component{
                 datum: '11/11/11',
                 status: 'Poslano',
                 odjel: 'Odjel 2',
-                prioritet: 2
+                prioritet: 2,
+                servis:'Servis'
             },
             {
                 id: 3,
@@ -91,7 +93,8 @@ class ListaIncidenata extends Component{
                 datum: '11/11/11',
                 status: 'Poslano',
                 odjel: 'Odjel 3',
-                prioritet: 2
+                prioritet: 2,
+                servis:'Servis'
             },
             {
                 id: 4,
@@ -100,7 +103,8 @@ class ListaIncidenata extends Component{
                 korisnik: 'Korisnik 1',
                 status: 'Poslano',
                 odjel: 'Odjel 1',
-                prioritet: 10
+                prioritet: 10,
+                servis:'Servis'
             }
         ];
         
@@ -129,24 +133,55 @@ class ListaIncidenata extends Component{
             'Rješeno':'Rješeno'
         }
 
+        var table = <div></div>;
+        var role = 'Korisnik';
+        switch(role){
+            case 'Administrator':
+                table =  
+                    <BootstrapTable data={test} options={options}>
+                        <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
+                        <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
+                        <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Rješava</TableHeaderColumn>
+                        <TableHeaderColumn  dataField ='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='status' dataSort
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
+                        filter={ { type: 'SelectFilter', options: sType }}
+                        >Status</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='odjel' dataSort filter={ { type: 'TextFilter', delay: 500 } } >Odjel</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='prioritet' dataSort
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                        filter={ { type: 'SelectFilter', options: pType }}
+                        >Prioritet
+                        </TableHeaderColumn>
+                        <TableHeaderColumn  dataField='prioritet' dataSort
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                        filter={ { type: 'SelectFilter', options: pType }}
+                        >Hitnost
+                        </TableHeaderColumn>
+                    </BootstrapTable>;
+                    break;
+            case 'Korisnik':
+                table = 
+                    <BootstrapTable data={test} options={options}>
+                        <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
+                        <TableHeaderColumn  dataField ='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='status' dataSort
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
+                        filter={ { type: 'SelectFilter', options: sType }}
+                        >Status</TableHeaderColumn>
+                   </BootstrapTable>;
+                break;
+        }
+
         return(
             <div>
-                <BootstrapTable data={test} options={options}>
-                    <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
-                    <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
-                    <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
-                    <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum</TableHeaderColumn>
-                    <TableHeaderColumn  dataField='status' dataSort
-                    filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
-                    filter={ { type: 'SelectFilter', options: sType }}
-                    >Status</TableHeaderColumn>
-                    <TableHeaderColumn  dataField='odjel' dataSort filter={ { type: 'TextFilter', delay: 500 } } >Odjel</TableHeaderColumn>
-                    <TableHeaderColumn  dataField='prioritet' dataSort
-                    filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
-                    filter={ { type: 'SelectFilter', options: pType }}
-                    >Prioritet
-                    </TableHeaderColumn>
-                </BootstrapTable>
+               {table}
             </div>
         );
     
