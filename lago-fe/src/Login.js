@@ -9,20 +9,22 @@ class Login extends Component {
   constructor(props){
     super(props);
     this.state = {username: '', password: ''};
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onLogin = this.onLogin.bind(this);
-
-  }
-  onChangePassword(event){
-    this.setState({password: event.target.value});
-  }
-  onChangeUsername(event){
-    this.setState({username: event.target.value});
+    this.onChange = this.onChange.bind(this);
   }
 
   onLogin(){
-      this.state.ulogovan=true;
+   sessionStorage.setItem("username", this.state.username);
+   sessionStorage.setItem("rola", "Administrator");
+   window.location='/dashboard';
+  }
+
+  handleError(error) {
+      console.log(error);
+  }
+
+  onChange(e) {
+      this.setState({[e.target.name]:e.target.value});
   }
 
   render() {
@@ -36,13 +38,13 @@ class Login extends Component {
 
                 <div className="login-input-wrapper">
                   <div className="form-group has-feedback">
-                      <input className=" colors login-input" placeholder="Korisničko ime" onFocus="{this.placeholder = ''}" onBlur="{this.placeholder = 'Korisničko ime'}"
-                          type="text" onChange={this.onChangeUsername} />
+                      <input className=" colors login-input" placeholder="Korisničko ime" onFocus="{this.placeholder = ''}" onBur="{this.placeholder = 'Korisničko ime'}"
+                          type="text"  onChange={this.onChange}/>
                       <i className="glyphicon glyphicon-user form-control-feedback pull-left" aria-hidden="true" />
                   </div>
                   <div className="form-group has-feedback">
-                      <input className="colors login-input" placeholder="Lozinka" onFocus="{this.placeholder = ''}" onBlur="{this.placeholder = 'Lozinka'}"
-                          type="password" onChange={this.onChangePassword}/>
+                      <input className="colors login-input" placeholder="Lozinka" onfocus="{this.placeholder = ''}" onblur="{this.placeholder = 'Lozinka'}"
+                          type="password" onChange={this.onChange}/>
                       <i className="glyphicon glyphicon-lock form-control-feedback pull-left" aria-hidden="true" />
                   </div>
                </div>

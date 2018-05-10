@@ -45,9 +45,13 @@ class Navi extends React.Component {
               <NavItem href="/onama">
                 <b>O nama</b>
               </NavItem>
-              {this.state.ulogovan ?
-                <NavItem href="/prijava">
-                  <b>Ma nemoj</b>
+              {sessionStorage.getItem("username") !== null ?
+                <NavItem href="/dashboard">
+                  <b>Dashboard</b>
+              </NavItem>:<div/>} 
+               {sessionStorage.getItem("username") !== null ?
+                 <NavItem href="javascript:sessionStorage.clear();window.location='/';">
+                <b>Logout</b>
                 </NavItem> :
               <NavItem href="/prijava">
                 <b>Prijava</b>
