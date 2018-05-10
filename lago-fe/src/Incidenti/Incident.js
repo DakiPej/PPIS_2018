@@ -28,7 +28,7 @@ class Incident extends Component{
             status:'U obradi',
             odjel:'Odjel 1',
             datumprijave:'11/11/11',
-            datumrjesenja:' ',
+            datumrjesenja:'N/A',
         };
 
         return(

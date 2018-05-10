@@ -10,9 +10,155 @@ import {
     FormControl,
     Table,
     Glyphicon} from 'react-bootstrap';
-import {bootstrapUtils} from 'react-bootstrap/lib/utils'
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import {bootstrapUtils} from 'react-bootstrap/lib/utils';
 
 bootstrapUtils.addStyle(ListGroup, 'custom');
+
+
+function enumFormatter(cell, row, enumObject) {
+    return enumObject[cell];
+}
+
+class ListaIncidenata extends Component{
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            sortName: undefined,
+            sortOrder: undefined
+        }
+
+        this.getIncidenti = this.getIncidenti.bind(this);
+        this.onSortChange = this.onSortChange.bind(this);
+    }
+
+    componentDidMount(){
+        this.getIncidenti();
+    }
+
+    onSortChange(sortName, sortOrder) {
+        console.info('onSortChange', arguments);
+        this.setState({
+          sortName,
+          sortOrder
+        });
+    }
+
+    getIncidenti(){
+        /*axios.get(
+
+        )
+        .then(this.handleSuccess.bind(this))
+        .catch(this.handleError.bind(this));
+        */
+    }
+
+    handleSuccess(response){
+
+    }
+
+    handleError(error){
+        console.log(error);
+    }
+
+    render(){
+
+        var test = [
+            {
+                id: 1,
+                naslov: 'Naslov',
+                datum: '11/11/11',
+                status: 'Poslano',
+                korisnik: 'Korisnik 1',
+                odjel: 'Odjel 1',
+                prioritet: 1
+            },
+            {
+                id: 2,
+                naslov: 'Naslov',
+                korisnik: 'Korisnik 1',
+                datum: '11/11/11',
+                status: 'Poslano',
+                odjel: 'Odjel 2',
+                prioritet: 2
+            },
+            {
+                id: 3,
+                naslov: 'Naslov',
+                korisnik: 'Korisnik 1',
+                datum: '11/11/11',
+                status: 'Poslano',
+                odjel: 'Odjel 3',
+                prioritet: 2
+            },
+            {
+                id: 4,
+                naslov: 'Naslov',
+                datum: '11/11/11',
+                korisnik: 'Korisnik 1',
+                status: 'Poslano',
+                odjel: 'Odjel 1',
+                prioritet: 10
+            }
+        ];
+        
+        const options = {
+            sortName: this.state.sortName,
+            sortOrder: this.state.sortOrder,
+            onSortChange: this.onSortChange
+        };
+
+        const pType ={
+            1:1,
+            2:2,
+            3:3,
+            4:4,
+            5:5,
+            6:6,
+            7:7,
+            8:8,
+            9:9,
+            10:10
+        };
+
+        const sType = {
+            'Poslano':'Poslano',
+            'U obradi':'U obradi',
+            'Rješeno':'Rješeno'
+        }
+
+        return(
+            <div>
+                <BootstrapTable data={test} options={options}>
+                    <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
+                    <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
+                    <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                    <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum</TableHeaderColumn>
+                    <TableHeaderColumn  dataField='status' dataSort
+                    filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
+                    filter={ { type: 'SelectFilter', options: sType }}
+                    >Status</TableHeaderColumn>
+                    <TableHeaderColumn  dataField='odjel' dataSort filter={ { type: 'TextFilter', delay: 500 } } >Odjel</TableHeaderColumn>
+                    <TableHeaderColumn  dataField='prioritet' dataSort
+                    filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                    filter={ { type: 'SelectFilter', options: pType }}
+                    >Prioritet
+                    </TableHeaderColumn>
+                </BootstrapTable>
+            </div>
+        );
+    
+    }
+
+}
+
+export default ListaIncidenata;
+
+// Backup if needed
+
+/*
 
 class IncidentItem extends Component{
 
@@ -49,7 +195,7 @@ class IncidentItem extends Component{
         //var date = new Date(this.state.datum);
 
         var incident = null;
-        var rola = "Administrator"; 
+        var rola = "Korisnik"; 
 
         switch (rola){
             case "Korisnik":
@@ -101,128 +247,4 @@ class IncidentItem extends Component{
 
 }
 
-class ListaIncidenata extends Component{
-
-    constructor(props){
-        super(props);
-
-        this.state = {
-            username:'',
-            role:'',
-            incidenti: []
-        }
-
-        this.getIncidenti = this.getIncidenti.bind(this);
-    }
-
-    componentDidMount(){
-        this.getIncidenti();
-    }
-
-    getIncidenti(){
-        /*axios.get(
-
-        )
-        .then(this.handleSuccess.bind(this))
-        .catch(this.handleError.bind(this));
-        */
-    }
-
-    handleSuccess(response){
-
-    }
-
-    handleError(error){
-        console.log(error);
-    }
-
-    render(){
-
-        var test = [
-            {
-                id: 1,
-                naslov: 'Naslov',
-                datum: '11/11/11',
-                status: 'Poslano',
-                korisnik: 'Korisnik 1',
-                odjel: null,
-                prioritet: null
-            },
-            {
-                id: 2,
-                naslov: 'Naslov',
-                korisnik: 'Korisnik 1',
-                datum: '11/11/11',
-                status: 'Poslano',
-                odjel: null,
-                prioritet: null
-            },
-            {
-                id: 3,
-                naslov: 'Naslov',
-                korisnik: 'Korisnik 1',
-                datum: '11/11/11',
-                status: 'Poslano',
-                odjel: null,
-                prioritet: null
-            },
-            {
-                id: 4,
-                naslov: 'Naslov',
-                datum: '11/11/11',
-                korisnik: 'Korisnik 1',
-                status: 'Poslano',
-                odjel: null,
-                prioritet: null
-            }
-        ];
-        
-        var list = test.map((incident)=><IncidentItem key={incident.id} item={incident}/>);
-        var role = "Administrator";
-
-        var labels = null;
-    
-        switch(role){
-            case "Korisnik":
-               labels = <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Naziv</th>
-                        <th>Datum</th>
-                        <th>Status</th>
-                        <th>Briši</th>
-                    </tr>
-                </thead>;
-                break;
-            case "Administrator":
-                labels = <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Korisnik</th>
-                        <th>Naziv</th>
-                        <th>Datum</th>
-                        <th>Status</th>
-                        <th>Odjel</th>
-                        <th>Prioritet</th>
-                        <th>Briši</th>
-                    </tr>
-                </thead>;
-                break;
-        }
-    
-        return(
-            <div>
-                <Table bordered responsive condensed>
-                    {labels}
-                    <tbody>        
-                    {list}
-                    </tbody>
-                </Table>
-            </div>
-        );
-    
-    }
-
-}
-
-export default ListaIncidenata;
+*/
