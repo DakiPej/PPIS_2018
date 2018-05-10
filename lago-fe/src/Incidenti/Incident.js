@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PageHeader, Row, Panel, Col } from 'react-bootstrap';
+import { PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup } from 'react-bootstrap';
 
 class Incident extends Component{
 
@@ -32,7 +32,7 @@ class Incident extends Component{
         };
 
         return(
-            <Panel bsStyle="primary" style={{background:"#babec4"}}>
+            <Panel bsStyle="primary">
                 <Panel.Heading> 
                     <Panel.Heading componentClass="h2">{test.naziv}
                     <small>
@@ -40,39 +40,55 @@ class Incident extends Component{
                     </small>
                     </Panel.Heading> 
                 </Panel.Heading>
-                <div style={{padding:"1%"}}>
+                <div style={{padding:"1%", overflowY:"scroll", maxHeight:"60vh"}}>
                 <Panel bsStyle="info">
                     <Panel.Heading>
-                        <Panel.Title componentClass="h4">Korisnik</Panel.Title>
+                        <Panel.Title componentClass="h5">Korisnik</Panel.Title>
                     </Panel.Heading>
                     <Panel.Body>{test.korisnik}</Panel.Body>
                 </Panel>
                 <Row>
-                    <Col md={3}>
+                    <Col md={2}>
                         <Panel bsStyle="info">
                             <Panel.Heading>
-                                <Panel.Title componentClass="h4">Odjel</Panel.Title>
+                                <Panel.Title componentClass="h5">Odjel</Panel.Title>
                             </Panel.Heading>
                             <Panel.Body>{test.odjel}</Panel.Body>
                         </Panel>
                     </Col>
-                    <Col md={3}>
-                        <Panel  bsStyle="success">
+                    <Col md={2}>
+                        <Panel bsStyle="success">
                             <Panel.Heading>
-                                <Panel.Title componentClass="h4">Datum prijave</Panel.Title>
+                                <Panel.Title componentClass="h5">Kontakt</Panel.Title>
+                            </Panel.Heading>
+                            <Panel.Body>Kontakt</Panel.Body>
+                        </Panel>
+                    </Col>
+                    <Col md={2}>
+                        <Panel  bsStyle="info">
+                            <Panel.Heading>
+                                <Panel.Title componentClass="h5">Datum P</Panel.Title>
                             </Panel.Heading>
                             <Panel.Body>{test.datumprijave}</Panel.Body>
                         </Panel>
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
+                        <Panel  bsStyle="success">
+                            <Panel.Heading>
+                                <Panel.Title componentClass="h6">Datum R</Panel.Title>
+                            </Panel.Heading>
+                            <Panel.Body>{test.datumprijave}</Panel.Body>
+                        </Panel>
+                    </Col>
+                    <Col md={2}>
                         <Panel  bsStyle="info">
                             <Panel.Heading>
-                                <Panel.Title componentClass="h4">Datum rješenja</Panel.Title>
+                                <Panel.Title componentClass="h5">Datum Z</Panel.Title>
                             </Panel.Heading>
                             <Panel.Body>{test.datumrjesenja}</Panel.Body>
                         </Panel>
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                         <Panel bsStyle="success">
                             <Panel.Heading>
                                 <Panel.Title componentClass="h5">Prioritet</Panel.Title>
@@ -81,14 +97,27 @@ class Incident extends Component{
                         </Panel>
                     </Col>
                 </Row>
-                <Panel>
+                <PanelGroup accordion>
+                <Panel eventKey="1">
                     <Panel.Heading>
-                        <Panel.Title componentClass="h5">Opis</Panel.Title>
+                        <Panel.Title componentClass="h5"  >Opis</Panel.Title>
                     </Panel.Heading>
-                    <Panel.Body>{test.opis}</Panel.Body>
+                    <Panel.Body >{test.opis}</Panel.Body>
                 </Panel>
+                <Panel bsStyle="info" eventKey="2">
+                    <Panel.Heading>
+                        <Panel.Title componentClass="h3" >Poruke</Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body >
+                        <FormControl componentClass="textarea" placeholder="Poruka" />
+                        <br/>
+                        <Button bsStyle="info" bsSize="lg">Pošalji</Button>
+                    </Panel.Body>
+                </Panel>
+                </PanelGroup>
                 </div>
             </Panel>
+            
         );
     }
 
