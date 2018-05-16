@@ -5,9 +5,10 @@ import { Switch, Route, NavLink} from 'react-router-dom';
 import './Style/UserProfile.css';
 
 import Details from './Details';
-import Zahtjevi from './Forms/Zahtjevi';
-import Incidenti from './Incidenti/Incidenti'; 
+import Zahtjevi from './Zahtjevi/Zahtjevi';
+import Incidenti from './Incidenti/Incidenti';
 import IncidentForm from './Incidenti/IncidentForm';
+import ZahtjevForm from './Zahtjevi/ZahtjevForm';
 
 
 const navigationItems = [
@@ -26,7 +27,7 @@ const navigationItems = [
         <span className="nav-title">Incidenti</span>
       </SidebarItem>
     </NavLink>,
-    <NavLink className="link" to="/nesto" activeClassName="active">
+    <NavLink className="link" to="/dashboard/newzahtjev" activeClassName="active">
       <SidebarItem>
         <span className="nav-title">Novi zahtjev</span>
       </SidebarItem>
@@ -37,7 +38,7 @@ const navigationItems = [
       </SidebarItem>
     </NavLink>,
   ];
-  
+
 
 class Dashboard extends Component{
 
@@ -61,6 +62,7 @@ class Dashboard extends Component{
                     <Route exact path='/dashboard' component={Details}/>
                     <Route path="/dashboard/profile" component={Details}/>
                     <Route path="/dashboard/zahtjevi" component= {Zahtjevi}/>
+                    <Route path="/dashboard/newzahtjev" component={ZahtjevForm}/>
                     <Route path="/dashboard/incidenti" component={Incidenti}/>
                     <Route path="/dashboard/newIncident" component={IncidentForm}/>
                 </Switch>
@@ -73,4 +75,3 @@ class Dashboard extends Component{
 }
 
 export default Dashboard;
-

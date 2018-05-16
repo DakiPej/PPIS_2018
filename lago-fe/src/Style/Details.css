@@ -1,13 +1,20 @@
 .body{
   width: 100%;
 }
+.row{
+  margin: 0;
+}
 .main-naslov {
   margin: 0;
+  width: 100%;
   padding: 1em 0;
   color: #117a8b!important;
   font-family: 'Open Sans', sans-serif;
 }
-
+.profil-forma{
+  width: 100%;
+  margin: 0;
+}
 
 @media (min-width: 768px){
   .content{
@@ -16,14 +23,21 @@
 }
 
 .profil-form-group{
-  padding: 0;
+  margin: 0;
+  width: 100%;
+  padding: 2%;
   margin-bottom:  0;
 }
 .form-group{
+  width: 100%;
+  padding: 2%;
   color: #343a40;
   padding-bottom: 0;
   margin-bottom:  0.1rem!important;
     font-size: 1.4em;
+}
+.span{
+  padding: 2%;
 }
 
 .separator{
