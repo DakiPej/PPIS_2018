@@ -65,7 +65,7 @@ class Zahtjev extends Component{
   </div></ListGroupItem>
         );
           var table = <div></div>;
-    			var role = 'Odjel';
+    			var role = sessionStorage.getItem("rola");
     			switch(role){
             case 'Administrator':
             if (test.odjel===null)
@@ -270,18 +270,10 @@ class Zahtjev extends Component{
                    </Panel.Heading>
                    <Panel.Collapse>
                    <Panel.Body >
-                   <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
-                      <Tab eventKey={1} title="Korisnik">
+
                       <ListGroup className="list-group-flush">
                         {listItems}
                       </ListGroup>
-                      </Tab>
-                      <Tab eventKey={2} title="Odjel">
-                      <ListGroup className="list-group-flush">
-                        {listItems2}
-                      </ListGroup>
-                      </Tab>
-                    </Tabs>
 
                    </Panel.Body>
                    <div style={{padding:"2.5%"}}>
@@ -574,12 +566,12 @@ class Zahtjev extends Component{
                 <Panel.Collapse>
                 <Panel.Body >
                 <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
-                   <Tab eventKey={1} title="Korisnik">
+                   <Tab eventKey={1} title="Administrator">
                    <ListGroup className="list-group-flush">
                      {listItems}
                    </ListGroup>
                    </Tab>
-                   <Tab eventKey={2} title="Odjel">
+                   <Tab eventKey={2} title="Korisnik">
                    <ListGroup className="list-group-flush">
                      {listItems2}
                    </ListGroup>
@@ -598,7 +590,7 @@ class Zahtjev extends Component{
                       <ControlLabel> Primalac: </ControlLabel>
                       <FormControl componentClass="select" placeholder="Odjel">
                           <option value="Korisnik">Korisnik</option>
-                          <option value="Odjel">Odjel</option>
+                          <option value="Administrator">Odjel</option>
                       </FormControl>
                       <br/>
                       <ControlLabel> Tekst poruke: </ControlLabel>

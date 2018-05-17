@@ -149,7 +149,7 @@ class ListaZahtjeva extends Component{
         }
 
         var table = <div></div>;
-        var role = 'Odjel';
+        var role = sessionStorage.getItem("rola");
         switch(role){
             case 'Administrator':
                 table =
@@ -226,7 +226,7 @@ class ListaZahtjeva extends Component{
                   </TableHeaderColumn>
                   <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
                   <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
-                  <TableHeaderColumn  dataField='status' dataSort
+                  <TableHeaderColumn  dataFieldKorisnik='status' dataSort
                   filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
                   filter={ { type: 'SelectFilter', options: sType }}
                   >Status</TableHeaderColumn>

@@ -151,7 +151,7 @@ class ListaIncidenata extends Component{
 
 
         var table = <div></div>;
-        var role = 'Administrator';
+        var role = sessionStorage.getItem("rola");
         switch(role){
             case 'Administrator':
                 table =
@@ -205,6 +205,46 @@ class ListaIncidenata extends Component{
                         >Status</TableHeaderColumn>
                    </BootstrapTable>;
                 break;
+              case 'Odjel':
+              if (this.props.tip==='Nedodijeljeni')
+              table =
+                  <BootstrapTable data={test} options={options}>
+                      <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
+                      <TableHeaderColumn   dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                      <TableHeaderColumn   dataField='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
+                      <TableHeaderColumn   dataField='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
+                      <TableHeaderColumn  dataField='prioritet' dataSort
+                      filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                      filter={ { type: 'SelectFilter', options: pType }}
+                      >Prioritet
+                      </TableHeaderColumn>
+                      <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                 </BootstrapTable>;
+              else
+              table =
+              <BootstrapTable data={test} options={options}>
+                  <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                  <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
+                  <TableHeaderColumn   dataField='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='prioritet' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                  filter={ { type: 'SelectFilter', options: pType }}
+                  >Prioritet
+                  </TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum posljednjeg rješavanja</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum zatvaranja</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='status' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
+                  filter={ { type: 'SelectFilter', options: sType }}
+                  >Status</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='eskalacija' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ eType }
+                  filter={ { type: 'SelectFilter', options: eType }}
+                  >Eskalacija</TableHeaderColumn>
+                </BootstrapTable>;
         }
 
         return(

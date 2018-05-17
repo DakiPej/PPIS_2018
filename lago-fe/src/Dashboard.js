@@ -22,7 +22,7 @@ class Dashboard extends Component{
 
         var navigationItems=[];
 
-        var rola ='Odjel';
+        var rola =sessionStorage.getItem("rola");
         switch(rola){
           case 'Korisnik':
           navigationItems = [
