@@ -15,7 +15,7 @@ class Login extends Component {
 
   onLogin(){
    sessionStorage.setItem("username", this.state.username);
-   sessionStorage.setItem("rola", "Administrator");
+   sessionStorage.setItem("rola", "Korisnik");
    window.location='/dashboard';
   }
 

@@ -1,9 +1,25 @@
 .Ponude {
-  margin-top: 3%;
-  margin-left: 5%;
-  margin-right: 5%;
+  height: 100vh;
+  padding-top: 8vh;
+  padding-left:12%;
+  padding-right: 15%;
+  width: auto;
+  padding-bottom: 5em;
+  background-image: linear-gradient( rgba(255, 255, 255, 0.65), rgba(0, 0, 255, 0.5)),
+  url('../Images/var1.jpg');
 }
 
 .card{
   background-color: rgba(52,58,64,1)!important;
+
+
+}
+.card-text{
+  margin-bottom:50px;
+}
+.btna{
+  position:absolute;
+  bottom: 10px;
+  right: 10px;
+
 }

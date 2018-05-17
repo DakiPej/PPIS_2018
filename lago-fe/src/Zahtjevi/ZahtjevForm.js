@@ -8,6 +8,7 @@ import {
     Checkbox,
     Button,
     Row,
+    Panel,
     Col,
     Grid} from 'react-bootstrap';
 
@@ -15,13 +16,18 @@ class ZahtjevForm extends Component{
 
     constructor(props){
         super(props);
+        if (localStorage.getItem("nazivZahtjeva") !== null)
+          var naziv=localStorage.getItem("nazivZahtjeva");
+        else naziv='';
+        localStorage.clear();
         this.state = {
-            naziv:'',
+            naziv: naziv,
             opis:'',
             email:0,
             telefon:0
         };
         this.handleChange = this.handleChange.bind(this);
+
     }
 
     handleChange(e) {
@@ -46,6 +52,12 @@ class ZahtjevForm extends Component{
     render(){
 
         return(
+          <Panel bsStyle="primary">
+          <Panel.Heading>
+                  <Panel.Title componentClass="h2">
+                      Novi zahtjev
+                  </Panel.Title>
+              </Panel.Heading>
             <form style={{padding:"2%"}}>
                 <Grid>
                 <Row>
@@ -74,11 +86,29 @@ class ZahtjevForm extends Component{
                 </Row>
                 <br/>
                 <Row>
+                <FormGroup controlId="formIncident">
+                    <Col md={6} xsOffset={3}>
+                        <ControlLabel> Odaberi hitnost </ControlLabel>
+                        <FormControl componentClass="select" placeholder="Hitnost">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </FormControl>
+                    </Col>
+                </FormGroup>
+                </Row>
+                <br/>
+                <Row>
                 <Col md={6}>
-                <h6>
-                        Način obavještavanja o razrješenju zahtjeva
-                </h6>
-                <FormGroup>
+                <FormGroup  controlId="formZahtjev">
+                <ControlLabel>   Način obavještavanja o razrješenju zahtjeva </ControlLabel>
                     <Radio inline
                         id = "email"
                         name="email"
@@ -94,14 +124,17 @@ class ZahtjevForm extends Component{
                         Telefon
                     </Radio>
                 </FormGroup>
-
                  </Col>
-                 <Col md={6} style={{textAlign:"right"}}>
-                 <Button type="submit" bsStyle="info" bsSize="lg">Prijavi Zahtjev</Button>
+                 </Row>
+
+                 <Row>
+                 <Col md={12} style={{textAlign:"right"}}>
+                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi zahtjev</Button>
                  </Col>
                  </Row>
                  </Grid>
             </form>
+              </Panel>
         );
 
     }

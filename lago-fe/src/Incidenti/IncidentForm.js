@@ -26,7 +26,7 @@ class IncidentForm extends Component{
     }
 
     handleChange(e) {
-        console.log(e.target.id + ' : ' + e.target.value);    
+        console.log(e.target.id + ' : ' + e.target.value);
         if(e.target.name == "telefon" || e.target.name == "email"){
             var name = 'email';
             if(e.target.id == 'email') name = "telefon";
@@ -48,18 +48,18 @@ class IncidentForm extends Component{
 
         return(
             <Panel bsStyle="primary">
-            <Panel.Heading> 
+            <Panel.Heading>
                     <Panel.Title componentClass="h2">
                         Novi incident
-                    </Panel.Title> 
+                    </Panel.Title>
                 </Panel.Heading>
             <form style={{padding:"2%"}}>
-                <Grid> 
+                <Grid>
                 <Row>
                 <Col md={12}>
-                <FormGroup controlId="formIndicdent">
+                <FormGroup controlId="formIncident">
                     <ControlLabel> Naziv </ControlLabel>
-                    <FormControl 
+                    <FormControl
                         type="text"
                         name="naziv"
                         value={this.state.naziv}
@@ -81,6 +81,7 @@ class IncidentForm extends Component{
                 </Row>
                 <br/>
                 <Row>
+                  <FormGroup  controlId="formIncident">
                     <Col md={6}>
                         <ControlLabel> Odaberi servis </ControlLabel>
                         <FormControl componentClass="select" placeholder="Servis">
@@ -100,14 +101,13 @@ class IncidentForm extends Component{
                             <option value="5">5</option>
                         </FormControl>
                     </Col>
+                    </FormGroup>
                 </Row>
                 <br/>
-                <Row> 
+                <Row>
                 <Col md={6}>
-                <h6>
-                        Način obavještavanja o razrješenju incidenta
-                </h6>
-                <FormGroup>
+                <FormGroup  controlId="formIncident">
+                <ControlLabel>   Način obavještavanja o razrješenju incidenta </ControlLabel>
                     <Radio inline
                         id = "email"
                         name="email"
@@ -124,8 +124,11 @@ class IncidentForm extends Component{
                     </Radio>
                 </FormGroup>
                  </Col>
-                 <Col md={6} style={{textAlign:"right"}}>
-                 <Button type="submit" bsStyle="info" bsSize="lg">Prijavi incident</Button>
+                 </Row>
+
+                 <Row>
+                 <Col md={12} style={{textAlign:"right"}}>
+                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi incident</Button>
                  </Col>
                  </Row>
                  </Grid>
