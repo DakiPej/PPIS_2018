@@ -9,6 +9,7 @@ import {
     FormGroup,
     FormControl,
     Table,
+    Panel,
     Glyphicon} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils';
@@ -32,10 +33,15 @@ class ListaZahtjeva extends Component{
 
         this.getZahtjevi = this.getZahtjevi.bind(this);
         this.onSortChange = this.onSortChange.bind(this);
+        this.onRowClick = this.onRowClick.bind(this);
     }
 
     componentDidMount(){
         this.getZahtjevi();
+    }
+    onRowClick(row) {
+        console.log("ID reda"+row.id);
+        window.location='/dashboard/zahtjevi/'+row.id;
     }
 
     onSortChange(sortName, sortOrder) {
@@ -64,7 +70,6 @@ class ListaZahtjeva extends Component{
     }
 
     render(){
-
         var test = [
             {
                 id: 1,
@@ -74,7 +79,8 @@ class ListaZahtjeva extends Component{
                 korisnik: 'Korisnik 1',
                 odjel: 'Odjel 1',
                 prioritet: 1,
-                servis:'Servis'
+                servis:'Servis',
+                eskalacija:'Da'
             },
             {
                 id: 2,
@@ -84,7 +90,8 @@ class ListaZahtjeva extends Component{
                 status: 'Poslano',
                 odjel: 'Odjel 2',
                 prioritet: 2,
-                servis:'Servis'
+                servis:'Servis',
+                eskalacija:'Da'
             },
             {
                 id: 3,
@@ -94,7 +101,8 @@ class ListaZahtjeva extends Component{
                 status: 'Poslano',
                 odjel: 'Odjel 3',
                 prioritet: 2,
-                servis:'Servis'
+                servis:'Servis',
+                eskalacija:'Ne'
             },
             {
                 id: 4,
@@ -104,14 +112,16 @@ class ListaZahtjeva extends Component{
                 status: 'Poslano',
                 odjel: 'Odjel 1',
                 prioritet: 10,
-                servis:'Servis'
+                servis:'Servis',
+                eskalacija:'Da'
             }
         ];
 
         const options = {
             sortName: this.state.sortName,
             sortOrder: this.state.sortOrder,
-            onSortChange: this.onSortChange
+            onSortChange: this.onSortChange,
+            onRowClick: this.onRowClick
         };
 
         const pType ={
@@ -133,13 +143,18 @@ class ListaZahtjeva extends Component{
             'Rješeno':'Rješeno'
         }
 
+        const eType = {
+            'Da':'Da',
+            'Ne':'Ne'
+        }
+
         var table = <div></div>;
-        var role = 'Korisnik';
+        var role = sessionStorage.getItem("rola");
         switch(role){
             case 'Administrator':
                 table =
                     <BootstrapTable data={test} options={options}>
-                        <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
+                        <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
                         <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                         <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Prijavio</TableHeaderColumn>
                         <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Rješava</TableHeaderColumn>
@@ -160,13 +175,17 @@ class ListaZahtjeva extends Component{
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
                         filter={ { type: 'SelectFilter', options: sType }}
                         >Status</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='eskalacija' dataSort
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ eType }
+                        filter={ { type: 'SelectFilter', options: eType }}
+                        >Eskalacija</TableHeaderColumn>
                       </BootstrapTable>;
                     break;
             case 'Korisnik':
                 table =
                     <BootstrapTable data={test} options={options}>
-                        <TableHeaderColumn isKey dataField='id' dataSort>#</TableHeaderColumn>
-                        <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                        <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
+                        <TableHeaderColumn   dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                         <TableHeaderColumn  dataField='prioritet' dataSort
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
                         filter={ { type: 'SelectFilter', options: pType }}
@@ -180,11 +199,57 @@ class ListaZahtjeva extends Component{
                         >Status</TableHeaderColumn>
                    </BootstrapTable>;
                 break;
+              case 'Odjel':
+              if (this.props.tip==='Nedodijeljeni')
+              table =
+                  <BootstrapTable data={test} options={options}>
+                      <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
+                      <TableHeaderColumn   dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                      <TableHeaderColumn   dataField='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
+                      <TableHeaderColumn  dataField='prioritet' dataSort
+                      filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                      filter={ { type: 'SelectFilter', options: pType }}
+                      >Prioritet
+                      </TableHeaderColumn>
+                      <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                 </BootstrapTable>;
+              else
+              table =
+              <BootstrapTable data={test} options={options}>
+                  <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                  <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Prijavio</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='prioritet' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
+                  filter={ { type: 'SelectFilter', options: pType }}
+                  >Prioritet
+                  </TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
+                  <TableHeaderColumn  dataFieldKorisnik='status' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
+                  filter={ { type: 'SelectFilter', options: sType }}
+                  >Status</TableHeaderColumn>
+                  <TableHeaderColumn  dataField='eskalacija' dataSort
+                  filterFormatted dataFormat={ enumFormatter } formatExtraData={ eType }
+                  filter={ { type: 'SelectFilter', options: eType }}
+                  >Eskalacija</TableHeaderColumn>
+                </BootstrapTable>;
         }
 
         return(
             <div>
-               {table}
+            <Panel bsStyle="primary">
+                <Panel.Heading>
+                  <div class="d-flex w-100 justify-content-between">
+                    <Panel.Title componentClass="h2">Lista zahtjeva </Panel.Title>
+                    <Button >
+                      <Glyphicon glyph="download-alt" />
+                    </Button>
+                  </div>
+                </Panel.Heading>
+                    {table}
+            </Panel>
             </div>
         );
 

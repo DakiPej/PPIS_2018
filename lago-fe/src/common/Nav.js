@@ -30,7 +30,7 @@ class Navi extends React.Component {
   render() {
     return (
       <div>
-        <Navbar inverse style={{marginBottom: "0"}}  className="navbar navbar-expand-md">
+        <Navbar inverse style={{marginBottom: "0"}}  className="navbar navbar-expand-md navbar-static-top">
           <Navbar.Brand href="/" > <img height="50px"src={logo}/>
           </Navbar.Brand>
           <Navbar.Toggle onClick={this.toggle} />
@@ -48,7 +48,7 @@ class Navi extends React.Component {
               {sessionStorage.getItem("username") !== null ?
                 <NavItem href="/dashboard">
                   <b>Dashboard</b>
-              </NavItem>:<div/>} 
+              </NavItem>:<div/>}
                {sessionStorage.getItem("username") !== null ?
                  <NavItem href="javascript:sessionStorage.clear();window.location='/';">
                 <b>Logout</b>
@@ -61,7 +61,7 @@ class Navi extends React.Component {
           </Navbar.Collapse>
         </Navbar>
       </div>
-      
+
     );
   }
 }
