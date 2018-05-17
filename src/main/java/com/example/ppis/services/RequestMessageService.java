@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RequestMessageService {
@@ -26,6 +30,8 @@ public class RequestMessageService {
     @Autowired
     RequestDAO requestDAO;
 
+    final private String[] userTypes = { "Korisnik", "Odjel", "Admin" };
+
     public List<RequestMessage> getRequestMessagesByReceiverId(Long receiverId) {
         return requestMessageDAO.getRequestMessagesByReceiver(registeredUserDAO.one(receiverId));
     }
@@ -34,7 +40,22 @@ public class RequestMessageService {
         return requestMessageDAO.getRequestMessagesBySender(registeredUserDAO.one(senderId));
     }
 
-    public RequestMessage create(RequestMessageForm requestMessageForm, String senderType, String receiverType) throws ServletException {
+    public List<RequestMessage> getAllRequestMessagesByUserId(Long id) {
+        List<RequestMessage> sentMessages = getRequestMessagesBySenderId(id);
+        List<RequestMessage> receivedMessages = getRequestMessagesByReceiverId(id);
+
+        List<RequestMessage> allMessages =
+                Stream.concat(receivedMessages.stream(), sentMessages.stream()).collect(Collectors.toList());
+
+        allMessages.sort(Comparator.comparing(RequestMessage::getDate));
+        return allMessages;
+    }
+
+    public RequestMessage create(RequestMessageForm requestMessageForm) throws ServletException {
+        return createWithUserTypes(requestMessageForm, requestMessageForm.getFromRole(), requestMessageForm.getToRole());
+    }
+
+    private RequestMessage createWithUserTypes(RequestMessageForm requestMessageForm, String senderType, String receiverType) throws ServletException {
 
         Request request = requestDAO.one(requestMessageForm.getRequestId());
         RegisteredUser sender = registeredUserDAO.findUserByUsername(requestMessageForm.getUsername());
