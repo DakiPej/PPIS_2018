@@ -15,7 +15,7 @@
 }
 
 .App-title {
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 .App-intro {
@@ -29,6 +29,16 @@
 
 .Nav{
 background-color: #343a40;
+margin-left: 0;
+font-size: 1.5em;
+}
+.ml-auto{
+  font-size: 1.5em;
+}
+.navbar-brand>img{
+  margin: 0;
+  position: absolute;
+  left: 0;
 }
 
 .Element{
