@@ -50,12 +50,12 @@ public class RequestMessageService {
     }
 
     public RequestMessage create(MessageForm messageForm) throws ServletException {
-        return createWithUserTypes(messageForm, messageForm.getFromRole(), messageForm.getToRole());
+        return createWithUserTypes(messageForm, messageForm.getSenderRole(), messageForm.getReceiverRole());
     }
 
     private RequestMessage createWithUserTypes(MessageForm messageForm, String senderType, String receiverType) throws ServletException {
 
-        Request request = requestDAO.one(messageForm.getRequestId());
+        Request request = requestDAO.one(messageForm.getRequestOrIncidentId());
         RegisteredUser sender = registeredUserDAO.findUserByUsername(messageForm.getUsername());
         RegisteredUser receiver = null;
         String message = messageForm.getMessage();

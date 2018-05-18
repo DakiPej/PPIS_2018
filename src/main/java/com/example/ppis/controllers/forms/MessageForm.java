@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class MessageForm {
 
-    private Long requestId;
+    private Long requestOrIncidentId;
 
     @Size(min = 3, max = 15)
     private String username;
@@ -14,27 +14,27 @@ public class MessageForm {
     private String message;
 
     @NotNull
-    private String fromRole;
+    private String senderRole;
 
     @NotNull
-    private String toRole;
+    private String receiverRole;
 
     public MessageForm() { }
 
-    public MessageForm(Long requestId, @Size(min = 3, max = 15) String username, @Size(min = 1, max = 2000) String message, @NotNull String fromRole, @NotNull String toRole) {
-        this.requestId = requestId;
+    public MessageForm(Long requestOrIncidentId, @Size(min = 3, max = 15) String username, @Size(min = 1, max = 2000) String message, @NotNull String senderRole, @NotNull String receiverRole) {
+        this.requestOrIncidentId = requestOrIncidentId;
         this.username = username;
         this.message = message;
-        this.fromRole = fromRole;
-        this.toRole = toRole;
+        this.senderRole = senderRole;
+        this.receiverRole = receiverRole;
     }
 
-    public Long getRequestId() {
-        return requestId;
+    public Long getRequestOrIncidentId() {
+        return requestOrIncidentId;
     }
 
-    public void setRequestId(Long requestId) {
-        this.requestId = requestId;
+    public void setRequestOrIncidentId(Long requestId) {
+        this.requestOrIncidentId = requestId;
     }
 
     public String getUsername() {
@@ -53,19 +53,19 @@ public class MessageForm {
         this.message = message;
     }
 
-    public String getFromRole() {
-        return fromRole;
+    public String getSenderRole() {
+        return senderRole;
     }
 
-    public void setFromRole(String fromRole) {
-        this.fromRole = fromRole;
+    public void setSenderRole(String senderRole) {
+        this.senderRole = senderRole;
     }
 
-    public String getToRole() {
-        return toRole;
+    public String getReceiverRole() {
+        return receiverRole;
     }
 
-    public void setToRole(String toRole) {
-        this.toRole = toRole;
+    public void setReceiverRole(String receiverRole) {
+        this.receiverRole = receiverRole;
     }
 }
