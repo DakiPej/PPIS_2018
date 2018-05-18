@@ -1,13 +1,11 @@
 package com.example.ppis.controllers;
 
-import com.example.ppis.controllers.forms.RequestMessageForm;
+import com.example.ppis.controllers.forms.MessageForm;
 import com.example.ppis.services.RequestMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletException;
 
 @RestController
 @RequestMapping("/requestMessages")
@@ -17,7 +15,7 @@ public class RequestMessageController {
     RequestMessageService requestMessageService;
 
 //    @RequestMapping(value = "/sendFromUserToResolver", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendFromUserToResolver(@RequestBody RequestMessageForm requestMessageForm) {
+//    public ResponseEntity<?> sendFromUserToResolver(@RequestBody MessageForm requestMessageForm) {
 //        try {
 //            return ResponseEntity.ok(requestMessageService.create(requestMessageForm, "KORISNIK", "ODJEL"));
 //        }
@@ -28,7 +26,7 @@ public class RequestMessageController {
 //    }
 //
 //    @RequestMapping(value = "/sendFromResolverToUser", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendFromResolverToUser(@RequestBody RequestMessageForm requestMessageForm) {
+//    public ResponseEntity<?> sendFromResolverToUser(@RequestBody MessageForm requestMessageForm) {
 //        try {
 //            return ResponseEntity.ok(requestMessageService.create(requestMessageForm, "ODJEL", "KORISNIK"));
 //        }
@@ -39,7 +37,7 @@ public class RequestMessageController {
 //    }
 //
 //    @RequestMapping(value = "/sendFromResolverToAdmin", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendFromResolverToAdmin(@RequestBody RequestMessageForm requestMessageForm) {
+//    public ResponseEntity<?> sendFromResolverToAdmin(@RequestBody MessageForm requestMessageForm) {
 //        try {
 //            return ResponseEntity.ok(requestMessageService.create(requestMessageForm, "ODJEL", "ADMIN"));
 //        }
@@ -50,7 +48,7 @@ public class RequestMessageController {
 //    }
 //
 //    @RequestMapping(value = "/sendFromAdminToResolver", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendFromAdminToResolver(@RequestBody RequestMessageForm requestMessageForm) {
+//    public ResponseEntity<?> sendFromAdminToResolver(@RequestBody MessageForm requestMessageForm) {
 //        try {
 //            return ResponseEntity.ok(requestMessageService.create(requestMessageForm, "ADMIN", "ODJEL"));
 //        }
@@ -83,9 +81,9 @@ public class RequestMessageController {
     }
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
-    public ResponseEntity<?> sendMessage(@RequestBody RequestMessageForm requestMessageForm) {
+    public ResponseEntity<?> sendMessage(@RequestBody MessageForm messageForm) {
         try {
-            return ResponseEntity.ok(requestMessageService.create(requestMessageForm));
+            return ResponseEntity.ok(requestMessageService.create(messageForm));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

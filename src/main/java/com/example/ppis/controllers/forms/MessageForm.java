@@ -3,7 +3,7 @@ package com.example.ppis.controllers.forms;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class RequestMessageForm {
+public class MessageForm {
 
     private Long requestId;
 
@@ -19,9 +19,9 @@ public class RequestMessageForm {
     @NotNull
     private String toRole;
 
-    public RequestMessageForm() { }
+    public MessageForm() { }
 
-    public RequestMessageForm(Long requestId, @Size(min = 3, max = 15) String username, @Size(min = 1, max = 2000) String message, @NotNull String fromRole, @NotNull String toRole) {
+    public MessageForm(Long requestId, @Size(min = 3, max = 15) String username, @Size(min = 1, max = 2000) String message, @NotNull String fromRole, @NotNull String toRole) {
         this.requestId = requestId;
         this.username = username;
         this.message = message;
