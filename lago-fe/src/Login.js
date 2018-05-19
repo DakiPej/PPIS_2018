@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
+import {PATH_BASE,PATH_LOGIN} from './globals';
 import './Style/Login.css';
+
+import axios from 'axios';
 
 
 
@@ -13,15 +15,30 @@ class Login extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  onLogin(){
-   sessionStorage.setItem("username", this.state.username);
-   sessionStorage.setItem("rola", "Odjel");
-   window.location='/dashboard';
-  }
+  onLogin(event){
 
-  handleError(error) {
-      console.log(error);
+    event.preventDefault();
+
+       if(this.state.username && this.state.password) {
+           if(this.state.username && this.state.password) {
+               axios.post(PATH_BASE+PATH_LOGIN, {
+                   username: this.state.username,
+                   password: this.state.password
+               })
+               .then(this.handleSuccess.bind(this))
+               .catch(this.handleError.bind(this));
+           }
+       }
   }
+  handleSuccess(response) {
+        sessionStorage.setItem("rola", response.data);
+        sessionStorage.setItem("username",this.state.username);
+        window.location = '/dashboard';
+    }
+
+    handleError(error) {
+        console.log(error);
+    }
 
   onChange(e) {
       this.setState({[e.target.name]:e.target.value});
@@ -38,13 +55,13 @@ class Login extends Component {
 
                 <div className="login-input-wrapper">
                   <div className="form-group has-feedback">
-                      <input className=" colors login-input" placeholder="Korisničko ime" onFocus="{this.placeholder = ''}" onBur="{this.placeholder = 'Korisničko ime'}"
-                          type="text"  onChange={this.onChange}/>
+                      <input className=" colors login-input" placeholder="Korisničko ime" onfocus="{this.placeholder = ''}" onblur="{this.placeholder = 'Korisničko ime'}"
+                          name="username" type="text"  onChange={this.onChange}/>
                       <i className="glyphicon glyphicon-user form-control-feedback pull-left" aria-hidden="true" />
                   </div>
                   <div className="form-group has-feedback">
                       <input className="colors login-input" placeholder="Lozinka" onfocus="{this.placeholder = ''}" onblur="{this.placeholder = 'Lozinka'}"
-                          type="password" onChange={this.onChange}/>
+                        name="password"  type="password" onChange={this.onChange}/>
                       <i className="glyphicon glyphicon-lock form-control-feedback pull-left" aria-hidden="true" />
                   </div>
                </div>
