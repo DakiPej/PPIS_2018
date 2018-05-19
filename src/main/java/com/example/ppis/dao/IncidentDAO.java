@@ -238,4 +238,28 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ; 
 	}
+
+	public Incident getIncidentById(Long id) {
+		Incident incident; 
+		
+		try {
+			incident = this.repo.findIncidentById(id); 
+		} catch (Exception e) {
+			throw e; 
+		}
+		
+		return incident;
+	}
+
+	public List<Incident> getAllByDepartmentNameAndResolverUserIsNull(Department department){
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByDepartmentAndResolverUserIsNull(department); 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ;
+	}
 }

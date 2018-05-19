@@ -2,6 +2,7 @@ package com.example.ppis.repositories;
 
 import java.util.List;
 
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +15,7 @@ public interface RegisteredUserRepository extends CrudRepository<RegisteredUser,
 	
 	public boolean existsByUsername(String username) ; 
 	
-	@Query("SELECT u.email FROM RegisteredUser u WHERE u.username = :username AND u.password = :password")
+	@Query("SELECT u.userType.typeName FROM RegisteredUser u WHERE u.username = :username AND u.password = :password")
 	String findUser(@Param("username") String username, @Param("password") String password);
 	
 	@Query("SELECT u FROM RegisteredUser u WHERE u.username = :username")
