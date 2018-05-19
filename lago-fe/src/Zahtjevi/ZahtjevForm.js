@@ -8,37 +8,42 @@ import {
     Checkbox,
     Button,
     Row,
+    Panel,
     Col,
-    Grid,
-    Panel} from 'react-bootstrap';
+    Grid} from 'react-bootstrap';
 
-class IncidentForm extends Component{
+class ZahtjevForm extends Component{
 
     constructor(props){
         super(props);
+        if (localStorage.getItem("nazivZahtjeva") !== null)
+          var naziv=localStorage.getItem("nazivZahtjeva");
+        else naziv='';
+        localStorage.clear();
         this.state = {
-            naziv:'',
+            naziv: naziv,
             opis:'',
-            email:true,
-            telefon:false
+            email:0,
+            telefon:0
         };
         this.handleChange = this.handleChange.bind(this);
+
     }
 
     handleChange(e) {
-        console.log(e.target.id + ' : ' + e.target.value);
-        if(e.target.name == "telefon" || e.target.name == "email"){
-            var name = 'email';
-            if(e.target.id == 'email') name = "telefon";
-            this.setState(
-                {
-                    [e.target.id]:true,
-                    [name]:false
-                }
-            );
-            console.log(e.target.id + ' ' +this.state.email);
-            console.log(name + ' ' +this.state.telefon);
-        }else this.setState({ [e.target.name]: e.target.value });
+      console.log(e.target.id + ' : ' + e.target.value);
+      if(e.target.name == "telefon" || e.target.name == "email"){
+          var name = 'email';
+          if(e.target.id == 'email') name = "telefon";
+          this.setState(
+              {
+                  [e.target.id]:true,
+                  [name]:false
+              }
+          );
+          console.log(e.target.id + ' ' +this.state.email);
+          console.log(name + ' ' +this.state.telefon);
+      }else this.setState({ [e.target.name]: e.target.value });
     }
 
     handleCheckbox(e){
@@ -47,23 +52,23 @@ class IncidentForm extends Component{
     render(){
 
         return(
-            <Panel bsStyle="primary">
-            <Panel.Heading>
-                    <Panel.Title componentClass="h2">
-                        Novi incident
-                    </Panel.Title>
-                </Panel.Heading>
+          <Panel bsStyle="primary">
+          <Panel.Heading>
+                  <Panel.Title componentClass="h2">
+                      Novi zahtjev
+                  </Panel.Title>
+              </Panel.Heading>
             <form style={{padding:"2%"}}>
                 <Grid>
                 <Row>
                 <Col md={12}>
-                <FormGroup controlId="formIncident">
+                <FormGroup controlId="formZahtjev">
                     <ControlLabel> Naziv </ControlLabel>
                     <FormControl
                         type="text"
                         name="naziv"
                         value={this.state.naziv}
-                        placeholder="Naziv incidenta"
+                        placeholder="Naziv zahtjeva"
                         onChange={this.handleChange}
                     />
                     <ControlLabel> Opis </ControlLabel>
@@ -72,7 +77,7 @@ class IncidentForm extends Component{
                         componentClass="textarea"
                         name="opis"
                         value={this.state.opis}
-                        placeholder="Opis incidenta"
+                        placeholder="Opis zahtjeva"
                         onChange={this.handleChange}
                         bsSize="large"
                     />
@@ -81,17 +86,8 @@ class IncidentForm extends Component{
                 </Row>
                 <br/>
                 <Row>
-                  <FormGroup  controlId="formIncident">
-                    <Col md={6}>
-                        <ControlLabel> Odaberi servis </ControlLabel>
-                        <FormControl componentClass="select" placeholder="Servis">
-                            <option value="Servis 1">Servis 1</option>
-                            <option value="Servis 2">Servis 2</option>
-                            <option value="Servis 3">Servis 3</option>
-                            <option value="Servis 4">Servis 4</option>
-                        </FormControl>
-                    </Col>
-                    <Col md={6}>
+                <FormGroup controlId="formIncident">
+                    <Col md={6} xsOffset={3}>
                         <ControlLabel> Odaberi hitnost </ControlLabel>
                         <FormControl componentClass="select" placeholder="Hitnost">
                             <option value="1">1</option>
@@ -99,15 +95,20 @@ class IncidentForm extends Component{
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </FormControl>
                     </Col>
-                    </FormGroup>
+                </FormGroup>
                 </Row>
                 <br/>
                 <Row>
                 <Col md={6}>
-                <FormGroup  controlId="formIncident">
-                <ControlLabel>   Način obavještavanja o razrješenju incidenta </ControlLabel>
+                <FormGroup  controlId="formZahtjev">
+                <ControlLabel>   Način obavještavanja o razrješenju zahtjeva </ControlLabel>
                     <Radio inline
                         id = "email"
                         name="email"
@@ -128,16 +129,16 @@ class IncidentForm extends Component{
 
                  <Row>
                  <Col md={12} style={{textAlign:"right"}}>
-                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi incident</Button>
+                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi zahtjev</Button>
                  </Col>
                  </Row>
                  </Grid>
             </form>
-            </Panel>
+              </Panel>
         );
 
     }
 
 }
 
-export default IncidentForm;
+export default ZahtjevForm;

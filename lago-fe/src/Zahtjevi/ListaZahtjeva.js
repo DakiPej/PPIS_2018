@@ -9,8 +9,8 @@ import {
     FormGroup,
     FormControl,
     Table,
-    Glyphicon,
-    Panel} from 'react-bootstrap';
+    Panel,
+    Glyphicon} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils';
 
@@ -21,7 +21,7 @@ function enumFormatter(cell, row, enumObject) {
     return enumObject[cell];
 }
 
-class ListaIncidenata extends Component{
+class ListaZahtjeva extends Component{
 
     constructor(props){
         super(props);
@@ -31,20 +31,19 @@ class ListaIncidenata extends Component{
             sortOrder: undefined
         }
 
-        this.getIncidenti = this.getIncidenti.bind(this);
+        this.getZahtjevi = this.getZahtjevi.bind(this);
         this.onSortChange = this.onSortChange.bind(this);
         this.onRowClick = this.onRowClick.bind(this);
-
     }
 
     componentDidMount(){
-        this.getIncidenti();
+        this.getZahtjevi();
     }
-
     onRowClick(row) {
         console.log("ID reda"+row.id);
-        window.location='/dashboard/incidenti/'+row.id;
+        window.location='/dashboard/zahtjevi/'+row.id;
     }
+
     onSortChange(sortName, sortOrder) {
         console.info('onSortChange', arguments);
         this.setState({
@@ -53,7 +52,7 @@ class ListaIncidenata extends Component{
         });
     }
 
-    getIncidenti(){
+    getZahtjevi(){
         /*axios.get(
 
         )
@@ -71,7 +70,6 @@ class ListaIncidenata extends Component{
     }
 
     render(){
-
         var test = [
             {
                 id: 1,
@@ -93,7 +91,7 @@ class ListaIncidenata extends Component{
                 odjel: 'Odjel 2',
                 prioritet: 2,
                 servis:'Servis',
-                eskalacija:'Ne'
+                eskalacija:'Da'
             },
             {
                 id: 3,
@@ -104,7 +102,7 @@ class ListaIncidenata extends Component{
                 odjel: 'Odjel 3',
                 prioritet: 2,
                 servis:'Servis',
-                eskalacija:'Da'
+                eskalacija:'Ne'
             },
             {
                 id: 4,
@@ -144,11 +142,11 @@ class ListaIncidenata extends Component{
             'U obradi':'U obradi',
             'Rješeno':'Rješeno'
         }
+
         const eType = {
             'Da':'Da',
             'Ne':'Ne'
         }
-
 
         var table = <div></div>;
         var role = sessionStorage.getItem("rola");
@@ -156,11 +154,10 @@ class ListaIncidenata extends Component{
             case 'Administrator':
                 table =
                     <BootstrapTable data={test} options={options}>
-                        <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
+                        <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
                         <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                         <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Prijavio</TableHeaderColumn>
                         <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Rješava</TableHeaderColumn>
-                        <TableHeaderColumn  dataField ='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
                         <TableHeaderColumn  dataField='prioritet' dataSort
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
                         filter={ { type: 'SelectFilter', options: pType }}
@@ -173,7 +170,6 @@ class ListaIncidenata extends Component{
                         </TableHeaderColumn>
                         <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
                         <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
-                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum posljednjeg rješavanja</TableHeaderColumn>
                         <TableHeaderColumn  dataField='odjel' dataSort filter={ { type: 'TextFilter', delay: 500 } } >Odjel</TableHeaderColumn>
                         <TableHeaderColumn  dataField='status' dataSort
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
@@ -189,16 +185,14 @@ class ListaIncidenata extends Component{
                 table =
                     <BootstrapTable data={test} options={options}>
                         <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
-                        <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
+                        <TableHeaderColumn   dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                         <TableHeaderColumn  dataField='prioritet' dataSort
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
                         filter={ { type: 'SelectFilter', options: pType }}
                         >Hitnost
                         </TableHeaderColumn>
-                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum kreiranja</TableHeaderColumn>
+                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
                         <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
-                        <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum zatvaranja</TableHeaderColumn>
-                        <TableHeaderColumn  dataField ='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
                         <TableHeaderColumn  dataField='status' dataSort
                         filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
                         filter={ { type: 'SelectFilter', options: sType }}
@@ -212,7 +206,6 @@ class ListaIncidenata extends Component{
                       <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
                       <TableHeaderColumn   dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                       <TableHeaderColumn   dataField='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
-                      <TableHeaderColumn   dataField='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
                       <TableHeaderColumn  dataField='prioritet' dataSort
                       filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
                       filter={ { type: 'SelectFilter', options: pType }}
@@ -225,18 +218,15 @@ class ListaIncidenata extends Component{
               <BootstrapTable data={test} options={options}>
                   <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
                   <TableHeaderColumn  dataField='naslov' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
-                  <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Korisnik</TableHeaderColumn>
-                  <TableHeaderColumn   dataField='servis' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Servis</TableHeaderColumn>
+                  <TableHeaderColumn  dataField ='korisnik' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Prijavio</TableHeaderColumn>
                   <TableHeaderColumn  dataField='prioritet' dataSort
                   filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
                   filter={ { type: 'SelectFilter', options: pType }}
                   >Prioritet
                   </TableHeaderColumn>
                   <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
-                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum posljednjeg rješavanja</TableHeaderColumn>
                   <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum rješavanja</TableHeaderColumn>
-                  <TableHeaderColumn  dataField='datum' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum zatvaranja</TableHeaderColumn>
-                  <TableHeaderColumn  dataField='status' dataSort
+                  <TableHeaderColumn  dataFieldKorisnik='status' dataSort
                   filterFormatted dataFormat={ enumFormatter } formatExtraData={ sType }
                   filter={ { type: 'SelectFilter', options: sType }}
                   >Status</TableHeaderColumn>
@@ -249,17 +239,17 @@ class ListaIncidenata extends Component{
 
         return(
             <div>
-                <Panel bsStyle="primary">
-                    <Panel.Heading>
-                      <div class="d-flex w-100 justify-content-between">
-                        <Panel.Title componentClass="h2">Lista incidenata</Panel.Title>
-                        <Button >
-                          <Glyphicon glyph="download-alt" />
-                        </Button>
-                      </div>
-                    </Panel.Heading>
-                        {table}
-                </Panel>
+            <Panel bsStyle="primary">
+                <Panel.Heading>
+                  <div class="d-flex w-100 justify-content-between">
+                    <Panel.Title componentClass="h2">Lista zahtjeva </Panel.Title>
+                    <Button >
+                      <Glyphicon glyph="download-alt" />
+                    </Button>
+                  </div>
+                </Panel.Heading>
+                    {table}
+            </Panel>
             </div>
         );
 
@@ -267,13 +257,13 @@ class ListaIncidenata extends Component{
 
 }
 
-export default ListaIncidenata;
+export default ListaZahtjeva;
 
 // Backup if needed
 
 /*
 
-class IncidentItem extends Component{
+class Zahtjevitem extends Component{
 
     constructor(props){
         super(props);

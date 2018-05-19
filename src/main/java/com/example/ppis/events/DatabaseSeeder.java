@@ -1,6 +1,7 @@
 package com.example.ppis.events;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Component;
 
 import com.example.ppis.dao.ContactMethodDAO;
 import com.example.ppis.dao.DepartmentDAO;
+import com.example.ppis.dao.IncidentDAO;
+import com.example.ppis.dao.IncidentLogDAO;
 import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.dao.RequestDAO;
 import com.example.ppis.dao.ServicesDAO;
 import com.example.ppis.dao.UserTypeDAO;
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
+import com.example.ppis.models.Incident;
+import com.example.ppis.models.IncidentLog;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.models.Services;
@@ -30,6 +35,18 @@ public class DatabaseSeeder {
 	DepartmentDAO departmentDao ;
 	RequestDAO requestDao ; 
 	ContactMethodDAO contactMethodDao ; 
+	IncidentDAO incidentDAO;
+	IncidentLogDAO incidentLogDAO;
+
+	@Autowired
+	public void setIncidentLogDAO(IncidentLogDAO incidentLogDAO) {
+		this.incidentLogDAO = incidentLogDAO;
+	}
+
+	@Autowired
+	public void setIncidentDAO(IncidentDAO incidentDAO) {
+		this.incidentDAO = incidentDAO;
+	}
 
 	@Autowired
 	public void setServicesDAO(ServicesDAO servicesDAO) {
@@ -72,6 +89,7 @@ public class DatabaseSeeder {
 		RegisteredUserTableSeed();
 		ServicesTableSeed();
 		RequestsTableSeed() ;
+		IncidentTableSeed();
 	}
 	
 	private void RequestsTableSeed()	{
@@ -290,6 +308,48 @@ public class DatabaseSeeder {
 			
 			ru.setServices(ss);
 			registeredUserDAO.create(ru);
+		}
+	}
+
+	private void IncidentTableSeed(){
+		if(!this.incidentDAO.existsById(0))	{
+
+			
+			Incident i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("hamster"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("richard.h@email.com");
+			i.setTitle("Naslov 1");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("test"));
+			incidentDAO.create(i);
+			
+			IncidentLog il = new IncidentLog();
+			il.setIncident(i);
+			il.setResolveDate(new Date());
+			incidentLogDAO.create(il);
+			il = new IncidentLog();
+			
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("clarkson"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("james.m@email.com");
+			i.setTitle("Naslov 1");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("test"));
+			incidentDAO.create(i);
 		}
 	}
 }

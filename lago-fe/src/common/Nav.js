@@ -2,15 +2,13 @@ import React from 'react';
 import {
   Collapse,
   Navbar,
-  NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem } from 'react-bootstrap';
 import logo from '../Images/lago.png';
 
 
@@ -32,33 +30,38 @@ class Navi extends React.Component {
   render() {
     return (
       <div>
-        <Navbar color="dark" className="navbar navbar-expand-md">
-          <NavbarBrand href="/" > <img height="50px"src={logo}/>
-          </NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
+        <Navbar inverse style={{marginBottom: "0"}}  className="navbar navbar-expand-md navbar-static-top">
+          <Navbar.Brand href="/" > <img height="50px"src={logo}/>
+          </Navbar.Brand>
+          <Navbar.Toggle onClick={this.toggle} />
+          <Navbar.Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink className="text-white 18px" href="/"><b>Početna</b></NavLink>
+              <NavItem href="/">
+                <b>Početna</b>
               </NavItem>
-              <NavItem>
-                <NavLink className="text-white 18px" href="/ponuda"><b>Ponuda</b></NavLink>
+              <NavItem href="/ponuda">
+                <b>Ponuda</b>
               </NavItem>
-              <NavItem>
-                <NavLink className="text-white 18px" href="/onama"><b>O nama</b></NavLink>
+              <NavItem href="/onama">
+                <b>O nama</b>
               </NavItem>
-              {this.state.ulogovan ?
-                <NavItem>
-                  <NavLink className="text-info 18px" href="/prijava"><b>Ma nemoj</b></NavLink>
+              {sessionStorage.getItem("username") !== null ?
+                <NavItem href="/dashboard">
+                  <b>Dashboard</b>
+              </NavItem>:<div/>}
+               {sessionStorage.getItem("username") !== null ?
+                 <NavItem href="javascript:sessionStorage.clear();window.location='/';">
+                <b>Logout</b>
                 </NavItem> :
-              <NavItem>
-                <NavLink className="text-info 18px" href="/prijava"><b>Prijava</b></NavLink>
+              <NavItem href="/prijava">
+                <b>Prijava</b>
               </NavItem>
             }
             </Nav>
-          </Collapse>
+          </Navbar.Collapse>
         </Navbar>
       </div>
+
     );
   }
 }

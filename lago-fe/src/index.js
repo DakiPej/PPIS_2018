@@ -12,7 +12,7 @@ import App from './App';
 
 /*Render and router*/
 ReactDOM.render(
-  
+    
     <BrowserRouter>
         <App/>
     </BrowserRouter>,

@@ -27,18 +27,14 @@ public class RegisteredUserService {
 			throw new ServletException("Password polje ne smije biti prazno.");
 		
 		try {
-			String userEmail = registeredUserDao.findUser(loginUser.getUsername(), loginUser.getPassword());
-			return userEmail;
+			System.out.println("RaDi");
+			String role = registeredUserDao.findUser(loginUser.getUsername(), loginUser.getPassword());
+			System.out.println("RaDi");
+			return role;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			throw new ServletException("RegiseredUserService Login exception");
 		}
 	}
-	
-	public String createRegisteredUser()	{
-		
-		return ""; 
-	}
-
 	
 }
