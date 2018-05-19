@@ -182,6 +182,12 @@ public class RequestService {
 		try {
 			if(validateUnassignedRequestToResolver(unassignedRequestId
 					, resolverUsername))	{
+				
+			if(!this.requestDao.one(unassignedRequestId).getDepartment()
+					.equals(this.registeredUserDao.getUserDepartment(resolverUsername
+							, this.registeredUserDao.findUserByUsername(resolverUsername).getUserType())))
+				throw new IllegalArgumentException("The user does not belong the department to which the request has been assigned.") ;
+			
 			Request unassignedRequest = this.requestDao.one(unassignedRequestId) ; 
 			
 			unassignedRequest.setResolverUser(this.registeredUserDao.findUserByUsername(resolverUsername));
@@ -203,12 +209,16 @@ public class RequestService {
 					|| !this.requestDao.existsById(requestId)
 					|| resolverUsername == null 
 					|| resolverUsername.length() == 0 
-					|| this.registeredUserDao.existsByUsername(resolverUsername)
-					|| this.requestDao.one(requestId).getResolverUser().equals(
-							this.registeredUserDao.findUserByUsername(resolverUsername)))
+					|| this.registeredUserDao.existsByUsername(resolverUsername))
 				throw new IllegalArgumentException(
 						"The request id is negative or the request does not exist or the resolver username is not specified "
 						+ "or the user does not exist or the user does not have the permission to escalate the request.") ;
+			
+			if(this.registeredUserDao.findUserByUsername(resolverUsername).getUserType().equals("Korisnik")
+					|| !this.requestDao.one(requestId).getResolverUser().equals(
+							this.registeredUserDao.findUserByUsername(resolverUsername)))
+				throw new IllegalArgumentException("The user does not have the permission to escalate the request.") ; 
+			
 			Request request = this.requestDao.one(requestId) ; 
 			request.setEscalated(true);
 			
@@ -522,5 +532,67 @@ public class RequestService {
 		}
 		
 		return requests ; 
+	}
+
+	public Request getRequest(long requestId, String username)	{
+		try {
+			Request request ; 
+			if(requestId < 0 || this.requestDao.existsById(requestId)
+					|| username == null || username.length() == 0 || this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException(
+						"The request id is either a negative number or the request does not exist or the user is unspecified or the user does not exist.") ; 
+			
+			request = this.requestDao.one(requestId) ; 
+			
+			if(request.getRegisteredUser().equals(this.registeredUserDao.findUserByUsername(username)) 
+					|| request.getResolverUser().equals(this.registeredUserDao.findUserByUsername(username)))
+				return request ; 
+			else throw new IllegalArgumentException("The user does not have access to the request.") ; 
+				
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	public List<Request> getRequests(String username)	{
+		try {
+			if(!this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user does not exist.") ; 
+			
+			if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))
+				return getRequestsByRegisteredUser(username) ; 
+			else return getRequestsByResolver(username) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	public List<Request> getRequestsByUrgency(String username, int urgency, boolean greater)	{
+		try {
+			List<Request> requests ;
+			if(!this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user does not exist.") ; 
+			
+			if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
+				if(greater)
+					return getRequestByRegisteredUserAndGreaterUrgency(username, urgency) ; 
+				return getRequestByRegisteredUserAndLowerUrgency(username, urgency) ; 
+			}
+			if(greater)
+				return getRequestsByResolverUserAndGreaterUrgency(username, urgency) ; 
+			return getRequestsByResolverUserAndLowerUrgency(username, urgency) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	public List<Request> getRequestsByClosed(String username, boolean closed)	{
+		try {
+			if(!this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user does not exist.") ;
+			
+			if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("korisnik"))
+				return getRequestsByRegisteredUserAndClosed(username, closed) ; 
+			return getRequestsByResolverUserAndClosed(username, closed) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
 	}
 }

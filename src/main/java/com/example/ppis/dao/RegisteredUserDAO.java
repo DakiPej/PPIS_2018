@@ -62,4 +62,12 @@ public class RegisteredUserDAO extends BaseDAO<RegisteredUser, RegisteredUserRep
 		return users ; 
 	}
 	
+	public Department getUserDepartment(String username, UserType userType)	{
+		try {
+			return this.repo.getUserDepartment(username, userType) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
 }
