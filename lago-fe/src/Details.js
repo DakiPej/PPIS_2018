@@ -26,7 +26,7 @@ class Details extends Component {
 			email:'sbecirovic@gmail.com'
 		};
 			var table = <div></div>;
-			var role = 'Administrator';
+			var role = sessionStorage.getItem("rola");
 			switch(role){
 					case 'Administrator':
 							table =<div className="form-horizontal profil-forma center-block">
@@ -46,8 +46,28 @@ class Details extends Component {
 								<span>{test.email}</span>
 				 	</div>
 					 <hr className="separator"/>
-				</div>;;
+				</div>;
 							break;
+							case 'Odjel':
+									table =<div className="form-horizontal profil-forma center-block">
+
+											<div className="form-group profil-form-group">
+												<label  className="col-sm-8  ">Korisničko ime:</label>
+														<span>{test.username}</span>
+											</div>
+											<hr className="separator"/>
+										<div className="form-group profil-form-group">
+											<label  className="col-sm-8  ">Ime i prezime:</label>
+													<span>{test.ime} {test.prezime}</span>
+									 </div>
+							 <hr className="separator"/>
+							<div className="form-group profil-form-group">
+								<label  className="col-sm-8  ">Email:</label>
+										<span>{test.email}</span>
+							</div>
+							 <hr className="separator"/>
+						</div>;
+									break;
 							case 'Korisnik':
 							table = <div className="form-horizontal profil-forma center-block">
 

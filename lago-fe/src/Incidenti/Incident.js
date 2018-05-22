@@ -38,7 +38,7 @@ class Incident extends Component{
             odjel:'Odjel1',
             datumprijave:'11/11/11',
             datumrjesenja:'N/A',
-            eskalacija: 'Da'
+            eskalacija: 'Ne'
         };
         var poruke = [{
           autor: "Admin", datum:"11/11/11", tekst:"Nesto"
