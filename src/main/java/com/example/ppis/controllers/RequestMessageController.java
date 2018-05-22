@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/requestMessages")
 public class RequestMessageController {

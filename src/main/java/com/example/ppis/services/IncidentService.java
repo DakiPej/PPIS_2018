@@ -411,7 +411,7 @@ public class IncidentService {
 
 			if(ru == null) throw new ServletException("Korsinik ne postoji");
 			else if(i == null) throw new ServletException("Incident ne postoji");
-			else if(!i.getResolverUser().getUsername().equals(ru.getUsername()) throw new ServletException("Incident ne pripada korisniku");
+			else if(!i.getResolverUser().getUsername().equals(ru.getUsername())) throw new ServletException("Incident ne pripada korisniku");
 
 			i.setResolved(true);
 			incidentDao.create(i);
