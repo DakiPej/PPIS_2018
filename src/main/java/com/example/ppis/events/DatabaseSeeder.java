@@ -280,6 +280,15 @@ public class DatabaseSeeder {
 			ru.setUsername("andy");
 			ru.setUserType(userTypeDAO.findUserTypeByName("Administrator"));
 			registeredUserDAO.create(ru);
+		
+			ru = new RegisteredUser();
+			ru.setEmail("odjel.o@email.com");
+			ru.setFirstname("odjel");
+			ru.setLastname("Odjel");
+			ru.setPassword("password");
+			ru.setUsername("odjel");
+			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver1"));
+			registeredUserDAO.create(ru);
 		}
 	}
 	

@@ -37,9 +37,9 @@ public class RegisteredUserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity login(@RequestBody final LoginUserForm loginUser) throws ServletException {
-		String email = registeredUserService.login(loginUser);
-		if (email != null) {
-			return ResponseEntity.ok(email);
+		String role = registeredUserService.login(loginUser);
+		if (role != null) {
+			return ResponseEntity.ok(role);
 		}
 		else
 			return ResponseEntity.badRequest().body("Korisnicko ime ili lozinka nisu ispravni.");
