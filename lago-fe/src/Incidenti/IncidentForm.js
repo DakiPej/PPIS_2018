@@ -11,38 +11,65 @@ import {
     Col,
     Grid,
     Panel} from 'react-bootstrap';
+import {PATH_BASE,PATH_INCIDENTS,PATH_CREATE_INCIDENT} from '../globals';
 
+import axios from 'axios';
 class IncidentForm extends Component{
 
     constructor(props){
         super(props);
         this.state = {
-            naziv:'',
-            opis:'',
-            email:true,
-            telefon:false
+          naziv: '',
+          opis:'',
+          email:0,
+          telefon:0,
+          hitnost: 0,
+          servis: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.onPrijavi = this.onPrijavi.bind(this);
     }
 
     handleChange(e) {
-        console.log(e.target.id + ' : ' + e.target.value);
-        if(e.target.name == "telefon" || e.target.name == "email"){
-            var name = 'email';
-            if(e.target.id == 'email') name = "telefon";
-            this.setState(
-                {
-                    [e.target.id]:true,
-                    [name]:false
-                }
-            );
-            console.log(e.target.id + ' ' +this.state.email);
-            console.log(name + ' ' +this.state.telefon);
-        }else this.setState({ [e.target.name]: e.target.value });
+      if(e.target.name == "telefon" || e.target.name == "email"){
+          var name = 'email';
+          if(e.target.id == 'email') name = "telefon";
+          this.setState(
+              {
+                  [e.target.id]:true,
+                  [name]:false
+              }
+          );
+      }else this.setState({ [e.target.name]: e.target.value });
     }
 
-    handleCheckbox(e){
-    }
+    onPrijavi(event){
+
+      event.preventDefault();
+      var kontakt;
+      if (this.state.email) kontakt="email";
+      else kontakt="phone";
+         if(this.state.naziv && this.state.opis &&(this.state.email || this.state.telefon)&& kontakt)
+                 axios.post(PATH_BASE+PATH_INCIDENTS+PATH_CREATE_INCIDENT, {
+                   username: sessionStorage.getItem("username"),
+                   contactMethodName: kontakt,
+                   serviceName: this.state.servis,
+                   title: this.state.naziv,
+					         description: this.state.opis,
+					         urgency: this.state.hitnost } )
+                   .then(this.handleSuccess.bind(this))
+                   .catch(this.handleError.bind(this));
+
+		}
+
+   handleSuccess(response) {
+            console.log("hej",response.data);
+            alert("Incident uspješno prijavljen");
+        }
+
+        handleError(error) {
+            console.log(error);
+        }
 
     render(){
 
@@ -84,21 +111,28 @@ class IncidentForm extends Component{
                   <FormGroup  controlId="formIncident">
                     <Col md={6}>
                         <ControlLabel> Odaberi servis </ControlLabel>
-                        <FormControl componentClass="select" placeholder="Servis">
-                            <option value="Servis 1">Servis 1</option>
-                            <option value="Servis 2">Servis 2</option>
-                            <option value="Servis 3">Servis 3</option>
-                            <option value="Servis 4">Servis 4</option>
+                        <FormControl componentClass="select" onChange={this.handleChange} name="servis"  >
+                            <option value="" selected disabled>Servis</option>
+                            <option value="SMS bankarstvo">SMS bankarstvo</option>
+                            <option value="Viber bankarstvo">Viber bankarstvo</option>
+                            <option value="Internet bankarstvo">Internet bankarstvo</option>
+                            <option value="Mobilno bankarstvo">Mobilno bankarstvo</option>
                         </FormControl>
                     </Col>
                     <Col md={6}>
                         <ControlLabel> Odaberi hitnost </ControlLabel>
-                        <FormControl componentClass="select" placeholder="Hitnost">
+                        <FormControl componentClass="select" name="hitnost"  onChange={this.handleChange}>
+                            <option value="" selected disabled>Hitnost</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </FormControl>
                     </Col>
                     </FormGroup>
@@ -128,7 +162,7 @@ class IncidentForm extends Component{
 
                  <Row>
                  <Col md={12} style={{textAlign:"right"}}>
-                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi incident</Button>
+                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg"onClick={this.onPrijavi}>Prijavi incident</Button>
                  </Col>
                  </Row>
                  </Grid>

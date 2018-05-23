@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ppis.services.RequestLogService;
 import com.example.ppis.services.RequestService;
 import com.example.ppis.dao.RegisteredUserDAO;
+import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.models.RequestLog;
 
@@ -75,11 +77,11 @@ public class RequestController {
 	public ResponseEntity createNewRequest(@RequestBody final NewRequest newRequest)	{
 		
 		try {
-			/*System.out.println("Username : " + newRequest.registeredUserUsername
+			System.out.println("Username : " + newRequest.registeredUserUsername
 					+ "\n ContactMethod : " + newRequest.contactMethod
 					+ "\n Title : " + newRequest.title
 					+ "\n Description : " + newRequest.description
-					+ "\b Urgency : " + newRequest.urgency);*/
+					+ "\b Urgency : " + newRequest.urgency);
 			String response = this.requestService.saveNewRequest(newRequest.registeredUserUsername
 					, newRequest.contactMethod
 					, newRequest.title
@@ -92,10 +94,11 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
-	@RequestMapping(value="", method=RequestMethod.GET)
+	@RequestMapping(value="/getAll", method=RequestMethod.POST)
 	public ResponseEntity getRequests(@RequestBody final UserInformation info)	{
 		try {
-			List<Request> requests ; 
+			
+			List<Request> requests; 
 			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	
 				requests = this.requestService.getRequestsByRegisteredUser(info.username) ; 
 			else requests = this.requestService.getRequestsByResolver(info.username) ; 

@@ -282,16 +282,18 @@ public class RequestService {
 	public List<Request> getRequestsByRegisteredUser(String registeredUserUsername)	{
 		
 		List<Request> requests ; 
-		
+		System.out.println("here:"+registeredUserUsername);
 		try {
 			
 			if(registeredUserUsername.length() > 0 && this.registeredUserDao.existsByUsername(registeredUserUsername))
+			{	
 				requests = this.requestDao.getRequestsByRegisteredUser(
 					this.registeredUserDao.findUserByUsername(registeredUserUsername)) ;
-			
+			}
 			else throw new IllegalArgumentException("The username is either unspecified or the user has no requests.") ; 
 		
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			throw e ; 
 		}
 		

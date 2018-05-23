@@ -5,27 +5,27 @@ import java.util.Date;
 public class UnassignedIncidentViewModel{
     private Long id;
     private String title;
-    private String adminName;
+    private String creator;
     private Integer priority;
     private Date createdDate;
     private String serviceName;
     private String departmentName;
     
-    public UnassignedIncidentViewModel(Long id, String title, String adminName, Integer priority, Date createdDate, String serviceName, String departmentName){
+    public UnassignedIncidentViewModel(Long id, String title, String creator, Integer priority, Date createdDate, String serviceName, String departmentName){
         this.id = id;
         this.title=title;
-        this.adminName=adminName;
+        this.creator=creator;
         this.priority=priority;
         this.createdDate=createdDate;
         this.serviceName=serviceName;
         this.departmentName=departmentName;        
     }
 
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
-    public String getAdminName() {
-        return adminName;
+    public String getCreator() {
+        return creator;
     }
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;

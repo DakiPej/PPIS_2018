@@ -3,9 +3,22 @@ package com.example.ppis.controllers.viewModels;
 import java.util.Date;
 
 public class UserIncidentsViewModel{
-    private Long id;
+    public UserIncidentsViewModel(Long id, String title, Date createdDate, Integer urgency, Date lastResolveDate,
+			Date closedDate, String serviceName, String status) {
+		this.id = id;
+		this.title = title;
+		this.createdDate = createdDate;
+		this.urgency = urgency;
+		this.lastResolveDate = lastResolveDate;
+		this.closedDate = closedDate;
+		this.serviceName = serviceName;
+		this.status = status;
+	}
+
+	private Long id;
     private String title;
     private Date createdDate;
+    private Integer urgency;
     private Date lastResolveDate;
     private Date closedDate;
     private String serviceName;
@@ -26,8 +39,14 @@ public class UserIncidentsViewModel{
         this.closedDate = closedDate;
         this.serviceName = serviceName;
         this.status = status;
+        
     }
-
+    public void setUrgency(Integer urgency) {
+        this.urgency = urgency;
+    }
+    public Integer getUrgency() {
+        return urgency;
+    }
     public Date getClosedDate() {
         return closedDate;
     }

@@ -5,11 +5,8 @@ import javax.validation.constraints.NotNull;
 public class GetUserIncidentsForm{
     @NotNull 
     private String username;
-    @NotNull
     private String filter;
-    @NotNull
     private String departmentName;
-    @NotNull
     private String escalated;
 
     public String getDepartmentName() {

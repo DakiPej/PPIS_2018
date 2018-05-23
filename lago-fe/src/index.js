@@ -7,12 +7,13 @@ import load from 'little-loader';
 import './Style/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 /*Main Componets*/
 import App from './App';
 
 /*Render and router*/
 ReactDOM.render(
-    
+
     <BrowserRouter>
         <App/>
     </BrowserRouter>,
