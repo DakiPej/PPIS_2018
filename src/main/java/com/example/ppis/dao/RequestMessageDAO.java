@@ -41,7 +41,7 @@ public class RequestMessageDAO extends BaseDAO<RequestMessage, RequestMessageRep
 		return requestMessages ; 
 	}
 	
-	public List<RequestMessage> getRequesttMessagesByRequest(Request request)	{
+	public List<RequestMessage> getRequestMessagesByRequest(Request request)	{
 		
 		List<RequestMessage> requestMessages ; 
 		

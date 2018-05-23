@@ -1,6 +1,5 @@
 package com.example.ppis.dao;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -16,6 +15,7 @@ public class IncidentMessageDAO extends BaseDAO<IncidentMessage, IncidentMessage
 	public boolean existsByIncident(Incident incident)	{
 		return this.repo.existsByIncident(incident) ; 
 	}
+
 	public List<IncidentMessage> getIncidentMessagesByReceiver(RegisteredUser receiver)	{
 		
 		List<IncidentMessage> incidentMessages ; 

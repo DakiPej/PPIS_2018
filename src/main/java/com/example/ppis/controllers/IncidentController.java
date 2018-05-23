@@ -18,12 +18,13 @@ import com.example.ppis.controllers.forms.UnassignedForm;
 import com.example.ppis.controllers.viewModels.UserIncidentDetailsViewModel;
 import com.example.ppis.services.IncidentService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping(value="/incident")
 public class IncidentController {
