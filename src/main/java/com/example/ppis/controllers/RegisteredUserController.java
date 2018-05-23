@@ -40,9 +40,14 @@ public class RegisteredUserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity login(@RequestBody final LoginUserForm loginUser) throws ServletException {
+<<<<<<< HEAD
+		String role = registeredUserService.login(loginUser);
+		if (role != null) {
+=======
 		System.out.println("tu sam");
 		String role = registeredUserService.login(loginUser);
 		if (role!= null) {
+>>>>>>> b0568b93f5ef86ca4436808a9e264a494369d7cb
 			return ResponseEntity.ok(role);
 		}
 		else

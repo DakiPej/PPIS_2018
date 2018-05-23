@@ -27,9 +27,8 @@ public class RegisteredUserService {
 			throw new ServletException("Password polje ne smije biti prazno.");
 		
 		try {
-			System.out.println("RaDi");
 			String role = registeredUserDao.findUser(loginUser.getUsername(), loginUser.getPassword());
-			System.out.println("RaDi");
+			if(role.equals("Korisnik") == false && role.equals("Administrator") == false) return "Odjel";
 			return role;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
