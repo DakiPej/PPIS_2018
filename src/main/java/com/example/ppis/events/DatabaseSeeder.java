@@ -344,7 +344,7 @@ public class DatabaseSeeder {
 			i.setCreatedDate(new Date());
 			i.setResolved(false);
 			i.setClosed(false);
-			i.setEscalated(false);
+			i.setEscalated(true);
 			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
 			
@@ -357,7 +357,6 @@ public class DatabaseSeeder {
 			i = new Incident();
 			i.setRegisteredUser(registeredUserDAO.findUserByUsername("clarkson"));
 			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
-			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
 			i.setContactInfo("james.m@email.com");
 			i.setTitle("Naslov 1");
