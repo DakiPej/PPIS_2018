@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Tab,Tabs,Modal, FormGroup,ControlLabel,PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup,ListGroup, ListGroupItem,Glyphicon } from 'react-bootstrap';
-import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT} from '../globals';
+import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT,PATH_ESCALATION_ADMIN,PATH_ASSIGN_ADMIN} from '../globals';
 
 import axios from 'axios';
 class Incident extends Component{
@@ -9,18 +9,58 @@ class Incident extends Component{
         super(props);
         this.state = {
             id: this.props.match.params.id,
-            naziv:'',
-            korisnik:'',
-            opis:'',
-            prioritet:'',
-            status:'',
-            odjel:null,
-            datum:null,
-            poruke: null,
-            show: false
+            data:'',
+            messagesAdmin:'',
+            messagesDepartment:'',
+            messagesUser:'',
+            departmentName:'',
+            dName:'',
+            priority:''
         };
         this.handleHide = this.handleHide.bind(this);
+        this.escalationConfirm=this.escalationConfirm.bind(this);
+        this.ponistiEskalaciju=this.ponistiEskalaciju.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+        this.assignSuccess=this.assignSuccess.bind(this);
+    }
+    ponistiEskalaciju(event){
+      event.preventDefault();
 
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ESCALATION_ADMIN, {
+          escalation: false,
+          id: this.state.id
+      }
+      )
+      .then(this.cancelSuccess.bind(this))
+      .catch(this.handleError.bind(this));
+
+    }
+    cancelSuccess(response){
+      alert("Eskalacija je poništena");
+    this.setState(prevState => ({data:
+      {...prevState.data,
+        escalation:false}}));
+  }
+    escalationConfirm(event){
+      event.preventDefault();
+
+
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ESCALATION_ADMIN, {
+          escalation: true,
+          id: this.state.id,
+          departmentName: this.state.departmentName
+      }
+      )
+      .then(this.confirmSuccess.bind(this))
+      .catch(this.handleError.bind(this));
+
+    }
+    confirmSuccess(response){
+      this.setState({ show: false });
+      alert("Eskalacija je prihvaćena");
+    this.setState(prevState => ({data:
+      {...prevState.data,
+        escalation:false}}));
     }
     componentDidMount(){
         this.getIncident();
@@ -28,9 +68,28 @@ class Incident extends Component{
     handleHide() {
      this.setState({ show: false });
     }
+    assignSuccess(event){
+      event.preventDefault();
+      console.log(this.state.dName+this.state.priority);
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ASSIGN_ADMIN, {
+        adminUsername: sessionStorage.getItem("username"),
+        departmentName: this.state.dName,
+        id: this.state.id,
+        priority: this.state.priority
+      }
+      )
+      .then(this.confirmAssing.bind(this))
+      .catch(this.handleError.bind(this));
+
+    }
+    confirmAssing()
+    {
+      alert("Uspješna dodjela incidenta.");
+      window.location = '/dashboard/incidenti/'+this.state.id;
+    }
     getIncident(){
 
-        axios.post(PATH_BASE+PATH_ONE_INCIDENT, {
+        axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ONE_INCIDENT, {
             username:  sessionStorage.getItem("username"),
             id: this.state.id
         }
@@ -40,9 +99,15 @@ class Incident extends Component{
 
 
     }
+    handleChange(e) {
+
+      this.setState({ [e.target.name]: e.target.value });
+      console.log(this.state.dName);
+      console.log(this.state.priority);
+    }
 
     handleSuccess(response){
-      console.log(response.data);
+      this.setState({data:response.data});
     }
 
     handleError(error){
@@ -50,20 +115,6 @@ class Incident extends Component{
     }
     render(){
 
-        var test = {
-            id:111,
-            naziv:'Naziv incidenta',
-            korisnik:'Korisnik Korisniković',
-            opis:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            hitnost:2,
-            rjesava: 'Korisnik Korisniković',
-            servis:"sms",
-            status:'U obradi',
-            odjel:'Odjel1',
-            datumprijave:'11/11/11',
-            datumrjesenja:'N/A',
-            eskalacija: 'Ne'
-        };
         var poruke = [{
           autor: "Admin", datum:"11/11/11", tekst:"Nesto"
         }, {
@@ -92,7 +143,7 @@ class Incident extends Component{
           var role = sessionStorage.getItem("rola");
           switch(role){
             case 'Administrator':
-            if (test.odjel===null)
+            if (this.state.data.departmentName==='')
             table = <div style={{padding:"1%", overflowY:"scroll", maxHeight:"60vh"}}>
             <Row>
                 <Col md={3}>
@@ -100,7 +151,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Korisnik</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.korisnik}</Panel.Body>
+                        <Panel.Body>{this.state.data.creatorUsername}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -108,7 +159,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Hitnost</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.hitnost}</Panel.Body>
+                        <Panel.Body>{this.state.data.urgency}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -116,7 +167,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.createdDate}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -124,7 +175,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Kontakt</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.kontakt}</Panel.Body>
+                        <Panel.Body>{this.state.data.contactMethod}</Panel.Body>
                     </Panel>
                 </Col>
 
@@ -136,7 +187,7 @@ class Incident extends Component{
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Collapse>
-                  <Panel.Body>{test.opis}</Panel.Body>
+                  <Panel.Body>{this.state.data.description}</Panel.Body>
                 </Panel.Collapse>
             </Panel>
             <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
@@ -144,15 +195,17 @@ class Incident extends Component{
               <FormGroup  controlId="formZahtjev">
                 <Col md={12}>
                     <ControlLabel> Odaberite odjel </ControlLabel>
-                    <FormControl componentClass="select" placeholder="Odjel">
-                        <option value="Odjel 1">Odjel 1</option>
-                        <option value="Odjel 2">Odjel 2</option>
-                        <option value="Odjel 3">Odjel 3</option>
-                        <option value="Odjel 4">Odjel 4</option>
+                    <FormControl componentClass="select" name="dName" onChange={this.handleChange} placeholder="Odjel">
+                    <option value="" selected disabled>Odjel</option>
+                        <option value="Odjel1">Odjel 1</option>
+                        <option value="Odjel2">Odjel 2</option>
+                        <option value="Odjel3">Odjel 3</option>
+                        <option value="Odjel4">Odjel 4</option>
                     </FormControl>
                     <br/>
                     <ControlLabel> Odaberite prioritet </ControlLabel>
-                    <FormControl componentClass="select" placeholder="Prioritet">
+                    <FormControl componentClass="select" name="priority" onChange={this.handleChange} placeholder="Prioritet">
+                    <option value="" selected disabled>Prioritet</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -170,7 +223,7 @@ class Incident extends Component{
                 <br/>
                 <Row>
                 <Col md={12} style={{textAlign:"right"}}>
-                <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Dodijeli</Button>
+                <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg" onClick={this.assignSuccess}>Dodijeli</Button>
                 </Col>
                 </Row>
                 <br/>
@@ -183,7 +236,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Prijavio</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.korisnik}</Panel.Body>
+                        <Panel.Body>{this.state.data.creatorUsername}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -191,7 +244,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Servis</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.servis}</Panel.Body>
+                        <Panel.Body>{this.state.data.serviceName}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -199,7 +252,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Rješava</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.korisnik}</Panel.Body>
+                        <Panel.Body>{this.state.data.resolverUsername}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -207,7 +260,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Hitnost</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.hitnost}</Panel.Body>
+                        <Panel.Body>{this.state.data.urgency}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -215,7 +268,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Prioritet</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.prioritet}</Panel.Body>
+                        <Panel.Body>{this.state.data.priority}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -223,7 +276,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Odjel</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.odjel}</Panel.Body>
+                        <Panel.Body>{this.state.data.departmentName}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -231,7 +284,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Status</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.status}</Panel.Body>
+                        <Panel.Body>{this.state.data.status}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -239,7 +292,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Eskalacija</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.eskalacija}</Panel.Body>
+                        <Panel.Body>{this.state.data.escalation?"Da":"Ne"}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -247,47 +300,37 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.createdDate}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
                     <Panel  bsStyle="success">
                         <Panel.Heading>
-                            <Panel.Title componentClass="h5">Datum rješavanja</Panel.Title>
+                            <Panel.Title componentClass="h5">Datum posljednjeg rješavanja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.lastResolveDate}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
                     <Panel  bsStyle="info">
                         <Panel.Heading>
-                            <Panel.Title componentClass="h5">Datum posljednjeg rješavanja</Panel.Title>
-                        </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
-                    </Panel>
-                </Col>
-                <Col md={3}>
-                    <Panel  bsStyle="success">
-                        <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum zatvaranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.closedDate}</Panel.Body>
                     </Panel>
                 </Col>
 
-                </Row>
-                <Row>
                 <Col md={3}>
-                    <Panel bsStyle="info">
+                    <Panel bsStyle="success">
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Kontakt</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.kontakt}</Panel.Body>
+                        <Panel.Body>{this.state.data.contactMethod}</Panel.Body>
                     </Panel>
                 </Col>
-                {test.eskalacija==='Da'? <Col md={3} xsOffset={6}>
+                {this.state.data.escalation? <Col md={6} xsOffset={3}>
                 <Button bsStyle="primary"
-                bsSize="large" className=" btn-lg btn-block">Poništi eskalaciju</Button>
+                bsSize="large" className=" btn-lg btn-block" onClick={this.ponistiEskalaciju}>Poništi eskalaciju</Button>
                <br/>
                 <Button  className="btn-block btn-lg"  bsStyle="primary"  bsSize="large"
                 onClick={() => this.setState({ show: true })} >
@@ -303,7 +346,7 @@ class Incident extends Component{
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Collapse>
-                  <Panel.Body>{test.opis}</Panel.Body>
+                  <Panel.Body>{this.state.data.description}</Panel.Body>
                 </Panel.Collapse>
             </Panel>
             <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
@@ -343,7 +386,7 @@ class Incident extends Component{
               </div>
               </Panel.Collapse>
             </Panel>
-            {test.eskalacija==='Da'?<div>
+            {this.state.data.escalation?<div>
             <Modal
       show={this.state.show}
       onHide={this.handleHide}
@@ -358,11 +401,11 @@ class Incident extends Component{
       <FormGroup  controlId="formZahtjev">
         <Col md={12}>
             <ControlLabel> Odaberite odjel </ControlLabel>
-            <FormControl componentClass="select" placeholder="Odjel">
-                <option value="Odjel 1">Odjel 1</option>
-                <option value="Odjel 2">Odjel 2</option>
-                <option value="Odjel 3">Odjel 3</option>
-                <option value="Odjel 4">Odjel 4</option>
+            <FormControl componentClass="select" name="departmentName" onChange={this.handleChange}placeholder="Odjel">
+                <option value="Odjel1">Odjel 1</option>
+                <option value="Odjel2">Odjel 2</option>
+                <option value="Odjel3">Odjel 3</option>
+                <option value="Odjel4">Odjel 4</option>
             </FormControl>
             </Col>
             </FormGroup>
@@ -370,7 +413,7 @@ class Incident extends Component{
     </Modal.Body>
     <Modal.Footer>
       <Button onClick={this.handleHide}>Close</Button>
-      <Button bsStyle="primary">Eskaliraj</Button>
+      <Button bsStyle="primary" onClick={this.escalationConfirm}>Eskaliraj</Button>
     </Modal.Footer>
   </Modal>
   </div>:null}
@@ -385,7 +428,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Servis</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.servis}</Panel.Body>
+                        <Panel.Body>{this.state.data.serviceName}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -393,7 +436,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Kontakt</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>Kontakt</Panel.Body>
+                        <Panel.Body>{this.state.data.contactMethod}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -401,7 +444,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Hitnost</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.hitnost}</Panel.Body>
+                        <Panel.Body>{this.state.data.urgency}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -409,7 +452,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h6">Datum kreiranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.createdDate}</Panel.Body>
                     </Panel>
                 </Col>
                 </Row>
@@ -419,7 +462,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum posljednjeg rješavanja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumrjesenja}</Panel.Body>
+                        <Panel.Body>{this.state.data.lastResolveDate}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -427,7 +470,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h6">Datum zatvaranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.closedDate}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={3}>
@@ -435,7 +478,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Status</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.status}</Panel.Body>
+                        <Panel.Body>{this.state.data.status}</Panel.Body>
                     </Panel>
                 </Col>
             </Row>
@@ -446,7 +489,7 @@ class Incident extends Component{
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Collapse>
-                  <Panel.Body>{test.opis}</Panel.Body>
+                  <Panel.Body>{this.state.data.description}</Panel.Body>
                 </Panel.Collapse>
             </Panel>
             <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
@@ -478,7 +521,7 @@ class Incident extends Component{
             </div>;
             break;
             case 'Odjel':
-            if (test.rjesava===null)
+            if (this.state.datarjesava===null)
             table = <div style={{padding:"1%", overflowY:"scroll", maxHeight:"60vh"}}>
             <Row>
                 <Col md={4}>
@@ -486,7 +529,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Korisnik</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.korisnik}</Panel.Body>
+                        <Panel.Body>{this.state.datakorisnik}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={4}>
@@ -494,7 +537,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Prioritet</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.prioritet}</Panel.Body>
+                        <Panel.Body>{this.state.dataprioritet}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={4}>
@@ -502,7 +545,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{test.datumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
                     </Panel>
                 </Col>
             </Row>
@@ -513,7 +556,7 @@ class Incident extends Component{
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Collapse>
-                  <Panel.Body>{test.opis}</Panel.Body>
+                  <Panel.Body>{this.state.dataopis}</Panel.Body>
                 </Panel.Collapse>
             </Panel>
             <Row>
@@ -531,7 +574,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Prijavio</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.korisnik}</Panel.Body>
+                          <Panel.Body>{this.state.datakorisnik}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -539,7 +582,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Prioritet</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.prioritet}</Panel.Body>
+                          <Panel.Body>{this.state.dataprioritet}</Panel.Body>
                       </Panel>
                   </Col>
 
@@ -548,7 +591,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Status</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.status}</Panel.Body>
+                          <Panel.Body>{this.state.datastatus}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -556,7 +599,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Eskalacija</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.eskalacija}</Panel.Body>
+                          <Panel.Body>{this.state.dataeskalacija}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -564,7 +607,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.datumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -572,7 +615,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum rješavanja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.datumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -580,7 +623,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum posljednjeg rješavanja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.datumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -588,7 +631,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum zatvaranja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{test.datumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
                       </Panel>
                   </Col>
                   </Row>
@@ -599,7 +642,7 @@ class Incident extends Component{
                     </Panel.Title>
                   </Panel.Heading>
                   <Panel.Collapse>
-                    <Panel.Body>{test.opis}</Panel.Body>
+                    <Panel.Body>{this.state.dataopis}</Panel.Body>
                   </Panel.Collapse>
               </Panel>
               <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
@@ -624,7 +667,7 @@ class Incident extends Component{
                   </Col>
                   </Row>
                   <Row>
-                  {test.eskalacija==='Ne'? <Col md={6} xsOffset={3}>
+                  {this.state.dataeskalacija==='Ne'? <Col md={6} xsOffset={3}>
                   <Button  className="btn-block btn-lg"  bsStyle="danger"  bsSize="large"
                   onClick={() => this.setState({ show: true })} >
                      Predloži eskalaciju
@@ -680,7 +723,7 @@ class Incident extends Component{
                 </div>
                 </Panel.Collapse>
               </Panel>
-              {test.eskalacija==='Ne'?<div>
+              {this.state.dataeskalacija==='Ne'?<div>
               <Modal
         show={this.state.show}
         onHide={this.handleHide}
@@ -706,9 +749,9 @@ class Incident extends Component{
           <Panel bsStyle="primary">
               <Panel.Heading>
               <div class="d-flex w-100 justify-content-between">
-                <Panel.Heading componentClass="h2">{test.naziv}
+                <Panel.Heading componentClass="h2">{this.state.data.title}
                   <small>
-                    #{test.id}
+                    #{this.state.id}
                   </small>
                   </Panel.Heading>
                   <Button  bsSize="large">

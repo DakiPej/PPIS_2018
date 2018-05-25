@@ -382,6 +382,8 @@ public class IncidentService {
 			i.setEscalated(false);
 		} else
 			i.setEscalated(false);
+		
+		incidentDao.create(i);
 
 		return true;
 	}
