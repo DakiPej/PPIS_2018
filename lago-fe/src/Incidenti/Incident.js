@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {Tab,Tabs,Modal, FormGroup,ControlLabel,PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup,ListGroup, ListGroupItem,Glyphicon } from 'react-bootstrap';
+import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT} from '../globals';
 
+import axios from 'axios';
 class Incident extends Component{
 
     constructor(props){
         super(props);
         this.state = {
-            id:-1,
+            id: this.props.match.params.id,
             naziv:'',
             korisnik:'',
             opis:'',
@@ -20,10 +22,32 @@ class Incident extends Component{
         this.handleHide = this.handleHide.bind(this);
 
     }
+    componentDidMount(){
+        this.getIncident();
+    }
     handleHide() {
      this.setState({ show: false });
     }
+    getIncident(){
 
+        axios.post(PATH_BASE+PATH_ONE_INCIDENT, {
+            username:  sessionStorage.getItem("username"),
+            id: this.state.id
+        }
+        )
+        .then(this.handleSuccess.bind(this))
+        .catch(this.handleError.bind(this));
+
+
+    }
+
+    handleSuccess(response){
+      console.log(response.data);
+    }
+
+    handleError(error){
+        console.log(error);
+    }
     render(){
 
         var test = {

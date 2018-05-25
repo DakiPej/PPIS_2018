@@ -12,8 +12,8 @@ public interface RequestMessageRepository extends CrudRepository<RequestMessage,
 	
 	public boolean existsByRequest(Request request) ; 
 	
-	public List<RequestMessage> findAllByReceiverOrderByDateDesc(RegisteredUser receiver) ; 
-	public List<RequestMessage> findAllBySenderOrderByDateDesc(RegisteredUser sender)	; 
+	public List<RequestMessage> findAllByReceiverOrderByDateDesc(RegisteredUser receiver);
+	public List<RequestMessage> findAllBySenderOrderByDateDesc(RegisteredUser sender);
 	
 	public List<RequestMessage> findAllByRequestOrderByDateDesc(Request request); 
 }

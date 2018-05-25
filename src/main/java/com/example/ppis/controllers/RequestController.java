@@ -5,19 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ppis.services.RequestLogService;
 import com.example.ppis.services.RequestService;
 import com.example.ppis.dao.RegisteredUserDAO;
+import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.models.RequestLog;
 import com.example.ppis.ViewModels.Employee_RequestVM;
 import com.example.ppis.ViewModels.EndUser_RequestVM ; 
 
+@CrossOrigin
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
@@ -77,11 +82,11 @@ public class RequestController {
 	public ResponseEntity createNewRequest(@RequestBody final NewRequest newRequest)	{
 		
 		try {
-			/*System.out.println("Username : " + newRequest.registeredUserUsername
+			System.out.println("Username : " + newRequest.registeredUserUsername
 					+ "\n ContactMethod : " + newRequest.contactMethod
 					+ "\n Title : " + newRequest.title
 					+ "\n Description : " + newRequest.description
-					+ "\b Urgency : " + newRequest.urgency);*/
+					+ "\b Urgency : " + newRequest.urgency);
 			String response = this.requestService.saveNewRequest(newRequest.registeredUserUsername
 					, newRequest.contactMethod
 					, newRequest.title
@@ -93,15 +98,17 @@ public class RequestController {
 			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
-	}
-	@RequestMapping(value="", method=RequestMethod.GET)
-	public ResponseEntity getRequests(@RequestBody final RequestInformation info)	{
+	}	
+	@RequestMapping(value="/{username}/{requestId}", method=RequestMethod.GET)
+	public ResponseEntity getRequests(
+			@PathVariable("username") String username
+			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info*/)	{
 		try {
-			if(info.requestId == null)	{
+			if(requestId == null)	{
 				List<Request> requests ;
-				requests = this.requestService.getRequests(info.username) ;
+				requests = this.requestService.getRequests(username) ;
 				
-				if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().getTypeName().equals("Korisnik"))	{
+				if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
 					List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
 					return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 				}	else	{
@@ -111,10 +118,17 @@ public class RequestController {
 			}
 			else	{
 				Request request ; 
-				request = this.requestService.getRequest(info.requestId, info.username) ; 
+				request = this.requestService.getRequest(requestId, username) ; 
 				return ResponseEntity.status(HttpStatus.OK).body(request) ; 
 			}
 			/*
+=======
+	@RequestMapping(value="/getAll", method=RequestMethod.POST)
+	public ResponseEntity getRequests(@RequestBody final UserInformation info)	{
+		try {
+			
+			List<Request> requests; 
+>>>>>>> b6570c2df298d54dde0113474e18185eb64d9436
 			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	
 				requests = this.requestService.getRequestsByRegisteredUser(info.username) ; 
 			else requests = this.requestService.getRequestsByResolver(info.username) ; 
@@ -124,15 +138,18 @@ public class RequestController {
 		}
 	}
 
-	@RequestMapping(value="/requestStatus", method=RequestMethod.GET)
-	public ResponseEntity getRequestStatuses(@RequestBody final RequestStatus info)	{
+	@RequestMapping(value="/requestStatus/{username}/{requestId}/{workingOn}", method=RequestMethod.GET)
+	public ResponseEntity getRequestStatuses(
+			@PathVariable("username") String username
+			, @PathVariable("requestId") Long requestId
+			, @PathVariable("workingOn") boolean workingOn/*@RequestBody final RequestStatus info*/)	{
 		try {
 			List<Request> requests ; 
-			if(!info.workingOn)
-				requests = this.requestService.getRequestByRegisteredUserAndResolverUser(info.username, null) ;
-			else requests = this.requestService.getRequestByRegisteredUserAndResolverUser(info.username, "") ; 
+			if(!workingOn)
+				requests = this.requestService.getRequestByRegisteredUserAndResolverUser(username, null) ;
+			else requests = this.requestService.getRequestByRegisteredUserAndResolverUser(username, "") ; 
 			
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().getTypeName().equals("Korisnik"))	{
+			if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
 				List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
 				return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 			}	else	{
@@ -144,6 +161,29 @@ public class RequestController {
 		}
 	}
 
+	@RequestMapping(value="/unassignedRequests_ByAdmins", method=RequestMethod.GET)
+	public ResponseEntity getReqeustsByUnassignedAdmins()	{
+		try {
+			List<Request> requests ; 
+			requests = this.requestService.getRequestsByAdmin(null) ; 
+			return ResponseEntity.status(HttpStatus.OK).body(this.e_vmConverter.convertToVM(requests)) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	@RequestMapping(value="/unassignedRequests_ByAdmins", method=RequestMethod.PUT)
+	public ResponseEntity assignRequestToAdmin(@RequestBody final RequestInformation info)	{
+		try {
+			
+			System.out.println("Username je: " + info.username);
+			System.out.println(("RequestID je : " + info.requestId));
+			String response = this.requestService.assingRequestToAdmin(info.username, new Long(info.requestId));
+			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
 	@RequestMapping(value="unassignedRequests_ByDepartments", method=RequestMethod.POST)
 	public ResponseEntity assignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
@@ -216,15 +256,18 @@ public class RequestController {
 	}
 
 	
-	@RequestMapping(value="/requestsByPriority", method=RequestMethod.GET)
-	public ResponseEntity getAllByPriority(@RequestBody final FilterInformation info)	{
+	@RequestMapping(value="/requestsByPriority/{username}/{priority}/{greater}", method=RequestMethod.GET)
+	public ResponseEntity getAllByPriority(
+			@PathVariable("username") String username
+			, @PathVariable("priority") int priority
+			, @PathVariable("greater") boolean greater /*@RequestBody final FilterInformation info*/)	{
 		try {
 			List<Request> requests ; 
-			if(info.greater)
-				requests = this.requestService.getRequestsByResolverUserAndGreaterPriority(info.username, info.urgency_or_priority) ; 
-			else requests = this.requestService.getRequestsByResolverUserAndLowerPriority(info.username, info.urgency_or_priority) ;
+			if(greater)
+				requests = this.requestService.getRequestsByResolverUserAndGreaterPriority(username, priority) ; 
+			else requests = this.requestService.getRequestsByResolverUserAndLowerPriority(username, priority) ;
 			
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().getTypeName().equals("Korisnik"))	{
+			if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
 				List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
 				return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 			}	else	{
@@ -238,8 +281,11 @@ public class RequestController {
 	}
 	
 	
-	@RequestMapping(value="/requestsByUrgency", method=RequestMethod.GET)
-	public ResponseEntity getAllByUrgency(@RequestBody final FilterInformation info)	{
+	@RequestMapping(value="/requestsByUrgency/{username}/{urgency}/{greater}", method=RequestMethod.GET)
+	public ResponseEntity getAllByUrgency(
+			@PathVariable("username") String username
+			, @PathVariable("urgency") int urgency
+			, @PathVariable("greater") boolean greater/*@RequestBody final FilterInformation info*/)	{
 		try {
 			List<Request> requests ; 
 			/*if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	{
@@ -251,9 +297,9 @@ public class RequestController {
 					requests = this.requestService.getRequestsByResolverUserAndGreaterUrgency(info.username, info.urgency_or_priority); 
 				else requests = this.requestService.getRequestsByResolverUserAndLowerUrgency(info.username, info.urgency_or_priority) ;
 			}*/
-			requests = this.requestService.getRequestsByUrgency(info.username, info.urgency_or_priority, info.greater) ; 
+			requests = this.requestService.getRequestsByUrgency(username, urgency, greater) ; 
 			
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().getTypeName().equals("Korisnik"))	{
+			if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
 				List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
 				return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 			}	else	{
@@ -267,17 +313,19 @@ public class RequestController {
 	}
 
 	
-	@RequestMapping(value="/closedRequests", method=RequestMethod.GET)
-	public ResponseEntity getAllByClosed(@RequestBody final ClosedInformation info)	{
+	@RequestMapping(value="/closedRequests/{username}/{closed}", method=RequestMethod.GET)
+	public ResponseEntity getAllByClosed(
+			@PathVariable("username") String username
+			, @PathVariable("closed") boolean closed/*@RequestBody final ClosedInformation info*/)	{
 		try {
 			List<Request> requests ; 
 			/*if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))
 				requests = this.requestService.getRequestsByRegisteredUserAndClosed(info.username, info.closed) ; 
 			else requests = this.requestService.getRequestsByResolverUserAndClosed(info.username, info.closed) ; 
 			*/
-			requests = this.requestService.getRequestsByClosed(info.username, info.closed) ;
+			requests = this.requestService.getRequestsByClosed(username, closed) ;
 			
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().getTypeName().equals("Korisnik"))	{
+			if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
 				List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
 				return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 			}	else	{
@@ -289,11 +337,13 @@ public class RequestController {
 		}
 	}
 	
-	@RequestMapping(value="/RequestLogs", method=RequestMethod.GET)
-	public ResponseEntity getRequestLogsByRequest(@RequestBody final RequestInformation info)	{
+	@RequestMapping(value="/RequestLogs/{username}/{requestId}", method=RequestMethod.GET)
+	public ResponseEntity getRequestLogsByRequest(
+			@PathVariable("username") String username
+			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info*/)	{
 		try {
 			List<RequestLog> logs ;
-			logs = this.requestLogService.getRequstLogsByRequest(info.requestId, info.username) ;
+			logs = this.requestLogService.getRequstLogsByRequest(requestId, username) ;
 				
 			return ResponseEntity.status(HttpStatus.OK).body(logs) ; 
 		} catch (Exception e) {

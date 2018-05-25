@@ -16,6 +16,7 @@ public class Employee_RequestVM {
 	private String description ; 
 	private int urgency ; 
 	private String contactMethod ; 
+	private String contactInfo ; 
 	private String status ; 
 	private String creationDate ; 
 	private String closedDate ; 
@@ -36,6 +37,16 @@ public class Employee_RequestVM {
 			, String status 
 			, String creationDate
 			, String closedDate)	{
+		this.requestId = requestId ; 
+		this.creatorUser = creatorUser ; 
+		this.resolver = resolver ; 
+		this.admin = admin ; 
+		this .urgency = urgency ; 
+		this.contactMethod = contactMethod ; 
+		this.contactInfo = contactInfo ; 
+		this.status = status ; 
+		this.creationDate = creationDate ; 
+		this.closedDate = closedDate ; 
 		
 	}
 	
@@ -88,5 +99,101 @@ public class Employee_RequestVM {
 		
 		return requestVMs ; 
 		
+	}
+
+	public long getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(long requestId) {
+		this.requestId = requestId;
+	}
+
+	public String getCreatorUser() {
+		return creatorUser;
+	}
+
+	public void setCreatorUser(String creatorUser) {
+		this.creatorUser = creatorUser;
+	}
+
+	public String getResolver() {
+		return resolver;
+	}
+
+	public void setResolver(String resolver) {
+		this.resolver = resolver;
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getUrgency() {
+		return urgency;
+	}
+
+	public void setUrgency(int urgency) {
+		this.urgency = urgency;
+	}
+
+	public String getContactMethod() {
+		return contactMethod;
+	}
+
+	public void setContactMethod(String contactMethod) {
+		this.contactMethod = contactMethod;
+	}
+
+	public String getContactInfo() {
+		return contactInfo;
+	}
+
+	public void setContactInfo(String contactInfo) {
+		this.contactInfo = contactInfo;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public String getClosedDate() {
+		return closedDate;
+	}
+
+	public void setClosedDate(String closedDate) {
+		this.closedDate = closedDate;
 	}
 }

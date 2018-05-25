@@ -154,6 +154,21 @@ public class RequestService {
 		
 		return "A new request has been created." ;
 	}
+	public String assingRequestToAdmin(String username, Long requestId)	{
+		try {
+			if(username == null || username.length() == 0 || requestId == null || requestId < 0 || !this.requestDao.existsById(requestId))
+					throw new IllegalArgumentException("The user is not specified or does not exist or the request id is not valid or the request does not exist.") ; ;
+			Request request = this.requestDao.one(requestId) ; 
+			RegisteredUser admin = this.registeredUserDao.findUserByUsername(username) ; 
+			request.setAdmin(admin);
+			
+			this.requestDao.create(request) ; 
+			
+			return "The request has been assigned to the admin " + admin.getUsername() ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
 	public String assignRequestToDepartment(long unassignedRequestId
 			, String departmentName
 			, Integer priority)	{
@@ -292,20 +307,35 @@ public class RequestService {
 	public List<Request> getRequestsByRegisteredUser(String registeredUserUsername)	{
 		
 		List<Request> requests ; 
-		
+		System.out.println("here:"+registeredUserUsername);
 		try {
 			
 			if(registeredUserUsername.length() > 0 && this.registeredUserDao.existsByUsername(registeredUserUsername))
+			{	
 				requests = this.requestDao.getRequestsByRegisteredUser(
 					this.registeredUserDao.findUserByUsername(registeredUserUsername)) ;
-			
+			}
 			else throw new IllegalArgumentException("The username is either unspecified or the user has no requests.") ; 
 		
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			throw e ; 
 		}
 		
 		return requests ; 
+	}
+	public List<Request> getRequestsByAdmin(String admin)	{
+		List<Request> requests ; 
+		try {
+			if(admin == null || (admin != null && admin.length() != 0 && this.registeredUserDao.existsByUsername(admin)))
+				requests = this.requestDao.getRequestsByAdmin(this.registeredUserDao.findUserByUsername(admin)) ;
+			else throw new IllegalArgumentException("The user with the given username does not exist.") ;
+			
+			return requests ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
 	}
 	public List<Request> getRequestsByResolver(String resolverUsername)	{
 		

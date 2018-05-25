@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.repositories.RegisteredUserRepository;
 import com.example.ppis.services.RegisteredUserService;
 
+@CrossOrigin
 @RestController
 public class RegisteredUserController {
 
@@ -34,12 +36,14 @@ public class RegisteredUserController {
 		}
 	}
 	
+	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity login(@RequestBody final LoginUserForm loginUser) throws ServletException {
-		String email = registeredUserService.login(loginUser);
-		if (email != null) {
-			return ResponseEntity.ok(email);
+
+		String role = registeredUserService.login(loginUser);
+		if (role != null) {
+			return ResponseEntity.ok(role);
 		}
 		else
 			return ResponseEntity.badRequest().body("Korisnicko ime ili lozinka nisu ispravni.");

@@ -186,17 +186,18 @@ public class IncidentService {
 			ContactMethod contactMethod = getContactMethodByName(createIncidentForm.getContactMethodName());
 			if (contactMethod == null)
 				throw new ServletException("Nacin kontaktiranja nije poznat.");
-
+			System.out.println(contactMethod.getContactMethodName());
 			String contactInfo = "";
-			if (contactMethod.getContactMethodName() == "email")
+			if (contactMethod.getContactMethodName().equals("email"))
 				contactInfo = registeredUser.getEmail();
-			else if (contactMethod.getContactMethodName() == "phone")
+			else if (contactMethod.getContactMethodName().equals("phone"))
 				contactInfo = registeredUser.getPhoneNumber();
 			else
-				throw new ServletException("Nacin kontaktiranja nije poznat.");
+				throw new ServletException("ovdje"+"Nacin kontaktiranja nije poznat.");
 
 			Incident incident = new Incident(registeredUser, contactMethod, service, createIncidentForm.getTitle(),
 					createIncidentForm.getDescription(), createIncidentForm.getUrgency(), contactInfo);
+			incidentDao.create(incident);
 			return true;
 		} catch (Exception e) {
 			throw new ServletException(e.getMessage());
@@ -228,7 +229,7 @@ public class IncidentService {
 				for (Incident i : incidents) {
 					if (getUserIncidentsForm.getFilter().equals("svi") || getUserIncidentsForm.getFilter()
 							.equals(getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())))
-						userIncidents.add(new UserIncidentsViewModel(i.getId(), i.getTitle(), i.getCreatedDate(), null,
+						userIncidents.add(new UserIncidentsViewModel(i.getId(), i.getTitle(), i.getCreatedDate(),i.getUrgency(), null,
 								i.getClosedDate(), i.getServices().getServiceName(),
 								getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())));
 				}
@@ -266,7 +267,7 @@ public class IncidentService {
 							.equals(getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()))) {
 
 						DepartmentIncidentsViewModel departmentIncidentsViewModel = new DepartmentIncidentsViewModel(
-								i.getId(), i.getTitle(), i.getPriority(), i.getCreatedDate(), null, i.getClosedDate(),
+								i.getId(), i.getRegisteredUser().getUsername(),i.getTitle(), i.getPriority(), i.getCreatedDate(), null, i.getClosedDate(),
 								i.getServices().getServiceName(),
 								getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()),
 								i.getEscalated());
@@ -292,7 +293,7 @@ public class IncidentService {
 
 			for (Incident i : incidents) {
 				unassignedIncident.add(new UnassignedIncidentViewModel(i.getId(), i.getTitle(),
-						i.getAdmin().getUsername(), i.getPriority(), i.getCreatedDate(),
+						i.getRegisteredUser().getUsername(), i.getPriority(), i.getCreatedDate(),
 						i.getServices().getServiceName(), i.getDepartment().getDepartmentName()));
 			}
 
@@ -411,7 +412,7 @@ public class IncidentService {
 
 			if(ru == null) throw new ServletException("Korsinik ne postoji");
 			else if(i == null) throw new ServletException("Incident ne postoji");
-			else if(!i.getResolverUser().getUsername().equals(ru.getUsername()) throw new ServletException("Incident ne pripada korisniku");
+			else if(!i.getResolverUser().getUsername().equals(ru.getUsername())) throw new ServletException("Incident ne pripada korisniku");
 
 			i.setResolved(true);
 			incidentDao.create(i);

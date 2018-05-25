@@ -11,6 +11,9 @@ import {
     Panel,
     Col,
     Grid} from 'react-bootstrap';
+import {PATH_BASE,PATH_REQUESTS} from '../globals';
+
+import axios from 'axios';
 
 class ZahtjevForm extends Component{
 
@@ -24,14 +27,16 @@ class ZahtjevForm extends Component{
             naziv: naziv,
             opis:'',
             email:0,
-            telefon:0
+            telefon:0,
+            hitnost: 0,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.onPrijavi = this.onPrijavi.bind(this);
 
     }
 
     handleChange(e) {
-      console.log(e.target.id + ' : ' + e.target.value);
+
       if(e.target.name == "telefon" || e.target.name == "email"){
           var name = 'email';
           if(e.target.id == 'email') name = "telefon";
@@ -41,13 +46,36 @@ class ZahtjevForm extends Component{
                   [name]:false
               }
           );
-          console.log(e.target.id + ' ' +this.state.email);
-          console.log(name + ' ' +this.state.telefon);
       }else this.setState({ [e.target.name]: e.target.value });
-    }
 
-    handleCheckbox(e){
+
     }
+    onPrijavi(event){
+
+      event.preventDefault();
+      var kontakt;
+      if (this.state.email) kontakt="email";
+      else kontakt="phone";
+         if(this.state.naziv && this.state.opis &&(this.state.email || this.state.telefon) && kontakt)
+                 axios.post(PATH_BASE+PATH_REQUESTS, {
+                   registeredUserUsername: sessionStorage.getItem("username"),
+                   contactMethod: kontakt,
+					         title: this.state.naziv,
+					         description: this.state.opis,
+					         urgency: this.state.hitnost } )
+                   .then(this.handleSuccess.bind(this))
+                   .catch(this.handleError.bind(this));
+
+		}
+
+   handleSuccess(response) {
+            console.log("hej",response.data);
+            alert("Zahtjev uspješno prijavljen");
+        }
+
+        handleError(error) {
+            console.log(error);
+        }
 
     render(){
 
@@ -86,10 +114,11 @@ class ZahtjevForm extends Component{
                 </Row>
                 <br/>
                 <Row>
-                <FormGroup controlId="formIncident">
+                <FormGroup controlId="formZahtjev">
                     <Col md={6} xsOffset={3}>
                         <ControlLabel> Odaberi hitnost </ControlLabel>
-                        <FormControl componentClass="select" placeholder="Hitnost">
+                        <FormControl componentClass="select" name="hitnost"  onChange={this.handleChange}>
+                            <option value="" selected disabled>Hitnost</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -129,7 +158,7 @@ class ZahtjevForm extends Component{
 
                  <Row>
                  <Col md={12} style={{textAlign:"right"}}>
-                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Prijavi zahtjev</Button>
+                 <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg" onClick={this.onPrijavi}>Prijavi zahtjev</Button>
                  </Col>
                  </Row>
                  </Grid>
