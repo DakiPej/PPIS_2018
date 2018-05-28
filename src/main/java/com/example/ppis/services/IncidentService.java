@@ -336,7 +336,7 @@ public class IncidentService {
 							incident.getEscalated());
 					return (T) incidentDetail;
 				} else {
-					DepartmentDetailsViewModel departmentDetailsViewModel = new DepartmentDetailsViewModel(incident.getId(), incident.getAdmin().getUsername(), incident.getTitle(), incident.getServices().getServiceName(), incident.getDescription(), incident.getPriority(), incident.getCreatedDate(), null, incident.getClosedDate(), getIncidentStatus(incident.getResolverUser(), incident.getResolved(), incident.getClosed()), incident.getEscalated());
+					DepartmentDetailsViewModel departmentDetailsViewModel = new DepartmentDetailsViewModel(incident.getId(), incident.getRegisteredUser().getUsername(), incident.getTitle(), incident.getServices().getServiceName(), incident.getDescription(), incident.getPriority(), incident.getCreatedDate(), null, incident.getClosedDate(), getIncidentStatus(incident.getResolverUser(), incident.getResolved(), incident.getClosed()), incident.getEscalated());
 					return (T) departmentDetailsViewModel;
 				}
 			} 

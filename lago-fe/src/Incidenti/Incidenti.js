@@ -7,15 +7,16 @@ import '../Style/UserProfile.css';
 
 class Incidenti extends Component{
     render(){
-      const NIncidenti = () => <ListaIncidenata tip='Nedodijeljeni'/>;
+      const NIncidenti = (props) => <ListaIncidenata tip='Nedodijeljeni'/>;
+      const NIncident = (props) => <Incident tip ='Nedodijeljen' {...props}/>;
 
         return(
             <div if="content">
             <Switch>
                   <Route exact path = "/dashboard/incidenti" component={ListaIncidenata}/>
                   <Route exact path = "/dashboard/nincidenti" component={NIncidenti}/>
-                  <Route path ={"/dashboard/incidenti"+'/:id'} component={Incident}/>
-                  <Route path ={"/dashboard/nincidenti"+'/:id'} component={Incident}/>
+                  <Route  path ={"/dashboard/incidenti"+'/:id'} component={Incident}/>
+                  <Route  path ={"/dashboard/nincidenti"+'/:id'} component={NIncident}/>
             </Switch>
             </div>
         );

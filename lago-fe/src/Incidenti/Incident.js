@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Tab,Tabs,Modal, FormGroup,ControlLabel,PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup,ListGroup, ListGroupItem,Glyphicon } from 'react-bootstrap';
-import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT,PATH_ESCALATION_ADMIN,PATH_ASSIGN_ADMIN} from '../globals';
+import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT,PATH_ESCALATION_ADMIN,PATH_ASSIGN_ADMIN,
+  PATH_RESOLVE_INCIDENT,PATH_ASSIGN_RESOLVER,PATH_ESCALATION_RESOLVER,PATH_CLOSE_INCIDENT} from '../globals';
 
 import axios from 'axios';
 class Incident extends Component{
@@ -15,13 +16,114 @@ class Incident extends Component{
             messagesUser:'',
             departmentName:'',
             dName:'',
-            priority:''
+            priority:'',
+            esc:''
         };
         this.handleHide = this.handleHide.bind(this);
         this.escalationConfirm=this.escalationConfirm.bind(this);
         this.ponistiEskalaciju=this.ponistiEskalaciju.bind(this);
         this.handleChange=this.handleChange.bind(this);
         this.assignSuccess=this.assignSuccess.bind(this);
+        this.promjenaStatusa=this.promjenaStatusa.bind(this);
+        this.preuzmiIncident=this.preuzmiIncident.bind(this);
+        this.suggestEscalation=this.suggestEscalation.bind(this);
+        this.odbijZatvaranje=this.odbijZatvaranje.bind(this);
+        this.prihvatiZatvaranje=this.prihvatiZatvaranje.bind(this);
+
+    }
+    odbijZatvaranje(event){
+      event.preventDefault();
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_CLOSE_INCIDENT,{
+        id: this.state.id,
+        username: sessionStorage.getItem("username"),
+        close: false
+      }
+    )
+    .then(this.closeRejectSucess.bind(this))
+    .catch(this.handleError.bind(this));
+
+    }
+
+    closeRejectSucess(response){
+      alert("Incident je ponovno otvoren");
+      this.setState(prevState => ({data:
+        {...prevState.data,
+          status:"zatvoren"}}));
+    }
+    prihvatiZatvaranje(event){
+      event.preventDefault();
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_CLOSE_INCIDENT,{
+        id: this.state.id,
+        username: sessionStorage.getItem("username"),
+        close: true
+      }
+    )
+    .then(this.closeSucess.bind(this))
+    .catch(this.handleError.bind(this));
+
+    }
+
+    closeSucess(response){
+      alert("Incident je zatvoren");
+      this.setState(prevState => ({data:
+        {...prevState.data,
+          status:"zatvoren"}}));
+    }
+
+
+    suggestEscalation(event){
+      event.preventDefault();
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ESCALATION_RESOLVER,{
+        id: this.state.id,
+        username: sessionStorage.getItem("username")
+      }
+    )
+    .then(this.escalationSuccess.bind(this))
+    .catch(this.handleError.bind(this));
+
+    }
+
+    escalationSuccess(response){
+      alert("Incident je eskaliran");
+      this.setState(prevState => ({data:
+        {...prevState.data,
+          escalation:true}}));
+    }
+
+    preuzmiIncident(event){
+      event.preventDefault();
+      event.preventDefault();
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_ASSIGN_RESOLVER,{
+        id: this.state.id,
+        username: sessionStorage.getItem("username")
+      }
+    )
+    .then(this.preuzmiSucess.bind(this))
+    .catch(this.handleError.bind(this));
+    }
+
+    preuzmiSucess(response){
+      alert("Incident je preuzet");
+      window.location="/dashboard/nincidenti";
+    }
+
+
+
+    promjenaStatusa(event){
+      event.preventDefault();
+      axios.post(PATH_BASE+PATH_INCIDENTS+PATH_RESOLVE_INCIDENT,{
+        id: this.state.id,
+        username: sessionStorage.getItem("username")
+      }
+    )
+    .then(this.resolveSucess.bind(this))
+    .catch(this.handleError.bind(this));
+    }
+    resolveSucess(response){
+      alert("Incident je riješen");
+      this.setState(prevState => ({data:
+        {...prevState.data,
+          status:"riješen"}}));
     }
     ponistiEskalaciju(event){
       event.preventDefault();
@@ -97,17 +199,15 @@ class Incident extends Component{
         .then(this.handleSuccess.bind(this))
         .catch(this.handleError.bind(this));
 
-
     }
     handleChange(e) {
 
       this.setState({ [e.target.name]: e.target.value });
-      console.log(this.state.dName);
-      console.log(this.state.priority);
     }
 
     handleSuccess(response){
       this.setState({data:response.data});
+      console.log(response.data);
     }
 
     handleError(error){
@@ -491,7 +591,31 @@ class Incident extends Component{
                 <Panel.Collapse>
                   <Panel.Body>{this.state.data.description}</Panel.Body>
                 </Panel.Collapse>
+
             </Panel>
+            {this.state.data.status==='riješen'?
+            <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
+                <Row>
+                <br/>
+                <Col md={6} style={{textAlign:"right"}}  xsOffset={3}>
+                <Button type="submit" bsStyle="primary" className="btn-block btn-lg" onClick={this.odbijZatvaranje} bsSize="lg">
+                Otvori ponovo</Button>
+                <br/>
+                </Col>
+                </Row>
+                <Row>
+                <Col md={6} xsOffset={3}>
+                <Button  className="btn-block btn-lg"  bsStyle="primary"  bsSize="large"
+                onClick={this.prihvatiZatvaranje} >
+                   Zatvori incident
+                 </Button>
+                 <br/>
+                </Col>
+                </Row>
+                <br/>
+            </Panel>
+            : null}
+
             <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
                 <Panel.Heading>
                     <Panel.Title toggle componentClass="h3" >Poruke</Panel.Title>
@@ -521,7 +645,7 @@ class Incident extends Component{
             </div>;
             break;
             case 'Odjel':
-            if (this.state.datarjesava===null)
+            if (this.props.tip === 'Nedodijeljen'){
             table = <div style={{padding:"1%", overflowY:"scroll", maxHeight:"60vh"}}>
             <Row>
                 <Col md={4}>
@@ -529,7 +653,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Korisnik</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{this.state.datakorisnik}</Panel.Body>
+                        <Panel.Body>{this.state.data.creatorUsername}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={4}>
@@ -537,7 +661,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Prioritet</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{this.state.dataprioritet}</Panel.Body>
+                        <Panel.Body>{this.state.data.priority}</Panel.Body>
                     </Panel>
                 </Col>
                 <Col md={4}>
@@ -545,7 +669,7 @@ class Incident extends Component{
                         <Panel.Heading>
                             <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
+                        <Panel.Body>{this.state.data.createdDate}</Panel.Body>
                     </Panel>
                 </Col>
             </Row>
@@ -556,16 +680,16 @@ class Incident extends Component{
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Collapse>
-                  <Panel.Body>{this.state.dataopis}</Panel.Body>
+                  <Panel.Body>{this.state.data.description}</Panel.Body>
                 </Panel.Collapse>
             </Panel>
             <Row>
                 <Col md={12} style={{textAlign:"right"}}>
-                <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg">Preuzmi</Button>
+                <Button type="submit" bsStyle="primary" className="pull-right" onClick={this.preuzmiIncident} bsSize="lg">Preuzmi</Button>
                 </Col>
                 </Row>
                 <br/>
-            </div>;
+            </div>;}
             else {
               table=<div style={{padding:"1%", overflowY:"scroll", maxHeight:"60vh"}}>
               <Row>
@@ -574,7 +698,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Prijavio</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.datakorisnik}</Panel.Body>
+                          <Panel.Body>{this.state.data.creatorUsername}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -582,7 +706,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Prioritet</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.dataprioritet}</Panel.Body>
+                          <Panel.Body>{this.state.data.priority}</Panel.Body>
                       </Panel>
                   </Col>
 
@@ -591,7 +715,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Status</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.datastatus}</Panel.Body>
+                          <Panel.Body>{this.state.data.status}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -599,7 +723,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Eskalacija</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.dataeskalacija}</Panel.Body>
+                          <Panel.Body>{this.state.data.escalation?'Da':'Ne'}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -607,7 +731,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum kreiranja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.data.createdDate}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -615,15 +739,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum rješavanja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
-                      </Panel>
-                  </Col>
-                  <Col md={3}>
-                      <Panel  bsStyle="info">
-                          <Panel.Heading>
-                              <Panel.Title componentClass="h5">Datum posljednjeg rješavanja</Panel.Title>
-                          </Panel.Heading>
-                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.data.lastResolveDate}</Panel.Body>
                       </Panel>
                   </Col>
                   <Col md={3}>
@@ -631,7 +747,7 @@ class Incident extends Component{
                           <Panel.Heading>
                               <Panel.Title componentClass="h5">Datum zatvaranja</Panel.Title>
                           </Panel.Heading>
-                          <Panel.Body>{this.state.datadatumprijave}</Panel.Body>
+                          <Panel.Body>{this.state.closedDate}</Panel.Body>
                       </Panel>
                   </Col>
                   </Row>
@@ -642,32 +758,24 @@ class Incident extends Component{
                     </Panel.Title>
                   </Panel.Heading>
                   <Panel.Collapse>
-                    <Panel.Body>{this.state.dataopis}</Panel.Body>
+                    <Panel.Body>{this.state.data.description}</Panel.Body>
                   </Panel.Collapse>
               </Panel>
+              {this.state.data.escaltion===false || this.state.data.status==="u obradi"?
               <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
-              <Row>
-                <FormGroup  controlId="formZahtjev">
-                  <Col md={12}>
-                      <ControlLabel> Promjenite status</ControlLabel>
-                      <FormControl componentClass="select" placeholder="Odjel">
-                          <option value="Poslano">Poslano</option>
-                          <option value="U obradi">U obradi</option>
-                          <option value="Rješeno">Rješeno</option>
-                      </FormControl>
-                  </Col>
-                  </FormGroup>
-                  </Row>
                   <br/>
                   <Row>
+                  <br/>
+                  {this.state.data.status==="u obradi"?
                   <Col md={6} style={{textAlign:"right"}}  xsOffset={3}>
-                  <Button type="submit" bsStyle="primary" className="btn-block btn-lg" bsSize="lg">Promijeni</Button>
+                  <Button type="submit" bsStyle="primary" className="btn-block btn-lg" onClick={this.promjenaStatusa} bsSize="lg">
+                  Riješen</Button>
 
                   <br/>
-                  </Col>
+                  </Col>: null}
                   </Row>
                   <Row>
-                  {this.state.dataeskalacija==='Ne'? <Col md={6} xsOffset={3}>
+                  {this.state.data.escalation===false? <Col md={6} xsOffset={3}>
                   <Button  className="btn-block btn-lg"  bsStyle="danger"  bsSize="large"
                   onClick={() => this.setState({ show: true })} >
                      Predloži eskalaciju
@@ -676,7 +784,7 @@ class Incident extends Component{
                   </Col> : null}
                   </Row>
                   <br/>
-              </Panel>
+              </Panel>:null}
 
               <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
                   <Panel.Heading>
@@ -723,7 +831,7 @@ class Incident extends Component{
                 </div>
                 </Panel.Collapse>
               </Panel>
-              {this.state.dataeskalacija==='Ne'?<div>
+              {this.state.data.escalation===false?<div>
               <Modal
         show={this.state.show}
         onHide={this.handleHide}
@@ -738,7 +846,7 @@ class Incident extends Component{
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={this.handleHide}>Ne</Button>
-        <Button bsStyle="primary">Eskaliraj</Button>
+        <Button bsStyle="primary" onClick={this.suggestEscalation}>Eskaliraj</Button>
       </Modal.Footer>
     </Modal>
     </div>:null}

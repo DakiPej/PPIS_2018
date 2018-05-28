@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class DepartmentDetailsViewModel{
     private Long id;
-    private String adminUsername;
+    private String creatorUsername;
     private String title;
     private String serviceName;
     private String description;
@@ -26,7 +26,7 @@ public class DepartmentDetailsViewModel{
                                 Date closedDate,
                                 String status,
                                 Boolean escalation){
-
+    	this.creatorUsername=adminUsername;
         this.id = id;
         this.title = title;
         this.serviceName = serviceName;
@@ -38,4 +38,92 @@ public class DepartmentDetailsViewModel{
         this.status = status;
         this.escalation = escalation;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCreatorUsername() {
+		return creatorUsername;
+	}
+
+	public void setCreatorUsername(String adminUsername) {
+		this.creatorUsername = adminUsername;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getLastResolveDate() {
+		return lastResolveDate;
+	}
+
+	public void setLastResolveDate(Date lastResolveDate) {
+		this.lastResolveDate = lastResolveDate;
+	}
+
+	public Date getClosedDate() {
+		return closedDate;
+	}
+
+	public void setClosedDate(Date closedDate) {
+		this.closedDate = closedDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Boolean getEscalation() {
+		return escalation;
+	}
+
+	public void setEscalation(Boolean escalation) {
+		this.escalation = escalation;
+	}
 }

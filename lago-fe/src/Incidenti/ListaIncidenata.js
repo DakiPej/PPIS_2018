@@ -46,7 +46,10 @@ class ListaIncidenata extends Component{
 
     onRowClick(row) {
         console.log("ID reda"+row.id);
-        window.location='/dashboard/incidenti/'+row.id;
+        if (this.props.tip==='Nedodijeljeni')
+        {
+        window.location='/dashboard/nincidenti/'+row.id;}
+        else window.location='/dashboard/incidenti/'+row.id;
     }
     onSortChange(sortName, sortOrder) {
         console.info('onSortChange', arguments);
