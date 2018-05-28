@@ -1,5 +1,6 @@
 const PATH_BASE = 'http://localhost:8080';
 const PATH_LOGIN = '/login';
+const PATH_USER_DETAILS='/userDetails';
 const PATH_REQUESTS ='/requests';
 const PATH_INCIDENTS='/incident';
 const PATH_INCIDENTS_GET='/getAll';
@@ -12,10 +13,12 @@ const PATH_RESOLVE_INCIDENT='/resolve';
 const PATH_ASSIGN_RESOLVER='/assignResolver';
 const PATH_ESCALATION_RESOLVER='/resolveEscalation';
 const PATH_CLOSE_INCIDENT='/closeIncident';
+
 export {
 
 	PATH_BASE,
   PATH_LOGIN,
+	PATH_USER_DETAILS,
 	PATH_REQUESTS,
 	PATH_INCIDENTS,
 	PATH_CREATE_INCIDENT,

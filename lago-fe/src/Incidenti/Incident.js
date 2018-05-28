@@ -48,7 +48,7 @@ class Incident extends Component{
       alert("Incident je ponovno otvoren");
       this.setState(prevState => ({data:
         {...prevState.data,
-          status:"zatvoren"}}));
+          status:"u obradi"}}));
     }
     prihvatiZatvaranje(event){
       event.preventDefault();
@@ -593,7 +593,7 @@ class Incident extends Component{
                 </Panel.Collapse>
 
             </Panel>
-            {this.state.data.status==='riješen'?
+            {this.state.data.status==='rijesen'?
             <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
                 <Row>
                 <br/>
@@ -761,7 +761,7 @@ class Incident extends Component{
                     <Panel.Body>{this.state.data.description}</Panel.Body>
                   </Panel.Collapse>
               </Panel>
-              {this.state.data.escaltion===false || this.state.data.status==="u obradi"?
+              {this.state.data.escalation===false || this.state.data.status==="u obradi"?
               <Panel bsStyle="info" id="collapsible-panel-example-2" defaultClosed>
                   <br/>
                   <Row>

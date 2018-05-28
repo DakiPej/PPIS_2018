@@ -1,30 +1,43 @@
 import React, { Component } from 'react';
 import './Style/Details.css';
 import {Row,Col,Grid,Panel} from 'react-bootstrap';
+import {PATH_BASE,PATH_USER_DETAILS} from './globals';
+import axios from 'axios';
 class Details extends Component {
 
 	constructor(props){
 		super(props);
 		this.state = {
-				username:'',
-				ime:'',
-				prezime:'',
-				racun:'',
-				telefon:'',
-				email:''
+				data: ''
 		};
+		this.getDetails=this.getDetails.bind(this);
 
 	}
 
+
+	    componentDidMount(){
+	        this.getDetails();
+	    }
+		getDetails(){
+			axios.post(PATH_BASE+PATH_USER_DETAILS, {
+					username: sessionStorage.getItem("username")
+			})
+			.then(this.handleSuccess.bind(this))
+			.catch(this.handleError.bind(this));
+	}
+
+	handleSuccess(response) {
+		console.log(response);
+        this.setState({data:response.data});
+    }
+
+handleError(error)
+{
+	console.log(error);
+}
+
+
 	render() {
-		var test = {
-			username:'sbecirovic',
-			ime:'Seila',
-			prezime:'Becirovic',
-			racun:'12132112',
-			telefon:'123123',
-			email:'sbecirovic@gmail.com'
-		};
 			var table = <div></div>;
 			var role = sessionStorage.getItem("rola");
 			switch(role){
@@ -33,17 +46,17 @@ class Details extends Component {
 
 									<div className="form-group profil-form-group">
 										<label  className="col-sm-8  ">Korisničko ime:</label>
-												<span>{test.username}</span>
+												<span>{this.state.data.username}</span>
 								 	</div>
 									<hr className="separator"/>
 							  <div className="form-group profil-form-group">
 							    <label  className="col-sm-8  ">Ime i prezime:</label>
-											<span>{test.ime} {test.prezime}</span>
+											<span>{this.state.data.firstname} {this.state.data.lastname}</span>
 							 </div>
 					 <hr className="separator"/>
 				 	<div className="form-group profil-form-group">
 						<label  className="col-sm-8  ">Email:</label>
-								<span>{test.email}</span>
+								<span>{this.state.data.email}</span>
 				 	</div>
 					 <hr className="separator"/>
 				</div>;
@@ -53,17 +66,17 @@ class Details extends Component {
 
 											<div className="form-group profil-form-group">
 												<label  className="col-sm-8  ">Korisničko ime:</label>
-														<span>{test.username}</span>
+														<span>{this.state.data.username}</span>
 											</div>
 											<hr className="separator"/>
 										<div className="form-group profil-form-group">
 											<label  className="col-sm-8  ">Ime i prezime:</label>
-													<span>{test.ime} {test.prezime}</span>
+													<span>{this.state.data.firstname} {this.state.data.lastname}</span>
 									 </div>
 							 <hr className="separator"/>
 							<div className="form-group profil-form-group">
 								<label  className="col-sm-8  ">Email:</label>
-										<span>{test.email}</span>
+										<span>{this.state.data.email}</span>
 							</div>
 							 <hr className="separator"/>
 						</div>;
@@ -73,28 +86,28 @@ class Details extends Component {
 
 									<div className="form-group profil-form-group">
 										<label  className="col-sm-8  ">Korisničko ime:</label>
-												<span>{test.username}</span>
+												<span>{this.state.data.username}</span>
 								 	</div>
 									<hr className="separator"/>
 							  <div className="form-group profil-form-group">
 							    <label  className="col-sm-8  ">Ime i prezime:</label>
-											<span>{test.ime} {test.prezime}</span>
+											<span>{this.state.data.firstname} {this.state.data.lastname}</span>
 							 </div>
 						<hr className="separator"/>
 						<div className="form-group profil-form-group">
 						 <label  className="col-sm-8  ">Broj računa:</label>
-								 <span>{test.racun}</span>
+								 <span>{this.state.data.accountNumber}</span>
 
 					 </div>
 					<hr className="separator"/>
 					<div className="form-group profil-form-group">
 				 	 <label  className="col-sm-8  ">Telefon:</label>
-				 			 <span>{test.telefon}</span>
+				 			 <span>{this.state.data.phoneNumber}</span>
 				 	 </div>
 					 <hr className="separator"/>
 				 	<div className="form-group profil-form-group">
 						<label  className="col-sm-8  ">Email:</label>
-								<span>{test.email}</span>
+								<span>{this.state.data.email}</span>
 				 	</div>
 					 <hr className="separator"/>
 				</div>;
