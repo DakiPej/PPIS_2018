@@ -208,7 +208,7 @@ public class DatabaseSeeder {
 			userTypeDAO.create(ut);
 			
 			ut = new UserType();
-			ut.setTypeName("Resolver1");
+			ut.setTypeName("Odjel");
 			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			userTypeDAO.create(ut);
 			
@@ -239,6 +239,7 @@ public class DatabaseSeeder {
 			ru.setAccountNumber("1234123412341234");
 			ru.setPhoneNumber("+38761123123");
 			ru.setUserType(userTypeDAO.findUserTypeByName("Korisnik"));
+			System.out.println("USER TIP JE -----------------     " + ru.getUserType().getTypeName());
 			registeredUserDAO.create(ru);
 			
 			ru = new RegisteredUser();
@@ -278,7 +279,7 @@ public class DatabaseSeeder {
 			ru.setLastname("Wilman");
 			ru.setPassword("password");
 			ru.setUsername("andy");
-			ru.setUserType(userTypeDAO.findUserTypeByName("Administrator"));
+			ru.setUserType(userTypeDAO.findUserTypeByName("Odjel"));
 			registeredUserDAO.create(ru);
 		
 			ru = new RegisteredUser();
@@ -287,7 +288,7 @@ public class DatabaseSeeder {
 			ru.setLastname("Odjel");
 			ru.setPassword("password");
 			ru.setUsername("odjel");
-			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver1"));
+			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver2"));
 			registeredUserDAO.create(ru);
 		}
 	}
@@ -305,11 +306,17 @@ public class DatabaseSeeder {
 			 * */
 			
 			Services s = new Services();
-			s.setServiceName("test");
+			s.setServiceName("SMS bankarstvo");
 			servicesDAO.create(s);
 			
 			s = new Services();
-			s.setServiceName("proba");
+			s.setServiceName("Mobilno bankarstvo");
+			servicesDAO.create(s);
+			s = new Services();
+			s.setServiceName("Viber bankarstvo");
+			servicesDAO.create(s);
+			s = new Services();
+			s.setServiceName("Internet bankarstvo");
 			servicesDAO.create(s);
 
 			RegisteredUser ru = registeredUserDAO.findUserByUsername("hamster");
@@ -327,6 +334,8 @@ public class DatabaseSeeder {
 			Incident i = new Incident();
 			i.setRegisteredUser(registeredUserDAO.findUserByUsername("hamster"));
 			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(registeredUserDAO.findUserByUsername("andy"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
 			i.setContactInfo("richard.h@email.com");
 			i.setTitle("Naslov 1");
@@ -335,8 +344,8 @@ public class DatabaseSeeder {
 			i.setCreatedDate(new Date());
 			i.setResolved(false);
 			i.setClosed(false);
-			i.setEscalated(false);
-			i.setServices(servicesDAO.getServiceByName("test"));
+			i.setEscalated(true);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
 			
 			IncidentLog il = new IncidentLog();
@@ -357,7 +366,7 @@ public class DatabaseSeeder {
 			i.setResolved(false);
 			i.setClosed(false);
 			i.setEscalated(false);
-			i.setServices(servicesDAO.getServiceByName("test"));
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
 		}
 	}

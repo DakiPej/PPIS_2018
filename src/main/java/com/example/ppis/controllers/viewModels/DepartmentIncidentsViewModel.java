@@ -5,6 +5,7 @@ import java.util.Date;
 public class DepartmentIncidentsViewModel{
     
     private Long id;
+    private String creator;
     private String title;
     private Integer priority;
     private Date createdDate;
@@ -15,6 +16,7 @@ public class DepartmentIncidentsViewModel{
     private Boolean escalation;
     
     public DepartmentIncidentsViewModel(Long id,
+    		String creator,
                                         String title,
                                         Integer priority,
                                         Date createdDate,
@@ -24,6 +26,7 @@ public class DepartmentIncidentsViewModel{
                                         String status,
                                         Boolean escalation){
         this.id = id;
+        this.creator = creator;
         this.title = title;
         this.createdDate = createdDate;
         this.lastResolveDate = lastResolveDate;
@@ -88,4 +91,12 @@ public class DepartmentIncidentsViewModel{
     public void setPriority(Integer priority) {
         this.priority = priority;
     }
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
 }

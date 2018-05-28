@@ -13,6 +13,9 @@ import {
     Glyphicon} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils';
+import {PATH_BASE,PATH_REQUESTS} from '../globals';
+
+import axios from 'axios';
 
 bootstrapUtils.addStyle(ListGroup, 'custom');
 
@@ -53,16 +56,17 @@ class ListaZahtjeva extends Component{
     }
 
     getZahtjevi(){
-        /*axios.get(
-
+        axios.get(PATH_BASE+PATH_REQUESTS, { params:{
+            username:  sessionStorage.getItem("username")}
+        }
         )
         .then(this.handleSuccess.bind(this))
         .catch(this.handleError.bind(this));
-        */
+
     }
 
     handleSuccess(response){
-
+      console.log(response.data);
     }
 
     handleError(error){

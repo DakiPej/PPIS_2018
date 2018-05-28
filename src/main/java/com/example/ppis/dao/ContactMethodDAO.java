@@ -12,7 +12,7 @@ public class ContactMethodDAO extends BaseDAO<ContactMethod, ContactMethodReposi
 		ContactMethod contactMethod; 
 		
 		try {
-			contactMethod = this.repo.getByContactMethodName(contactMethodName);
+			contactMethod = this.repo.findByContactMethodName(contactMethodName);
 		} catch (Exception e) {
 			throw e; 
 		}

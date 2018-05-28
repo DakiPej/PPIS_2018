@@ -43,6 +43,10 @@ public class RegisteredUserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity login(@RequestBody final LoginUserForm loginUser) throws ServletException {
+<<<<<<< HEAD
+=======
+
+>>>>>>> c65b766cc52ce4180d8edd5c592f0d292e86c8a8
 		String role = registeredUserService.login(loginUser);
 		if (role != null) {
 			return ResponseEntity.ok(role);

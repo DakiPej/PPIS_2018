@@ -20,7 +20,6 @@ class Login extends Component {
     event.preventDefault();
 
        if(this.state.username && this.state.password) {
-           if(this.state.username && this.state.password) {
                axios.post(PATH_BASE+PATH_LOGIN, {
                    username: this.state.username,
                    password: this.state.password
@@ -28,7 +27,7 @@ class Login extends Component {
                .then(this.handleSuccess.bind(this))
                .catch(this.handleError.bind(this));
            }
-       }
+
   }
   handleSuccess(response) {
         sessionStorage.setItem("rola", response.data);
