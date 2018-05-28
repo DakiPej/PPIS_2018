@@ -15,7 +15,6 @@ import com.example.ppis.controllers.forms.EscalationForm;
 import com.example.ppis.controllers.forms.GetUserIncidentsForm;
 import com.example.ppis.controllers.forms.IncidentResolverForm;
 import com.example.ppis.controllers.forms.UnassignedForm;
-import com.example.ppis.controllers.viewModels.UserIncidentDetailsViewModel;
 import com.example.ppis.services.IncidentService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;

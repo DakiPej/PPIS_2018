@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.ppis.controllers.forms.LoginUserForm;
 import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.models.RegisteredUser;
-import com.example.ppis.repositories.RegisteredUserRepository;
 
 @Service
 public class RegisteredUserService {
@@ -33,6 +32,14 @@ public class RegisteredUserService {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			throw new ServletException("RegiseredUserService Login exception");
+		}
+	}
+
+	public RegisteredUser getUserDetails(String username) {
+		try {
+			return registeredUserDao.findUserByUsername(username);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 	
