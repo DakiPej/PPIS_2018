@@ -4,6 +4,7 @@ import javax.servlet.ServletException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,8 @@ import com.example.ppis.controllers.forms.LoginUserForm;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.repositories.RegisteredUserRepository;
 import com.example.ppis.services.RegisteredUserService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @CrossOrigin
 @RestController
@@ -40,17 +43,21 @@ public class RegisteredUserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity login(@RequestBody final LoginUserForm loginUser) throws ServletException {
-<<<<<<< HEAD
 		String role = registeredUserService.login(loginUser);
 		if (role != null) {
-=======
-		System.out.println("tu sam");
-		String role = registeredUserService.login(loginUser);
-		if (role!= null) {
->>>>>>> b0568b93f5ef86ca4436808a9e264a494369d7cb
 			return ResponseEntity.ok(role);
 		}
 		else
 			return ResponseEntity.badRequest().body("Korisnicko ime ili lozinka nisu ispravni.");
 	}
+
+	@RequestMapping(value="/userDetails", method=RequestMethod.POST)
+	public ResponseEntity<?> requestMethodName(@RequestBody String username) {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(registeredUserService.getUserDetails(username));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Korisnik ne postoji");
+		}
+	}
+	
 }
