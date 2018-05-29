@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ public class IncidentMessageService {
     @Autowired
     IncidentDAO incidentDAO;
 
-    final private String[] userTypes = { "Korisnik", "Odjel", "Admin" };
+    final private String[] userTypes = { "Korisnik", "Odjel", "Administrator" };
 
     public List<IncidentMessage> getIncidentMessagesByReceiverId(Long receiverId) {
         return incidentMessageDAO.getIncidentMessagesByReceiver(registeredUserDAO.one(receiverId));
@@ -59,32 +60,33 @@ public class IncidentMessageService {
         RegisteredUser sender = registeredUserDAO.findUserByUsername(messageForm.getUsername());
         RegisteredUser receiver = null;
         String message = messageForm.getMessage();
+        System.out.println(message);
 
-        if (senderType.equals("KORISNIK") && receiverType.equals("ODJEL")) {
+        if (senderType.equals("korisnik") && receiverType.equals("odjel")) {
             receiver = incident.getResolverUser();
 
             if (incident.getRegisteredUser().getId() != sender.getId())
                 throw new ServletException("Zahtjev ne pripada korisniku");
         }
-        else if (senderType.equals("ODJEL") && receiverType.equals("KORISNIK")) {
+        else if (senderType.equals("odjel") && receiverType.equals("korisnik")) {
             receiver = incident.getRegisteredUser();
 
             if (incident.getResolverUser().getId() != sender.getId())
                 throw new ServletException("Zahtjev ne pripada odgovornoj osobi");
         }
-        else if (senderType.equals("ODJEL") && receiverType.equals("ADMIN")) {
+        else if (senderType.equals("odjel") && receiverType.equals("administrator")) {
             receiver = incident.getAdmin();
 
             if (incident.getResolverUser().getId() != sender.getId())
                 throw new ServletException("Zahtjev ne pripada odgovornoj osobi");
         }
-        else if (senderType.equals("ADMIN") && receiverType.equals("ODJEL")) {
+        else if (senderType.equals("administrator") && receiverType.equals("odjel")) {
             receiver = incident.getResolverUser();
 
             if (incident.getAdmin().getId() != sender.getId())
                 throw new ServletException("Zahtjev ne pripada administratoru");
         }
 
-        return incidentMessageDAO.create(new IncidentMessage(sender, receiver, incident, message));
+        return incidentMessageDAO.create(new IncidentMessage(sender, receiver, incident, message,new Date()));
     }
 }

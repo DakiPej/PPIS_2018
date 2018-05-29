@@ -115,10 +115,10 @@ class ListaIncidenata extends Component{
         };
 
         const sType = {
-            'nedodijeljen':'Nedodijeljen',
-            'u obradi':'U obradi',
-            'rijesen':'Rijesen',
-            'zatvoren':'Zatvoren'
+            'nedodijeljen':'nedodijeljen',
+            'u obradi':'u obradi',
+            'rijesen':'rijesen',
+            'zatvoren':'zatvoren'
         }
         const eType = {
             'true':'Da',

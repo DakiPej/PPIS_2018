@@ -29,6 +29,7 @@ class Details extends Component {
 	handleSuccess(response) {
 		console.log(response);
         this.setState({data:response.data});
+				  sessionStorage.setItem("id", response.data.id);
     }
 
 handleError(error)

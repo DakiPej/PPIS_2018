@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ppis.controllers.forms.LoginUserForm;
+import com.example.ppis.controllers.forms.UnassignedForm;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.repositories.RegisteredUserRepository;
 import com.example.ppis.services.RegisteredUserService;
@@ -52,9 +53,9 @@ public class RegisteredUserController {
 	}
 
 	@RequestMapping(value="/userDetails", method=RequestMethod.POST)
-	public ResponseEntity<?> requestMethodName(@RequestBody String username) {
+	public ResponseEntity<?> requestMethodName(@RequestBody UnassignedForm username) {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(registeredUserService.getUserDetails(username));
+			return ResponseEntity.status(HttpStatus.OK).body(registeredUserService.getUserDetails(username.getUsername()));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Korisnik ne postoji");
 		}
