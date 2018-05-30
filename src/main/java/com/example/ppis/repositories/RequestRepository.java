@@ -17,6 +17,7 @@ public interface RequestRepository extends CrudRepository<Request, Long>{
 	public List<Request> findAllByRegisteredUserAndResolverUserIsNull(RegisteredUser registeredUser) ;
 	public List<Request> findAllByRegisteredUserAndResolverUserNotNull(RegisteredUser registeredUser) ; 
 	public List<Request> findAllByResolverUser(RegisteredUser resolverUser); 
+	public List<Request> findAllByResolverUserAndDepartment(RegisteredUser resolverUser, Department department) ; 
 	
 	public List<Request> findAllByResolverUserAndPriorityGreaterThan(RegisteredUser resolverUser, int priority) ; 
 	public List<Request> findAllByResolverUserAndPriorityLessThan(RegisteredUser resolverUser, int priority) ; 

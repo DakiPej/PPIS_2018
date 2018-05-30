@@ -430,4 +430,81 @@ public class IncidentService {
 		incidentDao.create(i);
 		return true;
 	}
+	
+	public String resolveInc(String username, long incidentId, boolean resolved)	{
+		try {
+			if(username == null || username.length() == 0 || !this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user was not specified or does not exist.") ; 
+			if(incidentId< 1 || !this.incidentDao.existsById(incidentId))
+				throw new IllegalArgumentException("The incident id must be positive or the incident does not exist.") ;
+			
+			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
+			Incident incident = this.incidentDao.getIncidentById(incidentId) ; 
+			
+			if(!incident.getRegisteredUser().equals(user) && !incident.getResolverUser().equals(user))
+				throw new IllegalArgumentException("The user does not have the permission to resolve this incident") ; 
+			
+			incident.setResolved(resolved);
+			this.incidentDao.create(incident) ; 
+			
+			if(resolved)	
+				return "The user has successfully resolved the incident." ;
+			return "The user has successfully marked the incident as not resolved." ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public String closeInc(String username, long incidentId)	{
+		try {
+			if(username == null || username.length() == 0 || !this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user was not specified or does not exist.") ; 
+			if(incidentId< 1 || !this.incidentDao.existsById(incidentId))
+				throw new IllegalArgumentException("The incident id must be positive or the incident does not exist.") ;
+			
+			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
+			Incident incident = this.incidentDao.getIncidentById(incidentId) ; 
+			
+			if(!incident.getRegisteredUser().equals(user))
+				throw new IllegalArgumentException("The user did not create the incident.") ;
+			incident.setClosed(true);
+			incident.setClosedDate(new Date());
+			
+			this.incidentDao.create(incident) ; 
+			
+			return "The incident was successfully closed." ; 
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public String resolverPick(String username, long incidentId)	{
+		try {
+			if(username == null || username.length() == 0 || !this.registeredUserDao.existsByUsername(username))
+				throw new IllegalArgumentException("The user was not specified or does not exist.") ; 
+			if(incidentId< 1 || !this.incidentDao.existsById(incidentId))
+				throw new IllegalArgumentException("The incident id must be positive or the incident does not exist.") ;
+			
+			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
+			Incident incident = this.incidentDao.getIncidentById(incidentId) ; 
+			
+			if(!user.getUserType().equals("Resolver"))
+				throw new IllegalArgumentException("The user can't pick this incident.") ; 
+			if(!this.registeredUserDao.getUserDepartment(
+					user.getUsername(), user.getUserType())
+					.equals(incident.getDepartment()))
+				throw new IllegalArgumentException("The user does not belong to this department.") ; 
+			
+			incident.setResolverUser(user);
+				
+			this.incidentDao.create(incident) ; 
+			
+			return "The incident was successfully picked by the resolver" ;
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
 }

@@ -12,6 +12,7 @@ import com.example.ppis.dao.RegisteredUserDAO;
 import com.example.ppis.dao.RequestDAO;
 import com.example.ppis.dao.RequestLogDAO;
 import com.example.ppis.models.ContactMethod;
+import com.example.ppis.models.Department;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.models.RequestLog;
@@ -404,7 +405,25 @@ public class RequestService {
 		
 		return requests ; 
 	}
-
+	public List<Request> getRequestsByResolverUserAndDepartment(String resolverUsername, String departmentName)	{
+		try {
+			List<Request> requests ;
+			RegisteredUser resolverUser ;
+			Department department = this.departmentDao.getDepartmentByName(departmentName) ;
+			
+			if(resolverUsername != null)	{
+				resolverUser = this.registeredUserDao.findUserByUsername(resolverUsername) ;
+				requests = this.requestDao.getRequestsByResolverAndDepartment(resolverUser, department) ;
+			} 
+			else 
+				requests = this.requestDao.getRequestsByResolverAndDepartment(null, department) ;
+			
+			return requests ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
 	public List<Request> getRequestByRegisteredUserAndGreaterUrgency(String registeredUser, int urgency)	{
 		
 		List<Request> requests ; 
@@ -585,12 +604,25 @@ public class RequestService {
 	}
 	public List<Request> getRequests(String username)	{
 		try {
+			List<Request> requests ; 
 			if(!this.registeredUserDao.existsByUsername(username))
 				throw new IllegalArgumentException("The user does not exist.") ; 
 			
 			if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))
 				return getRequestsByRegisteredUser(username) ; 
-			else return getRequestsByResolver(username) ; 
+			else if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("Odjel"))	{
+				requests = getRequestsByResolver(username); 
+				
+				RegisteredUser resolver = this.registeredUserDao.findUserByUsername(username) ; 
+				requests.addAll(getRequestsByResolverUserAndDepartment(null
+						, resolver.getUserType().getDepartment().getDepartmentName())) ; 
+			}
+				
+			else	{ 
+				requests = getRequestsByAdmin(username) ;
+				requests.addAll(getRequestsByAdmin(null)) ; 
+			}
+			return requests ; 
 		} catch (Exception e) {
 			throw e ; 
 		}
