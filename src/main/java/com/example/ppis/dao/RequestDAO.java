@@ -74,6 +74,14 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		
 		return requests ; 
 	}
+	public List<Request> getRequestsByResolverAndDepartment(RegisteredUser resolverUser, Department department)	{
+		try {
+			
+			return this.repo.findAllByResolverUserAndDepartment(resolverUser, department) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
 	
 	public List<Request> getRequestssByResolverUserAndGreaterPriority(RegisteredUser resolverUser, int priority)	{
 		
