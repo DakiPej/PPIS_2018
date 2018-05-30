@@ -46,12 +46,13 @@ public class IncidentMessage {
 	public IncidentMessage(RegisteredUser sender
 			, RegisteredUser receiver
 			, Incident incident
-			, String message)	{
+			, String message, Date date)	{
 		
 		this.sender = sender ; 
 		this.receiver = receiver ; 
 		this.incident = incident ; 
 		this.message = message ; 
+		this.date = date;
 	}
 
 	public Long getId() {

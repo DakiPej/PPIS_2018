@@ -53,7 +53,7 @@ public class RequestMessage {
 		this.receiver = receiver ; 
 		this.request = request ; 
 		this.message = message ; 
-		date = new Date() ; 
+		this.date = new Date() ; 
 	}
 	public Long getId() {
 		return id;

@@ -39,6 +39,7 @@ public class RegisteredUserService {
 		try {
 			return registeredUserDao.findUserByUsername(username);
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}

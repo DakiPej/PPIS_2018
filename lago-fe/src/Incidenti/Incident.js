@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Tab,Tabs,Modal, FormGroup,ControlLabel,PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup,ListGroup, ListGroupItem,Glyphicon } from 'react-bootstrap';
 import {PATH_BASE,PATH_INCIDENTS,PATH_ONE_INCIDENT,PATH_ESCALATION_ADMIN,PATH_ASSIGN_ADMIN,
-  PATH_RESOLVE_INCIDENT,PATH_ASSIGN_RESOLVER,PATH_ESCALATION_RESOLVER,PATH_CLOSE_INCIDENT} from '../globals';
+  PATH_RESOLVE_INCIDENT,PATH_ASSIGN_RESOLVER,PATH_ESCALATION_RESOLVER,
+  PATH_CLOSE_INCIDENT, PATH_INCIDENT_MESSAGE,PATH_GET_INCIDENT_MESSAGE,PATH_SEND_INCIDENT_MESSAGE} from '../globals';
 
 import axios from 'axios';
 class Incident extends Component{
@@ -11,9 +12,9 @@ class Incident extends Component{
         this.state = {
             id: this.props.match.params.id,
             data:'',
-            messagesAdmin:'',
-            messagesDepartment:'',
-            messagesUser:'',
+            message:'',
+            poruke:[],
+            receiver:'odjel',
             departmentName:'',
             dName:'',
             priority:'',
@@ -29,7 +30,8 @@ class Incident extends Component{
         this.suggestEscalation=this.suggestEscalation.bind(this);
         this.odbijZatvaranje=this.odbijZatvaranje.bind(this);
         this.prihvatiZatvaranje=this.prihvatiZatvaranje.bind(this);
-
+        this.getMessages=this.getMessages.bind(this);
+        this.sendMessage=this.sendMessage.bind(this);
     }
     odbijZatvaranje(event){
       event.preventDefault();
@@ -203,44 +205,93 @@ class Incident extends Component{
     handleChange(e) {
 
       this.setState({ [e.target.name]: e.target.value });
+
+        console.log(e.target.name + e.target.value);
     }
 
     handleSuccess(response){
       this.setState({data:response.data});
       console.log(response.data);
+      this.getMessages();
     }
 
     handleError(error){
         console.log(error);
     }
+
+    getMessages(){
+      axios.get(PATH_BASE+PATH_INCIDENT_MESSAGE+PATH_GET_INCIDENT_MESSAGE,  {
+        params: {
+          userId:  sessionStorage.getItem("id")
+        }
+      }
+      )
+      .then(this.handleSuccessMessage.bind(this))
+      .catch(this.handleError.bind(this));
+
+    }
+    handleSuccessMessage(response){
+      console.log(response.data);
+      var id = this.state.id;
+      console.log(id);
+      var poruke = response.data.filter(poruka => poruka.incident.id==id);
+
+      this.setState({poruke:poruke});
+      console.log(poruke);
+    }
+
+    sendMessage(event){
+      event.preventDefault();
+        console.log(this.state.receiver);
+      axios.post(PATH_BASE+PATH_INCIDENT_MESSAGE+PATH_SEND_INCIDENT_MESSAGE,  {
+          message: this.state.message,
+          requestOrIncidentId: this.state.id,
+          senderRole: sessionStorage.getItem("rola").toLowerCase(),
+          receiverRole: this.state.receiver,
+          username:  sessionStorage.getItem("username")
+        }
+      )
+      .then(this.handleSuccessSendMessage.bind(this))
+      .catch(this.handleError.bind(this));
+
+    }
+    handleSuccessSendMessage()
+    {
+      alert("Uspješno ste poslali poruku.");
+      this.getMessages();
+    }
     render(){
 
-        var poruke = [{
-          autor: "Admin", datum:"11/11/11", tekst:"Nesto"
-        }, {
-          autor: "user", datum:"11/11/11", tekst:"Odgovor na Nesto"
-        },{
-        autor: "Admin", datum:"11/11/11", tekst:"Dosadan si"
-      }];
-      var poruke2 = [{
-        autor: "user", datum:"11/11/11", tekst:"Odgovor na Nesto"
-      },{
-      autor: "Admin", datum:"11/11/11", tekst:"......."
-    }];
-        const listItems = poruke.map((poruka) =>
-        <ListGroupItem header={poruka.tekst}> <div class="d-flex w-100 justify-content-between">
-          <h6 class="mb-2">{poruka.autor}</h6>
-          <small>{poruka.datum}</small>
-          </div></ListGroupItem>
-        );
-        const listItems2 = poruke2.map((poruka) =>
-        <ListGroupItem header={poruka.tekst}> <div class="d-flex w-100 justify-content-between">
-      <h6 class="mb-2">{poruka.autor}</h6>
-      <small>{poruka.datum}</small>
-    </div></ListGroupItem>
-          );
+        var role = sessionStorage.getItem("rola");
+        var listItems=<div></div>;
+        var listItems2=<div></div>;
+        var poruke = this.state.poruke;
+        if (role ==='Odjel')
+        {
+           listItems = poruke.filter((poruka=> poruka.receiver.userType.typeName==='Administrator' ||
+        poruka.sender.userType.typeName==='Administrator')).map((poruka) =>
+            <ListGroupItem header={poruka.message}> <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-2">{poruka.sender.username}</h6>
+              <small>{poruka.date}</small>
+              </div></ListGroupItem>
+              );
+         listItems2 = poruke.filter((poruka=> poruka.receiver.userType.typeName==='Korisnik' ||
+      poruka.sender.userType.typeName==='Korisnik')).map((poruka) =>
+          <ListGroupItem header={poruka.message}> <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-2">{poruka.sender.username}</h6>
+            <small>{poruka.date}</small>
+            </div></ListGroupItem>
+            );
+        }
+        else{
+           listItems = poruke.map((poruka) =>
+            <ListGroupItem header={poruka.message}> <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-2">{poruka.sender.username}</h6>
+              <small>{poruka.date}</small>
+              </div></ListGroupItem>
+              );
+        }
           var table = <div></div>;
-          var role = sessionStorage.getItem("rola");
           switch(role){
             case 'Administrator':
             if (this.state.data.departmentName==='')
@@ -469,17 +520,13 @@ class Incident extends Component{
                 <Panel.Collapse>
                 <Panel.Body>
                 <FormGroup  controlId="formZahtjev">
-                      <ControlLabel> Primalac: </ControlLabel>
-                      <FormControl componentClass="select" placeholder="Odjel">
-                          <option value="Korisnik">Korisnik</option>
-                          <option value="Odjel">Odjel</option>
-                      </FormControl>
+                      <ControlLabel> Primalac: Odjel </ControlLabel>
                       <br/>
                       <ControlLabel> Tekst poruke: </ControlLabel>
-                  <FormControl componentClass="textarea" placeholder="Poruka" />
+                  <FormControl onChange={this.handleChange} name="message" componentClass="textarea" placeholder="Poruka" />
                   </FormGroup>
                   <br/>
-                  <Button bsStyle="info" bsSize="lg" className="pull-right">Pošalji</Button>
+                  <Button bsStyle="info" onClick={this.sendMessage} bsSize="lg" className="pull-right">Pošalji</Button>
                   </Panel.Body>
                 </Panel.Collapse>
               </Panel>
@@ -501,7 +548,7 @@ class Incident extends Component{
       <FormGroup  controlId="formZahtjev">
         <Col md={12}>
             <ControlLabel> Odaberite odjel </ControlLabel>
-            <FormControl componentClass="select" name="departmentName" onChange={this.handleChange}placeholder="Odjel">
+            <FormControl componentClass="select" name="departmentName" onChange={this.handleChange} placeholder="Odjel">
                 <option value="Odjel1">Odjel 1</option>
                 <option value="Odjel2">Odjel 2</option>
                 <option value="Odjel3">Odjel 3</option>
@@ -633,9 +680,14 @@ class Incident extends Component{
                 </Panel.Heading>
                 <Panel.Collapse>
                 <Panel.Body>
-                  <FormControl componentClass="textarea" placeholder="Poruka" />
+                <FormGroup  controlId="formZahtjev">
+                      <ControlLabel> Primalac: Odjel </ControlLabel>
+                      <br/>
+                      <ControlLabel> Tekst poruke: </ControlLabel>
+                  <FormControl onChange={this.handleChange} name="message" componentClass="textarea" placeholder="Poruka" />
+                  </FormGroup>
                   <br/>
-                  <Button bsStyle="info" bsSize="lg" className="pull-right">Pošalji</Button>
+                  <Button bsStyle="info" onClick={this.sendMessage} bsSize="lg" className="pull-right">Pošalji</Button>
                   </Panel.Body>
                 </Panel.Collapse>
               </Panel>
@@ -815,16 +867,17 @@ class Incident extends Component{
                   <Panel.Body>
                   <FormGroup  controlId="formZahtjev">
                         <ControlLabel> Primalac: </ControlLabel>
-                        <FormControl componentClass="select" placeholder="Odjel">
-                            <option value="Korisnik">Korisnik</option>
-                            <option value="Administrator">Odjel</option>
+                        <FormControl name="receiver" componentClass="select" onChange={this.handleChange} placeholder="Primalac">
+                        <option value="" selected disabled>Primalac</option>
+                            <option value="korisnik">Korisnik</option>
+                            <option value="administrator">Administrator</option>
                         </FormControl>
                         <br/>
                         <ControlLabel> Tekst poruke: </ControlLabel>
-                    <FormControl componentClass="textarea" placeholder="Poruka" />
+                    <FormControl name="message" onChange={this.handleChange}componentClass="textarea" placeholder="Poruka" />
                     </FormGroup>
                     <br/>
-                    <Button bsStyle="info" bsSize="lg" className="pull-right">Pošalji</Button>
+                    <Button bsStyle="info" onClick={this.sendMessage} bsSize="lg" className="pull-right">Pošalji</Button>
                     </Panel.Body>
                   </Panel.Collapse>
                 </Panel>
