@@ -1,6 +1,13 @@
 package com.example.ppis.controllers.viewModels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.example.ppis.models.Incident;
+import com.example.ppis.models.RegisteredUser;
 
 public class AdminIncidentsViewModel{
     private Long id;
@@ -9,10 +16,10 @@ public class AdminIncidentsViewModel{
     private String resolverUsername;
     private Integer urgency;
     private Integer priority;
-    private Date createdDate;
+    private String createdDate;
     private String serviceName;
-    private Date lastResolveDate;
-    private Date closedDate;
+    private String lastResolveDate;
+    private String closedDate;
     private String status;
     private String departmentName;
     private Boolean escalation;
@@ -34,12 +41,15 @@ public class AdminIncidentsViewModel{
                                         String status,
                                         String departmentName,
                                         Boolean escalation){
+    	
+    	DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss") ;
+    	
         this.id = id;
         this.title = title;
         this.urgency = urgency;
-        this.createdDate = createdDate;
-        this.lastResolveDate = lastResolveDate;
-        this.closedDate = closedDate;
+        this.createdDate = df.format(createdDate);
+        this.lastResolveDate = null; //df.format(lastResolveDate);
+        this.closedDate = df.format(closedDate);
         this.serviceName = serviceName;
         this.status = status;
         this.creatorUsername = creatorUsername;
@@ -48,17 +58,56 @@ public class AdminIncidentsViewModel{
         this.departmentName = departmentName;
         this.escalation = escalation;
     }
-
-    public void setClosedDate(Date closedDate) {
+    
+    public String getIncidentStatus(RegisteredUser resolverUser, Boolean resolved, Boolean closed) {
+		String status = "svi";
+		if (closed == true)
+			status = "zatvoren";
+		else if (resolved == true)
+			status = "rijesen";
+		else if (resolverUser != null)
+			status = "u obradi";
+		else if (resolverUser == null)
+			status = "nedodijeljen";
+		return status;
+	}
+    
+    public List<AdminIncidentsViewModel> converToVMs(List<Incident> incidents)	{
+    	List<AdminIncidentsViewModel> incidentVMs = new ArrayList<>() ; 
+    	
+    	for(int index = 0 ; index < incidents.size() ; index ++)	{
+    		Incident i = incidents.get(index) ; 
+    		
+    		AdminIncidentsViewModel vm = new AdminIncidentsViewModel(
+    											i.getId()
+    											, i.getTitle()
+    											, i.getRegisteredUser().getUsername()
+    											, i.getResolverUser().getUsername()
+    											, i.getUrgency()
+    											, i.getPriority()
+    											, i.getCreatedDate()
+    											, null
+    											, i.getClosedDate()
+    											, i.getServices().getServiceName()
+    											, getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())
+    											, i.getDepartment().getDepartmentName()
+    											, i.getEscalated()
+    											) ;
+    		incidentVMs.add(vm) ; 
+    	}
+    	
+    	return incidentVMs ; 
+    }
+    public void setClosedDate(String closedDate) {
         this.closedDate = closedDate;
     }
-    public Date getClosedDate() {
+    public String getClosedDate() {
         return closedDate;
     }
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
     public void setId(Long id) {
@@ -67,10 +116,10 @@ public class AdminIncidentsViewModel{
     public Long getId() {
         return id;
     }
-    public void setLastResolveDate(Date lastResolveDate) {
+    public void setLastResolveDate(String lastResolveDate) {
         this.lastResolveDate = lastResolveDate;
     }
-    public Date getLastResolveDate() {
+    public String getLastResolveDate() {
         return lastResolveDate;
     }
     public void setServiceName(String serviceName) {

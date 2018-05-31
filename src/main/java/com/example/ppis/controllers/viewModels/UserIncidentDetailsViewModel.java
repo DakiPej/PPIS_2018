@@ -1,6 +1,11 @@
 package com.example.ppis.controllers.viewModels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.example.ppis.models.Incident;
+import com.example.ppis.models.RegisteredUser;
 
 public class UserIncidentDetailsViewModel{
     private Long id;
@@ -8,11 +13,15 @@ public class UserIncidentDetailsViewModel{
     private String description;
     private Integer urgency;
     private String contactMethod;
-    private Date createdDate;
-    private Date lastResolveDate;
-    private Date closedDate;
+    private String createdDate;
+    private String lastResolveDate;
+    private String closedDate;
     private String serviceName;
     private String status;
+    
+    public UserIncidentDetailsViewModel()	{
+    	
+    }
     
     public UserIncidentDetailsViewModel(Long id,
                                         String title,
@@ -24,22 +33,55 @@ public class UserIncidentDetailsViewModel{
                                         Date closedDate,
                                         String serviceName,
                                         String status){
+    	DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss") ; 
+    	
         this.id = id;
         this.title = title;
         this.description = description;
         this.urgency = urgency;
         this.contactMethod = contactMethod;
-        this.createdDate = createdDate;
-        this.lastResolveDate = lastResolveDate;
-        this.closedDate = closedDate;
+        this.createdDate = df.format(createdDate);
+        this.lastResolveDate = null ; // lastResolveDate;
+        this.closedDate = df.format(closedDate);
         this.serviceName = serviceName;
         this.status = status;
     }
 
-    public void setClosedDate(Date closedDate) {
+    
+    public String getIncidentStatus(RegisteredUser resolverUser, Boolean resolved, Boolean closed) {
+		String status = "svi";
+		if (closed == true)
+			status = "zatvoren";
+		else if (resolved == true)
+			status = "rijesen";
+		else if (resolverUser != null)
+			status = "u obradi";
+		else if (resolverUser == null)
+			status = "nedodijeljen";
+		return status;
+	}
+    
+    public UserIncidentDetailsViewModel convertToVM(Incident i)	{
+    	
+    	UserIncidentDetailsViewModel vm = new UserIncidentDetailsViewModel(
+    											i.getId()
+    											, i.getTitle()
+    											, i.getDescription()
+    											, i.getUrgency()
+    											, i.getContactMethod().getContactMethodName()
+    											, i.getCreatedDate()
+    											, null
+    											, i.getClosedDate()
+    											, i.getServices().getServiceName()
+    											, getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())
+    											) ;  
+    	return vm ; 
+    }
+    
+    public void setClosedDate(String closedDate) {
         this.closedDate = closedDate;
     }
-    public Date getClosedDate() {
+    public String getClosedDate() {
         return closedDate;
     }
     public void setContactMethod(String contactMethod) {
@@ -48,10 +90,10 @@ public class UserIncidentDetailsViewModel{
     public String getContactMethod() {
         return contactMethod;
     }
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
     public void setDescription(String description) {
@@ -66,10 +108,10 @@ public class UserIncidentDetailsViewModel{
     public Long getId() {
         return id;
     }
-    public void setLastResolveDate(Date lastResolveDate) {
+    public void setLastResolveDate(String lastResolveDate) {
         this.lastResolveDate = lastResolveDate;
     }
-    public Date getLastResolveDate() {
+    public String getLastResolveDate() {
         return lastResolveDate;
     }
     public void setServiceName(String serviceName) {

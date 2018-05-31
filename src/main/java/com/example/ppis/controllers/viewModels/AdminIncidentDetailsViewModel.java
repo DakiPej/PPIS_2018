@@ -1,6 +1,13 @@
 package com.example.ppis.controllers.viewModels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.example.ppis.models.Incident;
+import com.example.ppis.models.RegisteredUser;
 
 public class AdminIncidentDetailsViewModel{
 
@@ -13,13 +20,17 @@ public class AdminIncidentDetailsViewModel{
     private String description;
     private Integer urgency;
     private Integer priority;
-    private Date createdDate;
-    private Date lastResolveDate;
-    private Date closedDate;
+    private String createdDate;
+    private String lastResolveDate;
+    private String closedDate;
     private String contactMethod;
     private String status;
     private Boolean escalation;
 
+    public AdminIncidentDetailsViewModel()	{
+    	
+    }
+    
     public AdminIncidentDetailsViewModel(Long id,
                                 String creatorUsername,
                                 String resolverUsername,
@@ -35,6 +46,8 @@ public class AdminIncidentDetailsViewModel{
                                 String contactMethod,
                                 String status,
                                 Boolean escalation){
+    	
+    	DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss") ; 
 
         this.id = id;
         this.creatorUsername = creatorUsername;
@@ -45,22 +58,83 @@ public class AdminIncidentDetailsViewModel{
         this.description = description;
         this.urgency = urgency;
         this.priority = priority;
-        this.createdDate = createdDate;
-        this.lastResolveDate = lastResolveDate;
-        this.closedDate = closedDate;
+        this.createdDate = df.format(createdDate);
+        this.lastResolveDate = null ; //lastResolveDate;
+        this.closedDate = df.format(closedDate);
         this.contactMethod = contactMethod;
         this.status = status;
         this.escalation = escalation;
     }
 
+    public String getIncidentStatus(RegisteredUser resolverUser, Boolean resolved, Boolean closed) {
+		String status = "svi";
+		if (closed == true)
+			status = "zatvoren";
+		else if (resolved == true)
+			status = "rijesen";
+		else if (resolverUser != null)
+			status = "u obradi";
+		else if (resolverUser == null)
+			status = "nedodijeljen";
+		return status;
+	}
+    
+    public AdminIncidentDetailsViewModel converToVM(Incident i)	{
+    	AdminIncidentDetailsViewModel vm = new AdminIncidentDetailsViewModel(
+    											i.getId()
+    											, i.getRegisteredUser().getUsername()
+    											, i.getResolverUser().getUsername()
+    											, i.getTitle()
+    											, i.getServices().getServiceName()
+    											, i.getDepartment().getDepartmentName()
+    											, i.getDescription()
+    											, i.getUrgency()
+    											, i.getPriority()
+    											, i.getCreatedDate()
+    											, null
+    											, i.getClosedDate()
+    											, i.getContactMethod().getContactMethodName()
+    											, getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())
+    											, i.getEscalated()
+    											) ;
+    	return vm ; 
+    }
+    
+    public List<AdminIncidentDetailsViewModel> convertToVMs(List<Incident> incidents)	{
+    	List<AdminIncidentDetailsViewModel> vms = new ArrayList<>() ; 
+    	
+    	for(int index = 0 ; index < incidents.size() ; index++)	{
+    		Incident i = incidents.get(index) ; 
+    		
+    		AdminIncidentDetailsViewModel vm = new AdminIncidentDetailsViewModel(
+    												i.getId()
+    												, i.getRegisteredUser().getUsername()
+    												, i.getResolverUser().getUsername()
+    												, i.getTitle()
+    												, i.getServices().getServiceName()
+    												, i.getDepartment().getDepartmentName()
+    												, i.getDescription()
+    												, i.getUrgency()
+    												, i.getPriority()
+    												, i.getCreatedDate()
+    												, null
+    												, i.getClosedDate()
+    												, i.getContactMethod().getContactMethodName()
+    												, getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())
+    												, i.getEscalated()) ;
+    		vms.add(vm) ; 
+    	}
+    	
+    	return vms ; 			
+    }
 
-    public Date getClosedDate() {
+    public String getClosedDate() {
         return closedDate;
     }
     public String getContactMethod() {
         return contactMethod;
     }
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
     public String getCreatorUsername() {
@@ -78,7 +152,7 @@ public class AdminIncidentDetailsViewModel{
     public Long getId() {
         return id;
     }
-    public Date getLastResolveDate() {
+    public String getLastResolveDate() {
         return lastResolveDate;
     }
     public Integer getPriority() {
@@ -99,13 +173,13 @@ public class AdminIncidentDetailsViewModel{
     public Integer getUrgency() {
         return urgency;
     }
-    public void setClosedDate(Date closedDate) {
+    public void setClosedDate(String closedDate) {
         this.closedDate = closedDate;
     }
     public void setContactMethod(String contactMethod) {
         this.contactMethod = contactMethod;
     }
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
     public void setCreatorUsername(String creatorUsername) {
@@ -123,7 +197,7 @@ public class AdminIncidentDetailsViewModel{
     public void setId(Long id) {
         this.id = id;
     }
-    public void setLastResolveDate(Date lastResolveDate) {
+    public void setLastResolveDate(String lastResolveDate) {
         this.lastResolveDate = lastResolveDate;
     }
     public void setPriority(Integer priority) {
