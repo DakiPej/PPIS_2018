@@ -161,6 +161,7 @@ public class DatabaseSeeder {
 
 		}
 	}
+
 	private void DepartmentTableSeed()	{
 		if(!this.departmentDao.existsById(0))	{
 			Department department = new Department() ;
@@ -208,7 +209,7 @@ public class DatabaseSeeder {
 			userTypeDAO.create(ut);
 			
 			ut = new UserType();
-			ut.setTypeName("Odjel");
+			ut.setTypeName("Resolver1");
 			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			userTypeDAO.create(ut);
 			
@@ -279,16 +280,25 @@ public class DatabaseSeeder {
 			ru.setLastname("Wilman");
 			ru.setPassword("password");
 			ru.setUsername("andy");
-			ru.setUserType(userTypeDAO.findUserTypeByName("Odjel"));
+			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver1"));
 			registeredUserDAO.create(ru);
 		
 			ru = new RegisteredUser();
 			ru.setEmail("odjel.o@email.com");
-			ru.setFirstname("odjel");
-			ru.setLastname("Odjel");
+			ru.setFirstname("Ime");
+			ru.setLastname("Prezime");
 			ru.setPassword("password");
 			ru.setUsername("odjel");
-			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver2"));
+			ru.setUserType(userTypeDAO.findUserTypeByName("Resolver1"));
+			registeredUserDAO.create(ru);
+
+			ru = new RegisteredUser();
+			ru.setEmail("korisnik.k@email.com");
+			ru.setFirstname("Ime");
+			ru.setLastname("Prezime");
+			ru.setPassword("password");
+			ru.setUsername("korisnik");
+			ru.setUserType(userTypeDAO.findUserTypeByName("Korisnik"));
 			registeredUserDAO.create(ru);
 		}
 	}
@@ -348,12 +358,6 @@ public class DatabaseSeeder {
 			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
 			
-			IncidentLog il = new IncidentLog();
-			il.setIncident(i);
-			il.setResolveDate(new Date());
-			incidentLogDAO.create(il);
-			il = new IncidentLog();
-			
 			i = new Incident();
 			i.setRegisteredUser(registeredUserDAO.findUserByUsername("clarkson"));
 			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
@@ -368,6 +372,116 @@ public class DatabaseSeeder {
 			i.setEscalated(false);
 			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
+
+
+			//Incident bez admina
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incident koji nije dodijeljen");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet preuzet od strane admina");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(registeredUserDAO.findUserByUsername("odjel"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet preuzet od strane odjela");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(registeredUserDAO.findUserByUsername("odjel"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet koji je rijesen");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(true);
+			i.setClosed(false);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			IncidentLog il = new IncidentLog();
+			il.setIncident(i);
+			il.setResolveDate(new Date());
+			incidentLogDAO.create(il);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(registeredUserDAO.findUserByUsername("odjel"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet koji je zavrsen");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(true);
+			i.setEscalated(false);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			il = new IncidentLog();
+			il.setIncident(i);
+			il.setResolveDate(new Date());
+			incidentLogDAO.create(il);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(registeredUserDAO.findUserByUsername("odjel"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet koji je eskaliran");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(true);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
 		}
 	}
 }
