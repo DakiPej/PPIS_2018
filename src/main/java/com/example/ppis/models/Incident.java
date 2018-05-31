@@ -41,7 +41,7 @@ public class Incident {
 	private Department department;
 	
 	@NotNull
-	@Size(max = 30)
+	@Size(max = 100)
 	private String title;
 	
 	@NotNull
