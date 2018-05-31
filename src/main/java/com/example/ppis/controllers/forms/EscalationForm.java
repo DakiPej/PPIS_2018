@@ -14,5 +14,14 @@ public class EscalationForm{
     public Long getId() {
         return id;
     }
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+    public void setEscalation(Boolean escalation) {
+        this.escalation = escalation;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

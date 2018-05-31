@@ -31,9 +31,10 @@ class ListaZahtjeva extends Component{
 
         this.state = {
             sortName: undefined,
-            sortOrder: undefined
+            sortOrder: undefined, 
+            requests: []
         }
-
+        this.role = sessionStorage.getItem("rola") ; 
         this.getZahtjevi = this.getZahtjevi.bind(this);
         this.onSortChange = this.onSortChange.bind(this);
         this.onRowClick = this.onRowClick.bind(this);
@@ -74,6 +75,10 @@ class ListaZahtjeva extends Component{
     }
 
     render(){
+
+        var table = <div></div>;
+        //var role = sessionStorage.getItem("rola");
+
         var test = [
             {
                 id: 1,
@@ -152,9 +157,7 @@ class ListaZahtjeva extends Component{
             'Ne':'Ne'
         }
 
-        var table = <div></div>;
-        var role = sessionStorage.getItem("rola");
-        switch(role){
+        switch(this.role){
             case 'Administrator':
                 table =
                     <BootstrapTable data={test} options={options}>

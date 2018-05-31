@@ -29,6 +29,7 @@ public class RequestController {
 	RequestService requestService ; 
 	RegisteredUserDAO registeredUserDAO ; 
 	RequestLogService requestLogService ; 
+	RegisteredUserDAO registeredUserDao ; 
 	@Autowired
 	public void setServices(RequestService requestService, RequestLogService requestLogService)	{
 		this.requestService = requestService ; 
@@ -36,7 +37,7 @@ public class RequestController {
 	}
 	@Autowired
 	public void setRegisteredUserDAO(RegisteredUserDAO registeredUserDao)	{
-		this.registeredUserDAO = registeredUserDAO ; 
+		this.registeredUserDao = registeredUserDao ; 
 	}
 	
 	
@@ -104,21 +105,26 @@ public class RequestController {
 			@PathVariable("username") String username
 			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info*/)	{
 		try {
-			if(requestId == null)	{
+			if(requestId == -1)	{
 				List<Request> requests ;
 				requests = this.requestService.getRequests(username) ;
-				
-				if(this.registeredUserDAO.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
-					List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests); 
+				System.out.println("evo dobavio sam ti requestove");
+				if(requests.isEmpty())System.out.println("NEMA NISTA JEBO GA HLJEB");
+				if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("Korisnik"))	{
+					List<EndUser_RequestVM> vms = EU_vmConverter.convertToVM(requests);
+					System.out.println("saljem opet nesto");
 					return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
 				}	else	{
+					System.out.println("usao sam u else");
 					List<Employee_RequestVM> vms = e_vmConverter.convertToVM(requests) ; 
+					System.out.println("saljem nesto");
 					return ResponseEntity.status(HttpStatus.OK).body(vms) ;
 				}
 			}
 			else	{
 				Request request ; 
-				request = this.requestService.getRequest(requestId, username) ; 
+				request = this.requestService.getRequest(requestId, username) ;
+				System.out.println("e sacu ti ga poslat");
 				return ResponseEntity.status(HttpStatus.OK).body(request) ; 
 			}
 			/*
@@ -134,6 +140,7 @@ public class RequestController {
 			else requests = this.requestService.getRequestsByResolver(info.username) ; 
 			*/
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}

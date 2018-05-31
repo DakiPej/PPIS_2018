@@ -16,4 +16,14 @@ public class CloseIncidentForm{
     public Boolean getClose() {
         return close;
     }
+    public void setClose(Boolean close) {
+        this.close = close;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }

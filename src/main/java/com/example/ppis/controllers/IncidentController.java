@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @CrossOrigin
@@ -134,6 +135,48 @@ public class IncidentController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 		}
+	}
+	
+	@RequestMapping(value="resolve", method=RequestMethod.PUT)
+	public ResponseEntity resolveInc(@RequestBody final IncidentStatusUpdate info)	{
+		try {
+			String response = "" ;
+			response = this.incidentService.resolveInc(info.username, info.incidentId, info.resolved) ;
+			
+			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	
+	@RequestMapping(value="close", method=RequestMethod.PUT)
+	public ResponseEntity closeInc(@RequestBody final IncidentStatusUpdate info)	{
+		try {
+			String response = "" ; 
+			response = this.incidentService.closeInc(info.username, info.incidentId) ; 
+			
+			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	
+	@RequestMapping(value="resolverPick", method=RequestMethod.PUT)
+	public ResponseEntity resolverPick(@RequestBody final IncidentStatusUpdate info)	{
+		try {
+			String response = "" ; 
+			response = this.incidentService.resolverPick(info.username, info.incidentId) ;
+			
+			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	
+	private static class IncidentStatusUpdate {
+		String username ; 
+		long incidentId ; 
+		boolean resolved ; 
 	}
 
 }

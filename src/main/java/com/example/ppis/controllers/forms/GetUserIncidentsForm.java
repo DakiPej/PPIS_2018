@@ -21,4 +21,17 @@ public class GetUserIncidentsForm{
     public String getUsername() {
         return username;
     }
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+    public void setEscalated(String escalated) {
+        this.escalated = escalated;
+    }
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }
