@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Switch, Route} from 'react-router-dom';
 
 import ListaIncidenata from './ListaIncidenata';
-import Incident from './Incident';
+import Incident from './Incident2';
 import '../Style/UserProfile.css';
 
 class Incidenti extends Component{
