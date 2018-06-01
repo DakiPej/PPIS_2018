@@ -22,13 +22,13 @@ class ZahtjevForm extends Component{
         if (localStorage.getItem("nazivZahtjeva") !== null)
           var naziv=localStorage.getItem("nazivZahtjeva");
         else naziv='';
-        localStorage.clear();
+        localStorage.removeItem("nazivZahtjeva");
         this.state = {
             naziv: naziv,
             opis:'',
             email:0,
             telefon:0,
-            hitnost: 0,
+            hitnost: 0
         };
         this.handleChange = this.handleChange.bind(this);
         this.onPrijavi = this.onPrijavi.bind(this);
