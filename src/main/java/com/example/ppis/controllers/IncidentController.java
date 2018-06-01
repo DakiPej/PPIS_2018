@@ -182,7 +182,7 @@ public class IncidentController {
 		}
 	}
 	
-	@RequestMapping(value="resolverPick", method=RequestMethod.PUT)
+	@RequestMapping(value="/resolverPick", method=RequestMethod.PUT)
 	public ResponseEntity resolverPick(@RequestBody final IncidentStatusUpdate info)	{
 		try {
 			String response = "" ; 
@@ -194,7 +194,7 @@ public class IncidentController {
 		}
 	}
 	
-	@RequestMapping(value="unassigned_byDepartments/{username}", method=RequestMethod.GET)
+	@RequestMapping(value="/unassigned_byDepartments/{username}", method=RequestMethod.GET)
 	public ResponseEntity getUnassignedByDepartments(@PathVariable("username") String username)	{
 		try {
 			List<Incident> incidents = this.incidentService.getAllUnassignedByDepartments(username) ;
@@ -206,7 +206,7 @@ public class IncidentController {
 		}
 	}
 	
-	@RequestMapping(value="unassigned_byResolvers/{username}", method=RequestMethod.GET) 
+	@RequestMapping(value="/unassigned_byResolvers/{username}", method=RequestMethod.GET) 
 	public ResponseEntity getUnassignedByResolvers(@PathVariable("username") String username)	{
 		try {
 			List<Incident> incidents = this.incidentService.getUnassignedByResolvers(username) ; 
