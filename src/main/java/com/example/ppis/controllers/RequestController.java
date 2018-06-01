@@ -57,7 +57,7 @@ public class RequestController {
 	private static class AssignRequestInfo {
 		public long requestId ; 
 		public String departmentName ; 
-		public Integer priority ; 
+		//public Integer priority ; 
 		
 	}
 	private static class RequestInformation	{
@@ -108,7 +108,6 @@ public class RequestController {
 		try {
 
 			Request request = this.requestService.getRequest(requestId, username) ; 
-			
 			Employee_RequestVM vm = this.e_vmConverter.convert(request) ; 
 			return ResponseEntity.status(HttpStatus.OK).body(vm) ; 
 		} catch (Exception e) {
@@ -198,8 +197,7 @@ public class RequestController {
 	public ResponseEntity assignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
 			String response = this.requestService.assignRequestToDepartment(assignRequestInfo.requestId
-					, assignRequestInfo.departmentName
-					, assignRequestInfo.priority) ;
+					, assignRequestInfo.departmentName) ;
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
@@ -223,8 +221,7 @@ public class RequestController {
 	public ResponseEntity reassignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
 			String response = this.requestService.reassignRequest(assignRequestInfo.requestId
-					, assignRequestInfo.departmentName
-					, assignRequestInfo.priority) ;
+					, assignRequestInfo.departmentName) ;
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 

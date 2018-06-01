@@ -205,7 +205,7 @@ public class DatabaseSeeder {
 			
 			ut = new UserType();
 			ut.setTypeName("Administrator");
-			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Administracija"));
 			userTypeDAO.create(ut);
 			
 			ut = new UserType();
