@@ -62,14 +62,11 @@ class Zahtjev extends Component {
                                 <ListGroupItem header="Hitnost">{this.state.data.urgency}</ListGroupItem>
                             </Col>
                             <Col md={4} lg={4}>
-                                {role !== 'Korisnik' && this.props.tip !== 'Nedodjeljen' ? <ListGroupItem header="Prioritet">{this.state.data.priority}</ListGroupItem> : ""}
                                 {role === 'Administrator' && this.props.tip !== 'Nedodjeljen' ? <ListGroupItem header="Odjel">{this.state.data.departmentName}</ListGroupItem> : ""}
                                 <ListGroupItem header="Status">{this.state.data.status}</ListGroupItem>
-                                {role != "Korisnik" ? <ListGroupItem header="Eskalacija">{this.state.data.escalation ? "Da" : "Ne"}</ListGroupItem> : ""}
                             </Col>
                             <Col md={4} lg={4}>
                                 <ListGroupItem header="Datum kreiranja">{this.state.data.createdDate}</ListGroupItem>
-                                <ListGroupItem header="Posljednje rješavanje">{this.state.data.lastResolveDate}</ListGroupItem>
                                 <ListGroupItem header="Datum zatvaranja">{this.state.data.closedDate}</ListGroupItem>
                                 <ListGroupItem header="Kontakt">{this.state.data.contactMethod}</ListGroupItem>
                             </Col>
