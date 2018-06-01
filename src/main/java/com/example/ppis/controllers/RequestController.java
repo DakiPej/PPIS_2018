@@ -128,18 +128,6 @@ public class RequestController {
 				System.out.println("e sacu ti ga poslat");
 				return ResponseEntity.status(HttpStatus.OK).body(request) ; 
 			}
-			/*
-=======
-	@RequestMapping(value="/getAll", method=RequestMethod.POST)
-	public ResponseEntity getRequests(@RequestBody final UserInformation info)	{
-		try {
-			
-			List<Request> requests; 
->>>>>>> b6570c2df298d54dde0113474e18185eb64d9436
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	
-				requests = this.requestService.getRequestsByRegisteredUser(info.username) ; 
-			else requests = this.requestService.getRequestsByResolver(info.username) ; 
-			*/
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
@@ -378,7 +366,7 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
-	@RequestMapping(value="{username}", method=RequestMethod.GET)
+	@RequestMapping(value="/{username}", method=RequestMethod.GET)
 	public ResponseEntity getAll(@PathVariable("username") String username)	{
 		try {
 			List<Request> requests = new ArrayList<>() ;

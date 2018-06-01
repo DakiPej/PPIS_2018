@@ -10,17 +10,23 @@ import Poruke from './Poruke';
 class Zahtjev extends Component {
 
     state = {
-        data: '',
+        data: {},
         openOpis: false
     }
 
-    getZahtjevi() {
-        axios.get("htttp://localhost:8080/zahtjevi/" + sessionStorage.getItem("username"))
+    componentDidMount(){
+        this.getZahtjevi();
+    }
+
+    getZahtjevi= () => {
+        console.log("htttp://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id);
+        axios.get("htttp://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id)
             .then(this.handleSuccessZahtjevi(this))
             .catch(this.handleError(this));
     }
 
     handleSuccessZahtjevi = (response) => {
+
         this.setState({
             data: response.data
         });

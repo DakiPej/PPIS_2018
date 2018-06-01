@@ -64,7 +64,7 @@ class ListaZahtjeva extends Component {
                 .catch(this.handleError.bind(this));
         }
         else {
-            axios.get("http://localhost:8080/requests" + sessionStorage.getItem("username"))
+            axios.get("http://localhost:8080/requests/" + sessionStorage.getItem("username"))
                 .then(this.handleSuccess.bind(this))
                 .catch(this.handleError.bind(this));
         }
@@ -73,6 +73,9 @@ class ListaZahtjeva extends Component {
 
     handleSuccess(response) {
         console.log(response.data);
+        this.setState({
+            data:response.data
+        });
     }
 
     handleError(error) {
@@ -208,96 +211,3 @@ class ListaZahtjeva extends Component {
 }
 
 export default ListaZahtjeva;
-
-// Backup if needed
-
-/*
-
-class Zahtjevitem extends Component{
-
-    constructor(props){
-        super(props);
-
-        this.state = {
-            id: props.item.id,
-            naslov: props.item.naslov,
-            datum: props.item.datum,
-            status: props.item.status,
-            odjel: props.item.odjel,
-            prioritet: props.item.prioritet,
-            odjel: props.item.odjel,
-            korisnik: props.item.korisnik
-        }
-
-        this.onSelectChange = this.onSelectChange.bind(this);
-    }
-
-    deleteIncident(){
-        alert("Incident je izbrisan!");
-        window.location.reload();
-    }
-
-    onSelectChange(e){
-        var selected = e.target.options.selectedIndex;
-        console.log(e.target.name + ' ' + e.target.options[selected].value);
-        this.setState({[e.target.name]:e.target.options[selected].value});
-    }
-
-    render(){
-
-        //var date = new Date(this.state.datum);
-
-        var incident = null;
-        var rola = "Korisnik";
-
-        switch (rola){
-            case "Korisnik":
-                incident =
-                        <tr>
-                            <td>{this.state.id}</td>
-                            <td>{this.state.naslov}</td>
-                            <td>{this.state.datum}</td>
-                            <td>{this.state.status}</td>
-                            <td><Button bsStyle="danger" onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="trash" /></Button></td>
-                        </tr>
-                break;
-            case "Administrator":
-                incident =
-                        <tr>
-                            <td >{this.state.id}</td>
-                            <td>{this.state.korisnik}</td>
-                            <td>{this.state.naslov}</td>
-                            <td>{this.state.datum}</td>
-                            <td>{this.state.status}</td>
-                            <td>
-                            <FormGroup controlId="formControlsSelect">
-                                <FormControl componentClass="select" name="odjel" placeholder="Odjel" onChange={this.onSelectChange}>
-                                    <option value="Odjel 1">Odjel 1</option>
-                                    <option value="Odjel 2">Odjel 2</option>
-                                    <option value="Odjel 3">Odejl 3</option>
-                                </FormControl>
-                            </FormGroup>
-                            </td>
-                            <td>
-                            <FormGroup controlId="formControlsSelect">
-                                <FormControl componentClass="select" name="prioritet" placeholder="Prioritet" onChange={this.onSelectChange}>
-                                    <option value="Visok">Visok</option>
-                                    <option value="Normalan">Normalan</option>
-                                    <option value="Nizak">Nizak</option>
-                                </FormControl>
-                            </FormGroup>
-                            </td>
-                            <td><Button bsStyle="info" style={{width:"100%"}} onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="eye-open" style={{color:"white", fontSize:"18px"}} /></Button></td>
-                        </tr>
-            break;
-        }
-
-
-        return(
-            incident
-        );
-    }
-
-}
-
-*/
