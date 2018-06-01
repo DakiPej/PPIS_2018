@@ -186,6 +186,7 @@ public class IncidentController {
 	public ResponseEntity resolverPick(@RequestBody final IncidentStatusUpdate info)	{
 		try {
 			String response = "" ; 
+			System.out.println(info.username);
 			response = this.incidentService.resolverPick(info.username, info.incidentId) ;
 			
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
@@ -221,7 +222,33 @@ public class IncidentController {
 	private static class IncidentStatusUpdate {
 		String username ; 
 		long incidentId ; 
-		boolean resolved ; 
+		boolean resolved ;
+		
+		public IncidentStatusUpdate (){
+
+		}
+
+		/**
+		 * @param incidentId the incidentId to set
+		 */
+		public void setIncidentId(long incidentId) {
+			this.incidentId = incidentId;
+		}
+
+		/**
+		 * @param resolved the resolved to set
+		 */
+		public void setResolved(boolean resolved) {
+			this.resolved = resolved;
+		}
+
+		/**
+		 * @param username the username to set
+		 */
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		
 	}
 
 }

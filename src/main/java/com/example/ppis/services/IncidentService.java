@@ -506,13 +506,15 @@ public class IncidentService {
 			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
 			Incident incident = this.incidentDao.getIncidentById(incidentId) ; 
 			
-			if(!user.getUserType().equals("Resolver"))
-				throw new IllegalArgumentException("The user can't pick this incident.") ; 
-			if(!this.registeredUserDao.getUserDepartment(
-					user.getUsername(), user.getUserType())
-					.equals(incident.getDepartment()))
-				throw new IllegalArgumentException("The user does not belong to this department.") ; 
+			//if(!user.getUserType().equals("Resolver"))
+			//	throw new IllegalArgumentException("The user can't pick this incident.") ; 
 			
+			
+			//if(!this.registeredUserDao.getUserDepartment(
+			//		user.getUsername(), user.getUserType())
+			//		.equals(incident.getDepartment()))
+			//	throw new IllegalArgumentException("The user does not belong to this department.") ; 
+				System.out.println("TU SAM");
 			incident.setResolverUser(user);
 				
 			this.incidentDao.create(incident) ; 

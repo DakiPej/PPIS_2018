@@ -482,6 +482,23 @@ public class DatabaseSeeder {
 			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
 			incidentDAO.create(i);
 
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(null);
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet koji je eskaliran");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(true);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
 		}
 	}
 }

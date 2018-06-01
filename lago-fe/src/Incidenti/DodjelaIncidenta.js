@@ -41,7 +41,8 @@ class DodjelaIncidenta extends Component {
 
     preuzmi = () => {
         console.log("OKE");
-        axios.put("https://localhost:8080/incident/resolverPick",
+        console.log(sessionStorage.getItem("username"));
+        axios.put("http://localhost:8080/incident/resolverPick",
             {
                 username: sessionStorage.getItem("username"),
                 incidentId: this.props.data.id,
