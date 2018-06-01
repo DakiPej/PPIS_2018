@@ -8,18 +8,20 @@ import java.util.List;
 import com.example.ppis.models.Request;
 
 public class Employee_RequestVM {
-	private long requestId ;
-	private String creatorUser ;
-	private String resolver ; 
-	private String admin ; 
+	
+	private long id ;
+	private String creatorUsername ;
+	private String resolverUsername ; 
+	//private String admin ; 
 	private String title ; 
 	private String description ; 
 	private int urgency ; 
 	private String contactMethod ; 
 	private String contactInfo ; 
 	private String status ; 
-	private String creationDate ; 
-	private String closedDate ; 
+	private String createdDate ; 
+	private String closedDate ;
+	private String departmentName ; 
 	
 	public Employee_RequestVM ()	{
 		
@@ -28,7 +30,7 @@ public class Employee_RequestVM {
 	public Employee_RequestVM (long requestId
 			, String creatorUser
 			, String resolver
-			, String admin
+			//, String admin
 			, String title
 			, String description
 			, int urgency
@@ -36,17 +38,20 @@ public class Employee_RequestVM {
 			, String contactInfo 
 			, String status 
 			, String creationDate
-			, String closedDate)	{
-		this.requestId = requestId ; 
-		this.creatorUser = creatorUser ; 
-		this.resolver = resolver ; 
-		this.admin = admin ; 
-		this .urgency = urgency ; 
+			, String closedDate
+			, String departmentName)	{
+		
+		this.id= requestId ; 
+		this.creatorUsername = creatorUser ; 
+		this.resolverUsername = resolver ; 
+		//this.admin = admin ; 
+		this.urgency = urgency ; 
 		this.contactMethod = contactMethod ; 
 		this.contactInfo = contactInfo ; 
 		this.status = status ; 
-		this.creationDate = creationDate ; 
+		this.createdDate = creationDate ; 
 		this.closedDate = closedDate ; 
+		this.departmentName = departmentName ; 
 		
 	}
 	
@@ -84,7 +89,7 @@ public class Employee_RequestVM {
 					requests.get(i).getId()
 					, requests.get(i).getRegisteredUser().getUsername()
 					, resolver
-					, admin 
+					//, admin 
 					, requests.get(i).getTitle()
 					, requests.get(i).getDescription()
 					, requests.get(i).getUrgency()
@@ -92,7 +97,8 @@ public class Employee_RequestVM {
 					, requests.get(i).getContactInfo() 
 					, status
 					, df.format(requests.get(i).getCreatedDate())
-					, closedDate) ;
+					, closedDate
+					, requests.get(i).getDepartment().getDepartmentName()) ;
 			
 			requestVMs.add(element) ; 
 		}
@@ -101,36 +107,28 @@ public class Employee_RequestVM {
 		
 	}
 
-	public long getRequestId() {
-		return requestId;
+	public long getId() {
+		return id;
 	}
 
-	public void setRequestId(long requestId) {
-		this.requestId = requestId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public String getCreatorUser() {
-		return creatorUser;
+	public String getCreatorUsername() {
+		return creatorUsername;
 	}
 
-	public void setCreatorUser(String creatorUser) {
-		this.creatorUser = creatorUser;
+	public void setCreatorUsername(String creatorUsername) {
+		this.creatorUsername = creatorUsername;
 	}
 
-	public String getResolver() {
-		return resolver;
+	public String getResolverUsername() {
+		return resolverUsername;
 	}
 
-	public void setResolver(String resolver) {
-		this.resolver = resolver;
-	}
-
-	public String getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(String admin) {
-		this.admin = admin;
+	public void setResolverUsername(String resolverUsername) {
+		this.resolverUsername = resolverUsername;
 	}
 
 	public String getTitle() {
@@ -181,12 +179,12 @@ public class Employee_RequestVM {
 		this.status = status;
 	}
 
-	public String getCreationDate() {
-		return creationDate;
+	public String getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreationDate(String creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public String getClosedDate() {
@@ -195,5 +193,13 @@ public class Employee_RequestVM {
 
 	public void setClosedDate(String closedDate) {
 		this.closedDate = closedDate;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 }

@@ -1,5 +1,6 @@
 package com.example.ppis.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -653,6 +654,35 @@ public class RequestService {
 			if(this.registeredUserDao.findUserByUsername(username).getUserType().getTypeName().equals("korisnik"))
 				return getRequestsByRegisteredUserAndClosed(username, closed) ; 
 			return getRequestsByResolverUserAndClosed(username, closed) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public List<Request> getAll (String username)	{
+		try {
+			List<Request> requests = new ArrayList<>(); 
+			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
+			if(user.getUserType().getTypeName().equals("Administrator"))	{
+				requests = this.requestDao.getAll() ; 
+			}
+			else if(user.getUserType().getTypeName().equals("Korisnik"))
+				requests = this.requestDao.getRequestsByRegisteredUser(user) ; 
+			else requests = this.requestDao.getRequestsByResolver(user) ; 
+			return requests ;
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public List<Request> getAllUnassigned (String username)	{
+		try {
+			List<Request> requests = new ArrayList<>() ; 
+			RegisteredUser resolver = this.registeredUserDao.findUserByUsername(username) ; 
+			Department department = this.registeredUserDao.getUserDepartment(username, resolver.getUserType()) ; 
+			requests = this.requestDao.getRequestsByResolverAndDepartment(null, department) ;
+			
+			return requests ; 
 		} catch (Exception e) {
 			throw e ; 
 		}
