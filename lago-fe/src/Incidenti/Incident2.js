@@ -83,7 +83,7 @@ class Incident extends Component {
                             </Col>
                             <Col md={4} lg={4}>
                                 <ListGroupItem header="Datum kreiranja">{this.state.data.createdDate}</ListGroupItem>
-                                <ListGroupItem header="Poslijednje rješavanje">{this.state.data.lastResolveDate}</ListGroupItem>
+                                <ListGroupItem header="Posljednje rješavanje">{this.state.data.lastResolveDate}</ListGroupItem>
                                 <ListGroupItem header="Datum zatvaranja">{this.state.data.closedDate}</ListGroupItem>
                                 <ListGroupItem header="Kontakt">{this.state.data.contactMethod}</ListGroupItem>
                             </Col>

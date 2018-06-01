@@ -4,7 +4,7 @@ import { Tab, Tabs, Modal, FormGroup, ControlLabel, PageHeader, Row, Panel, Col,
 import axios from 'axios';
 
 class DodjelaIncidenta extends Component{
-    
+
     constructor(props){
         super(props);
     }
@@ -13,7 +13,7 @@ class DodjelaIncidenta extends Component{
         dName: '',
         priority: ''
     }
-    
+
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -45,7 +45,7 @@ class DodjelaIncidenta extends Component{
     render(){
         let role = sessionStorage.getItem("rola");
         console.log(this.props.data);
-        
+
         return(
             <div>
             {role == 'Administrator' && this.props.data.departmentName === '' ?
@@ -64,21 +64,15 @@ class DodjelaIncidenta extends Component{
                         <ControlLabel> Odaberite prioritet </ControlLabel>
                         <FormControl componentClass="select" name="priority" onChange={this.handleChange} placeholder="Prioritet">
                             <option value="" selected disabled>Prioritet</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
+                            <option value="1">Nizak prioritet</option>
+                            <option value="2">Srednji prioritet</option>
+                            <option value="3">Visoki prioritet</option>
                         </FormControl>
                     </Col>
                 </Row>
                 <Row>
                     <Col md={12} style={{ textAlign: "right" }}>
+                    <br/>
                         <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg" onClick={this.assignSuccess}>Dodijeli</Button>
                     </Col>
                 </Row>

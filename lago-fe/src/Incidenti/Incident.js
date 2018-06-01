@@ -931,9 +931,9 @@ class Incident extends Component {
                                 </div>
                             </Panel.Collapse>
                         </Panel>
-                        
-                        
-                        
+
+
+
                     </div>;
                 }
         }
