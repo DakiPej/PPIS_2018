@@ -8,129 +8,164 @@ import java.util.List;
 import com.example.ppis.models.Request;
 
 public class Employee_RequestVM {
-	private long requestId ;
-	private String creatorUser ;
-	private String resolver ; 
-	private String admin ; 
-	private String title ; 
-	private String description ; 
-	private int urgency ; 
-	private String contactMethod ; 
-	private String contactInfo ; 
-	private String status ; 
-	private String creationDate ; 
-	private String closedDate ; 
-	
-	public Employee_RequestVM ()	{
-		
+
+	private long id;
+	private String creatorUsername;
+	private String resolverUsername;
+	// private String admin ;
+	private String title;
+	private String description;
+	private int urgency;
+	private String contactMethod;
+	private String contactInfo;
+	private String status;
+	private String createdDate;
+	private String closedDate;
+	private String departmentName;
+
+	public Employee_RequestVM() {
+
 	}
-	
-	public Employee_RequestVM (long requestId
-			, String creatorUser
-			, String resolver
-			, String admin
-			, String title
-			, String description
-			, int urgency
-			, String contactMethod
-			, String contactInfo 
-			, String status 
-			, String creationDate
-			, String closedDate)	{
-		this.requestId = requestId ; 
-		this.creatorUser = creatorUser ; 
-		this.resolver = resolver ; 
-		this.admin = admin ; 
-		this .urgency = urgency ; 
-		this.contactMethod = contactMethod ; 
-		this.contactInfo = contactInfo ; 
-		this.status = status ; 
-		this.creationDate = creationDate ; 
-		this.closedDate = closedDate ; 
-		
+
+	public Employee_RequestVM(long requestId, String creatorUser, String resolver
+	// , String admin
+			, String title, String description, int urgency, String contactMethod, String contactInfo, String status,
+			String creationDate, String closedDate, String departmentName) {
+
+		this.id = requestId;
+		this.creatorUsername = creatorUser;
+		this.resolverUsername = resolver;
+		// this.admin = admin ;
+		this.urgency = urgency;
+		this.contactMethod = contactMethod;
+		this.contactInfo = contactInfo;
+		this.status = status;
+		this.createdDate = creationDate;
+		this.closedDate = closedDate;
+		this.departmentName = departmentName;		
+		this.title = title;
+		this.description = description;
+
 	}
-	
-	public List<Employee_RequestVM> convertToVM(List<Request> requests)	{
+
+	public Employee_RequestVM convert(Request request)	{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		
-		List<Employee_RequestVM> requestVMs = new ArrayList<Employee_RequestVM> ();
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss") ;
+		String status ; 
+		String closedDate ; 
+		String resolver ; 
 		
-		for(int i = 0 ; i < requests.size() ; i++)	{
-			String status; 
-			String closedDate ; 
-			String resolver ; 
-			String admin ; 
-			
-			if(requests.get(i).getAdmin() == null)
-				admin = "The request has not been picked by any administrator yet." ; 
-			else admin = requests.get(i).getAdmin().getUsername() ; 
-			
-			if(requests.get(i).getResolverUser() == null)	{
-				status = "Not assigned." ; 
-				resolver = "The request has not been picked by any resolver yet." ; 
-			}
-			else {
-				status = "Working on" ;
-				resolver = requests.get(i).getResolverUser().getUsername() ; 
-			}
-			
-			if(requests.get(i).getClosed())
-				status = "Closed" ;
-			
-			if(requests.get(i).getClosedDate() != null)
-				closedDate = df.format(requests.get(i).getClosedDate()) ; 
-			else closedDate = "Not closed" ; 
-			Employee_RequestVM element = new Employee_RequestVM(
-					requests.get(i).getId()
-					, requests.get(i).getRegisteredUser().getUsername()
-					, resolver
-					, admin 
-					, requests.get(i).getTitle()
-					, requests.get(i).getDescription()
-					, requests.get(i).getUrgency()
-					, requests.get(i).getContactMethod().getContactMethodName()
-					, requests.get(i).getContactInfo() 
-					, status
-					, df.format(requests.get(i).getCreatedDate())
-					, closedDate) ;
-			
-			requestVMs.add(element) ; 
+		if(request.getResolverUser() == null)	{
+			status = "nedodijeljen" ; 
+			resolver = "" ; 
 		}
+		else	{
+			status = "u obradi" ; 
+			resolver = request.getResolverUser().getUsername() ; 
+		}
+		if(request.getClosed()) status = "zatvoren" ; 
+		if(request.getClosedDate() != null) closedDate = df.format(request.getClosedDate()) ; 
+		else closedDate = "Not closed" ; 
 		
-		return requestVMs ; 
+		String departmentName = "" ; 
+		
+		if(request.getDepartment() != null)
+			departmentName = request.getDepartment().getDepartmentName() ; 
+		else departmentName = "" ; 
+		
+		Employee_RequestVM vm = new Employee_RequestVM(
+										request.getId()
+										, request.getRegisteredUser().getUsername()
+										, resolver
+										, request.getTitle()
+										, request.getDescription()
+										, request.getUrgency()
+										, request.getContactMethod().getContactMethodName()
+										, request.getContactInfo()
+										, status
+										, df.format(request.getCreatedDate())
+										, closedDate
+										, departmentName
+									) ; 
+		
+		return vm ; 
 		
 	}
+	public List<Employee_RequestVM> convertToVM(List<Request> requests) {
 
-	public long getRequestId() {
-		return requestId;
+		List<Employee_RequestVM> requestVMs = new ArrayList<Employee_RequestVM>();
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+		for (int i = 0; i < requests.size(); i++) {
+			String status;
+			String closedDate;
+			String resolver;
+			String admin;
+
+			if (requests.get(i).getAdmin() == null)
+				admin = "The request has not been picked by any administrator yet.";
+			else
+				admin = requests.get(i).getAdmin().getUsername();
+
+			if (requests.get(i).getResolverUser() == null) {
+				status = "nedodijeljen";
+				resolver = "";
+			} else {
+				status = "u obradi";
+				resolver = requests.get(i).getResolverUser().getUsername();
+			}
+
+			if (requests.get(i).getClosed())
+				status = "zatvoren";
+
+			if (requests.get(i).getClosedDate() != null)
+				closedDate = df.format(requests.get(i).getClosedDate());
+			else
+				closedDate = "Not closed";
+
+				String departmentName = "" ;
+			if(requests.get(i).getDepartment() != null)	
+				departmentName = requests.get(i).getDepartment().getDepartmentName() ;
+			else departmentName = "" ;
+			Employee_RequestVM element = new Employee_RequestVM(requests.get(i).getId(),
+					requests.get(i).getRegisteredUser().getUsername(), resolver
+					// , admin
+					, requests.get(i).getTitle(), requests.get(i).getDescription(), requests.get(i).getUrgency(),
+					requests.get(i).getContactMethod().getContactMethodName(), requests.get(i).getContactInfo(), status,
+					df.format(requests.get(i).getCreatedDate()), closedDate,
+					departmentName);
+
+
+			requestVMs.add(element);
+
+		}
+
+		return requestVMs;
+
 	}
 
-	public void setRequestId(long requestId) {
-		this.requestId = requestId;
+	public long getId() {
+		return id;
 	}
 
-	public String getCreatorUser() {
-		return creatorUser;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public void setCreatorUser(String creatorUser) {
-		this.creatorUser = creatorUser;
+	public String getCreatorUsername() {
+		return creatorUsername;
 	}
 
-	public String getResolver() {
-		return resolver;
+	public void setCreatorUsername(String creatorUsername) {
+		this.creatorUsername = creatorUsername;
 	}
 
-	public void setResolver(String resolver) {
-		this.resolver = resolver;
+	public String getResolverUsername() {
+		return resolverUsername;
 	}
 
-	public String getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(String admin) {
-		this.admin = admin;
+	public void setResolverUsername(String resolverUsername) {
+		this.resolverUsername = resolverUsername;
 	}
 
 	public String getTitle() {
@@ -181,12 +216,12 @@ public class Employee_RequestVM {
 		this.status = status;
 	}
 
-	public String getCreationDate() {
-		return creationDate;
+	public String getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreationDate(String creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public String getClosedDate() {
@@ -195,5 +230,13 @@ public class Employee_RequestVM {
 
 	public void setClosedDate(String closedDate) {
 		this.closedDate = closedDate;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 }

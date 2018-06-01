@@ -1,46 +1,40 @@
 import React, { Component } from 'react';
-import { Button, Glyphicon, ListGroup, ListGroupItem, Row, Col, Panel, FormGroup } from 'react-bootstrap';
-import { Collapse } from 'reactstrap';
 import axios from 'axios';
-import DodjelaIncidenta from './DodjelaIncidenta';
-import EskalacijaIncidenta from './EskalacijaIncidenta';
+import { ListGroup,  ListGroupItem, Button, Glyphicon, Row, Col, Panel } from 'react-bootstrap';
+import { Collapse } from 'reactstrap';
+import DodjelaZahtjeva from './DodjelaZahtjeva';
+import EskalacijaZahtjeva from './EskalacijaZahtjeva';
 import Poruke from './Poruke';
 
-class Incident extends Component {
+
+class Zahtjev extends Component {
 
     state = {
-        id: this.props.match.params.id,
         data: {},
-        openOpis: false,
+        openOpis: false
     }
 
-    componentWillMount() {
-        this.getIncident();
+    componentDidMount(){
+        this.getZahtjevi();
     }
 
-    getIncident = () => {
-        axios.post('http://localhost:8080/incident/getIncidentDetail',
-            {
-                username: sessionStorage.getItem("username"),
-                id: this.state.id
-            })
-            .then(this.handleSuccess.bind(this))
-            .catch(this.handleError.bind(this));
+    getZahtjevi= () => {
+        console.log("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id);
+        axios.get("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id)
+            .then(this.handleSuccessZahtjevi)
+            .catch(this.handleError);
     }
 
-    handleSuccess = (response) => {
+    handleSuccessZahtjevi = (response) => {
+        console.log("USPJELO....") ;
+        console.log(response) ;  
         this.setState({
             data: response.data
-        })
-        console.log(this.state.data);
+        });
     }
 
     handleError = (error) => {
         console.log(error);
-    }
-
-    handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
     }
 
     toggleOpis = () => {
@@ -52,7 +46,7 @@ class Incident extends Component {
     render() {
 
         let role = sessionStorage.getItem("rola");
-        console.log(this.state.data);
+
         return (
             <div className="panel panel-primary ">
                 <div className="panel-heading d-flex w-100 justify-content-between">
@@ -64,27 +58,22 @@ class Incident extends Component {
                 <div className="panel-body">
 
                     {
-                        // GLAVNI DIO INFORMACIJA O INCIDENTU
+                        //PODACI
                     }
-
 
                     <ListGroup>
                         <Row>
                             <Col md={4} lg={4}>
-                                {role != 'Korisnik' ? <ListGroupItem header="Prijavio">{this.state.data.creatorUsername}</ListGroupItem> : ""}
-                                <ListGroupItem header="Servis">{this.state.data.serviceName}</ListGroupItem>
-                                {role == 'Administrator' && this.props.tip ? <ListGroupItem header="Rješava">{this.state.data.resolverUsername}</ListGroupItem> : ""}
+                                {role !== 'Korisnik' ? <ListGroupItem header="Prijavio">{this.state.data.creatorUsername}</ListGroupItem> : ""}
+                                {role === 'Administrator' && this.props.tip ? <ListGroupItem header="Rješava">{this.state.data.resolverUsername}</ListGroupItem> : ""}
                                 <ListGroupItem header="Hitnost">{this.state.data.urgency}</ListGroupItem>
                             </Col>
                             <Col md={4} lg={4}>
-                                {role != 'Korisnik' && this.props.tip != 'Nedodjeljen' ? <ListGroupItem header="Prioritet">{this.state.data.priority}</ListGroupItem> : ""}
-                                {role == 'Administrator' && this.props.tip != 'Nedodjeljen' ? <ListGroupItem header="Odjel">{this.state.data.departmentName}</ListGroupItem> : ""}
+                                {role === 'Administrator' && this.props.tip !== 'Nedodjeljen' ? <ListGroupItem header="Odjel">{this.state.data.departmentName}</ListGroupItem> : ""}
                                 <ListGroupItem header="Status">{this.state.data.status}</ListGroupItem>
-                                {role != "Korisnik" ? <ListGroupItem header="Eskalacija">{this.state.data.escalation ? "Da" : "Ne"}</ListGroupItem> : ""}
                             </Col>
                             <Col md={4} lg={4}>
                                 <ListGroupItem header="Datum kreiranja">{this.state.data.createdDate}</ListGroupItem>
-                                <ListGroupItem header="Posljednje rješavanje">{this.state.data.lastResolveDate}</ListGroupItem>
                                 <ListGroupItem header="Datum zatvaranja">{this.state.data.closedDate}</ListGroupItem>
                                 <ListGroupItem header="Kontakt">{this.state.data.contactMethod}</ListGroupItem>
                             </Col>
@@ -104,30 +93,26 @@ class Incident extends Component {
                     </Panel>
 
                     {
-                        // DODJELA INCIDENTA
+                        //DODJELJIVANJE ZAHTJEVA
                     }
 
-                    <DodjelaIncidenta Id={this.state.id} data={this.state.data} />
+                    <DodjelaZahtjeva data={this.state.data} />
 
                     {
-                        //ESKALACIJA INCIDENTA
+                        //ESKALACIJA ZAHTJEVA <EskalacijaZahtjeva data={this.state.data} />
                     }
 
-                    <EskalacijaIncidenta data={this.state.data}/>
-
+                    <br/>
                     {
                         //PORUKE
                     }
 
-                    <Poruke Id={this.state.id}/>
-
+                    <Poruke Id={this.state.id} />
 
                 </div>
             </div>
         );
-
     }
-
 }
 
-export default Incident;
+export default Zahtjev;

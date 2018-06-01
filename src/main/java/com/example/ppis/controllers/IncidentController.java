@@ -172,11 +172,21 @@ public class IncidentController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
+
+	@RequestMapping(value="/adminUnassigned", method=RequestMethod.GET)
+	public ResponseEntity adminUnassigned()	{
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(incidentService.adminUnassigned()) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
 	
-	@RequestMapping(value="resolverPick", method=RequestMethod.PUT)
+	@RequestMapping(value="/resolverPick", method=RequestMethod.PUT)
 	public ResponseEntity resolverPick(@RequestBody final IncidentStatusUpdate info)	{
 		try {
 			String response = "" ; 
+			System.out.println(info.username);
 			response = this.incidentService.resolverPick(info.username, info.incidentId) ;
 			
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
@@ -185,7 +195,7 @@ public class IncidentController {
 		}
 	}
 	
-	@RequestMapping(value="unassigned_byDepartments/{username}", method=RequestMethod.GET)
+	@RequestMapping(value="/unassigned_byDepartments/{username}", method=RequestMethod.GET)
 	public ResponseEntity getUnassignedByDepartments(@PathVariable("username") String username)	{
 		try {
 			List<Incident> incidents = this.incidentService.getAllUnassignedByDepartments(username) ;
@@ -197,7 +207,7 @@ public class IncidentController {
 		}
 	}
 	
-	@RequestMapping(value="unassigned_byResolvers/{username}", method=RequestMethod.GET) 
+	@RequestMapping(value="/unassigned_byResolvers/{username}", method=RequestMethod.GET) 
 	public ResponseEntity getUnassignedByResolvers(@PathVariable("username") String username)	{
 		try {
 			List<Incident> incidents = this.incidentService.getUnassignedByResolvers(username) ; 
@@ -212,7 +222,33 @@ public class IncidentController {
 	private static class IncidentStatusUpdate {
 		String username ; 
 		long incidentId ; 
-		boolean resolved ; 
+		boolean resolved ;
+		
+		public IncidentStatusUpdate (){
+
+		}
+
+		/**
+		 * @param incidentId the incidentId to set
+		 */
+		public void setIncidentId(long incidentId) {
+			this.incidentId = incidentId;
+		}
+
+		/**
+		 * @param resolved the resolved to set
+		 */
+		public void setResolved(boolean resolved) {
+			this.resolved = resolved;
+		}
+
+		/**
+		 * @param username the username to set
+		 */
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		
 	}
 
 }

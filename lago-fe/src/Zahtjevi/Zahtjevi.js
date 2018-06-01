@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Switch, Route} from 'react-router-dom';
 
 import ListaZahtjeva from './ListaZahtjeva';
-import Zahtjev from './Zahtjev';
+import Zahtjev from './Zahtjev2';
 import '../Style/UserProfile.css';
 
 class Zahtjevi extends Component{

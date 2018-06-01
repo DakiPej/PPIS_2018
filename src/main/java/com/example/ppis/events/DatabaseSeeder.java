@@ -205,7 +205,7 @@ public class DatabaseSeeder {
 			
 			ut = new UserType();
 			ut.setTypeName("Administrator");
-			ut.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			ut.setDepartment(this.departmentDao.getDepartmentByName("Administracija"));
 			userTypeDAO.create(ut);
 			
 			ut = new UserType();
@@ -469,6 +469,23 @@ public class DatabaseSeeder {
 			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
 			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
 			i.setResolverUser(registeredUserDAO.findUserByUsername("odjel"));
+			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
+			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
+			i.setContactInfo("korisnik.k@email.com");
+			i.setTitle("Incidet koji je eskaliran");
+			i.setDescription("Opis incidenta 1");
+			i.setUrgency(5);
+			i.setCreatedDate(new Date());
+			i.setResolved(false);
+			i.setClosed(false);
+			i.setEscalated(true);
+			i.setServices(servicesDAO.getServiceByName("Viber bankarstvo"));
+			incidentDAO.create(i);
+
+			i = new Incident();
+			i.setRegisteredUser(registeredUserDAO.findUserByUsername("korisnik"));
+			i.setAdmin(registeredUserDAO.findUserByUsername("admin"));
+			i.setResolverUser(null);
 			i.setDepartment(this.departmentDao.getDepartmentByName("Odjel1"));
 			i.setContactMethod(contactMethodDao.getContactMethodByName("email"));
 			i.setContactInfo("korisnik.k@email.com");

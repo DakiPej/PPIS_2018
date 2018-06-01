@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, FormGroup, ControlLabel, PageHeader, Row, Panel, Col, FormControl, Button, PanelGroup, ListGroup, ListGroupItem, Glyphicon } from 'react-bootstrap';
 import {Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {
-    PATH_BASE, PATH_INCIDENTS, PATH_ONE_INCIDENT, PATH_ESCALATION_ADMIN, PATH_ASSIGN_ADMIN,
-    PATH_RESOLVE_INCIDENT, PATH_ASSIGN_RESOLVER, PATH_ESCALATION_RESOLVER,
-    PATH_CLOSE_INCIDENT, PATH_INCIDENT_MESSAGE, PATH_GET_INCIDENT_MESSAGE, PATH_SEND_INCIDENT_MESSAGE
-} from '../globals';
 import axios from 'axios';
 
-
-class EskalacijaIncidenta extends Component {
+class EskalacijaZahtjeva extends Component{
     
     state = {
         data: this.props.data,
@@ -26,10 +20,10 @@ class EskalacijaIncidenta extends Component {
         event.preventDefault();
 
 
-        axios.post(PATH_BASE + PATH_INCIDENTS + PATH_ESCALATION_ADMIN, {
-            escalation: true,
-            id: this.props.data.id,
-            departmentName: this.state.departmentName
+        axios.post("http://localhost:8080/requests/unassignedRequests_ByDepartments", {
+            requestId: this.props.data.id,
+            departmentName: this.state.departmentName,
+            priority: null
         }
         )
             .then(this.confirmSuccess.bind(this))
@@ -39,13 +33,13 @@ class EskalacijaIncidenta extends Component {
     confirmSuccess = (response) => {
         this.setState({ show: false });
         alert("Eskalacija je prihvaćena");
-        window.location = '/dashboard/incidenti/' + this.props.data.id;
+        window.location = '/dashboard/zahtjevi/' + this.props.data.id;
     }
 
     promjenaStatusa = (event) => {
         event.preventDefault();
-        axios.post(PATH_BASE + PATH_INCIDENTS + PATH_RESOLVE_INCIDENT, {
-            id: this.props.data.id,
+        axios.put("http://localhost:8080/requests/close", {
+            requestId: this.props.data.id,
             username: sessionStorage.getItem("username")
         }
         )
@@ -54,14 +48,14 @@ class EskalacijaIncidenta extends Component {
     }
 
     resolveSucess = (response) => {
-        alert("Incident je riješen");
-        window.location = '/dashboard/incidenti/' + this.props.data.id;
+        alert("Zahtjev je riješen");
+        window.location = '/dashboard/zahtjevi/' + this.props.data.id;
     }
 
     suggestEscalation = (event) => {
         event.preventDefault();
-        axios.post(PATH_BASE + PATH_INCIDENTS + PATH_ESCALATION_RESOLVER, {
-            id: this.props.data.id,
+        axios.put("http://localhost:8080/requests/escalatedRequests", {
+            requestId: this.props.data.id,
             username: sessionStorage.getItem("username")
         }
         )
@@ -71,16 +65,16 @@ class EskalacijaIncidenta extends Component {
     }
 
     escalationSuccess = (response) => {
-        alert("Incident je eskaliran");
-        window.location = '/dashboard/incidenti/' + this.props.data.id;
+        alert("Zahtjev je eskaliran");
+        window.location = '/dashboard/zahtjevi/' + this.props.data.id;
     }
 
     ponistiEskalaciju = (event) => {
         event.preventDefault();
 
-        axios.post(PATH_BASE + PATH_INCIDENTS + PATH_ESCALATION_ADMIN, {
-            escalation: false,
-            id: this.props.data.id
+        axios.put("http://localhost:8080/requests/cancelEscalation", {
+            requestId: this.props.data.id,
+            username: sessionStorage.getItem("username")
         }
         )
             .then(this.cancelSuccess.bind(this))
@@ -195,4 +189,4 @@ class EskalacijaIncidenta extends Component {
     }
 }
 
-export default EskalacijaIncidenta;
+export default EskalacijaZahtjeva;

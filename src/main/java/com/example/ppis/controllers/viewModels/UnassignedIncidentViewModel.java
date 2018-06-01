@@ -35,7 +35,11 @@ public class UnassignedIncidentViewModel{
         this.title = title;
         this.creator = creator;
         this.priority = priority;
-        this.createdDate = df.format(createdDate);
+
+        if (createdDate != null) this.createdDate = df.format(createdDate);
+        else this.createdDate = "";
+        //this.createdDate =  df.format(createdDate);
+        
         this.serviceName = serviceName;
         this.departmentName = departmentName;        
     }

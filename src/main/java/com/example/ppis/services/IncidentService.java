@@ -235,8 +235,14 @@ public class IncidentService {
 				}
 				return (List<T>) userIncidents;
 			} else if (registeredUser.getUserType().getTypeName().equals("Administrator") == true) {
-				List<AdminIncidentsViewModel> userIncidents = new ArrayList<AdminIncidentsViewModel>();
 				List<Incident> incidents = incidentDao.getIncidentsByAdmin(registeredUser);
+				
+				List<AdminIncidentsViewModel> userIncidents = new ArrayList<AdminIncidentsViewModel>();
+/*
+				AdminIncidentsViewModel adminModels = new AdminIncidentsViewModel();
+				List<AdminIncidentsViewModel> userIncidents = adminModels.converToVMs(incidents);
+*/
+
 				for (Incident i : incidents) {
 					if (getUserIncidentsForm.getFilter().equals("svi") || getUserIncidentsForm.getFilter()
 							.equals(getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()))) {
@@ -248,14 +254,24 @@ public class IncidentService {
 						if (i.getDepartment() != null)
 							departmentName = i.getDepartment().getDepartmentName();
 
-						AdminIncidentsViewModel adminIncidentsViewModel = new AdminIncidentsViewModel(i.getId(),
-								i.getTitle(), i.getRegisteredUser().getUsername(), resolverUsername, i.getUrgency(),
-								i.getPriority(), i.getCreatedDate(), null, i.getClosedDate(),
-								i.getServices().getServiceName(),
-								getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()), departmentName,
-								i.getEscalated());
+						AdminIncidentsViewModel adminIncidentsViewModel = new AdminIncidentsViewModel(
+							i.getId(),
+							i.getTitle(), 
+							i.getRegisteredUser().getUsername(), 
+							resolverUsername, 
+							i.getUrgency(),
+							i.getPriority(), 
+							i.getCreatedDate(), 
+							null, 
+							i.getClosedDate(),
+							i.getServices().getServiceName(),
+							getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()), 
+							departmentName,
+							i.getEscalated());
+								
+								//AdminIncidentsViewModel adminIncidentsViewModel = new AdminIncidentsViewModel();
 						userIncidents.add(adminIncidentsViewModel);
-					}
+							}
 				}
 
 				return (List<T>) userIncidents;
@@ -490,13 +506,15 @@ public class IncidentService {
 			RegisteredUser user = this.registeredUserDao.findUserByUsername(username) ; 
 			Incident incident = this.incidentDao.getIncidentById(incidentId) ; 
 			
-			if(!user.getUserType().equals("Resolver"))
-				throw new IllegalArgumentException("The user can't pick this incident.") ; 
-			if(!this.registeredUserDao.getUserDepartment(
-					user.getUsername(), user.getUserType())
-					.equals(incident.getDepartment()))
-				throw new IllegalArgumentException("The user does not belong to this department.") ; 
+			//if(!user.getUserType().equals("Resolver"))
+			//	throw new IllegalArgumentException("The user can't pick this incident.") ; 
 			
+			
+			//if(!this.registeredUserDao.getUserDepartment(
+			//		user.getUsername(), user.getUserType())
+			//		.equals(incident.getDepartment()))
+			//	throw new IllegalArgumentException("The user does not belong to this department.") ; 
+				System.out.println("TU SAM");
 			incident.setResolverUser(user);
 				
 			this.incidentDao.create(incident) ; 
@@ -507,7 +525,17 @@ public class IncidentService {
 			throw e ; 
 		}
 	}
-	
+
+	public List<Incident> adminUnassigned(){
+		try {
+			List<Incident> incidents = incidentDao.getAllByAdminIsNull();
+			return incidents;
+		} catch (Exception e) {
+			throw e;
+			//TODO: handle exception
+		
+		}
+	}
 	public List<Incident> getAllUnassignedByDepartments(String username)	{
 		try {
 			if(username == null || username.length() == 0 || !this.registeredUserDao.existsByUsername(username)) 

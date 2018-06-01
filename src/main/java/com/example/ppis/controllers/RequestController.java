@@ -1,5 +1,6 @@
 package com.example.ppis.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class RequestController {
 	private static class AssignRequestInfo {
 		public long requestId ; 
 		public String departmentName ; 
-		public Integer priority ; 
+		//public Integer priority ; 
 		
 	}
 	private static class RequestInformation	{
@@ -100,10 +101,23 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}	
+	
 	@RequestMapping(value="/{username}/{requestId}", method=RequestMethod.GET)
+	public ResponseEntity getOneRequest(@PathVariable("username") String username
+			, @PathVariable("requestId") long requestId)	{
+		try {
+
+			Request request = this.requestService.getRequest(requestId, username) ; 
+			Employee_RequestVM vm = this.e_vmConverter.convert(request) ; 
+			return ResponseEntity.status(HttpStatus.OK).body(vm) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage()) ; 
+		}
+	}
+	/*@RequestMapping(value="/{username}/{requestId}", method=RequestMethod.GET)
 	public ResponseEntity getRequests(
 			@PathVariable("username") String username
-			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info*/)	{
+			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info)	{
 		try {
 			if(requestId == -1)	{
 				List<Request> requests ;
@@ -127,24 +141,12 @@ public class RequestController {
 				System.out.println("e sacu ti ga poslat");
 				return ResponseEntity.status(HttpStatus.OK).body(request) ; 
 			}
-			/*
-=======
-	@RequestMapping(value="/getAll", method=RequestMethod.POST)
-	public ResponseEntity getRequests(@RequestBody final UserInformation info)	{
-		try {
-			
-			List<Request> requests; 
->>>>>>> b6570c2df298d54dde0113474e18185eb64d9436
-			if(this.registeredUserDAO.findUserByUsername(info.username).getUserType().equals("Korisnik"))	
-				requests = this.requestService.getRequestsByRegisteredUser(info.username) ; 
-			else requests = this.requestService.getRequestsByResolver(info.username) ; 
-			*/
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
-
+			*/
 	@RequestMapping(value="/requestStatus/{username}/{requestId}/{workingOn}", method=RequestMethod.GET)
 	public ResponseEntity getRequestStatuses(
 			@PathVariable("username") String username
@@ -191,17 +193,17 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
-	@RequestMapping(value="unassignedRequests_ByDepartments", method=RequestMethod.POST)
+	@RequestMapping(value="/unassignedRequests_ByDepartments", method=RequestMethod.PUT)
 	public ResponseEntity assignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
 			String response = this.requestService.assignRequestToDepartment(assignRequestInfo.requestId
-					, assignRequestInfo.departmentName
-					, assignRequestInfo.priority) ;
+					, assignRequestInfo.departmentName) ;
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
+	//PREPRAVITI DA DOBAVLJA SVE ONE ZA DEPARTMENT !!!!	
 	@RequestMapping(value="/unassignedRequests_ByDepartments", method=RequestMethod.GET)
 	public ResponseEntity getAllUnassignedRequestsByDepartments(/*@RequestBody final UserInformation userInfo*/)	{
 		try { 
@@ -215,12 +217,11 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); 
 		}
 	}
-	@RequestMapping(value="unassignedRequests_ByDepartments", method=RequestMethod.PUT)
-	public ResponseEntity reasignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
+	@RequestMapping(value="unassignedRequests_ByDepartments", method=RequestMethod.POST)
+	public ResponseEntity reassignRequestToDepartment(@RequestBody final AssignRequestInfo assignRequestInfo)	{
 		try {
 			String response = this.requestService.reassignRequest(assignRequestInfo.requestId
-					, assignRequestInfo.departmentName
-					, assignRequestInfo.priority) ;
+					, assignRequestInfo.departmentName) ;
 			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
@@ -238,8 +239,13 @@ public class RequestController {
 		}
 	}
 	
+	/*@RequestMapping(value="/cancelEscalation", method=RequestMethod.PUT)
+	public ResponseEntity cancelEscalation(@RequestBody final RequestInformation info)	{
+		
+	}*/
 	
-	@RequestMapping(value="unassignedRequests_ToResolvers", method=RequestMethod.POST)
+	
+	@RequestMapping(value="/unassignedRequests_ToResolvers", method=RequestMethod.PUT)
 	public ResponseEntity assignRequestToResolver(@RequestBody final RequestInformation info)	{
 		try {
 			String response = this.requestService.assignRequestToResolver(info.requestId
@@ -355,6 +361,35 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.OK).body(logs) ; 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	
+	@RequestMapping(value="/unassigned/{username}", method=RequestMethod.GET)
+	public ResponseEntity getAllUnass (@PathVariable("username") String username)	{
+		try {
+			List<Request> requests = new ArrayList<>() ; 
+			requests = this.requestService.getAllUnassigned(username) ; 
+			
+			List<Employee_RequestVM> vms = e_vmConverter.convertToVM(requests) ;
+			return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	@RequestMapping(value="/{username}", method=RequestMethod.GET)
+	public ResponseEntity getAll(@PathVariable("username") String username)	{
+		try {
+			List<Request> requests = new ArrayList<>() ;
+			requests = this.requestService.getAll(username) ; 
+			
+			List<Employee_RequestVM> vms = e_vmConverter.convertToVM(requests) ; 
+			return ResponseEntity.status(HttpStatus.OK).body(vms) ; 
+			
+			
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage()) ; 
 		}
 	}
 }

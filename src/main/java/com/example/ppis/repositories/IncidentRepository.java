@@ -41,5 +41,6 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 	public Incident findIncidentById(Long id);
 
 	public List<Incident> findAllByDepartmentAndResolverUserIsNull(Department department);
+	public List<Incident> findAllByAdminIsNull();
 	
 }
