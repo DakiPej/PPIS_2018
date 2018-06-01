@@ -123,16 +123,9 @@ class IncidentForm extends Component{
                         <ControlLabel> Odaberi hitnost </ControlLabel>
                         <FormControl componentClass="select" name="hitnost"  onChange={this.handleChange}>
                             <option value="" selected disabled>Hitnost</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
+                            <option value="1">Niska hitnost</option>
+                            <option value="2">Srednja hitnost</option>
+                            <option value="3">Visoka hitnost</option>
                         </FormControl>
                     </Col>
                     </FormGroup>

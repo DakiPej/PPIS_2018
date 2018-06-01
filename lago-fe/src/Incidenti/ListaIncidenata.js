@@ -100,18 +100,28 @@ class ListaIncidenata extends Component{
             onSortChange: this.onSortChange,
             onRowClick: this.onRowClick
         };
-
         const pType ={
+<<<<<<< HEAD
             "Nizak":"Nizak",
            "Srednji":"Srednji",
             "Visok":"Visok"
+=======
+            1:"Nizak prioritet",
+            2:"Srednji prioritet",
+            3:"Visoki prioritet",
+>>>>>>> 36da2d92699c1391d10b46c272d55f588f79ccae
         };
+        const hType={
+          1:"Niska hitnost",
+          2:"Srednja hitnost",
+          3:"Visoka hitnost",
+        }
 
         const sType = {
-            'nedodijeljen':'nedodijeljen',
-            'u obradi':'u obradi',
-            'rijesen':'rijesen',
-            'zatvoren':'zatvoren'
+            'nedodijeljen':'Nedodijeljen',
+            'u obradi':'U obradi',
+            'rijesen':'Rijesen',
+            'zatvoren':'Zatvoren'
         }
         const eType = {
             'true':'Da',
@@ -136,8 +146,8 @@ class ListaIncidenata extends Component{
                         >Prioritet
                         </TableHeaderColumn>
                         <TableHeaderColumn  columnTitle={ true }  dataField='urgency' dataSort
-                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
-                        filter={ { type: 'SelectFilter', options: pType }}
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ hType }
+                        filter={ { type: 'SelectFilter', options: hType }}
                         >Hitnost
                         </TableHeaderColumn>
                         <TableHeaderColumn  columnTitle={ true }  dataField='createdDate' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum prijave</TableHeaderColumn>
@@ -160,8 +170,8 @@ class ListaIncidenata extends Component{
                         <TableHeaderColumn  columnTitle={ true } isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
                         <TableHeaderColumn  columnTitle={ true }  dataField='title' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Naslov</TableHeaderColumn>
                         <TableHeaderColumn  columnTitle={ true }  dataField='urgency' dataSort
-                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ pType }
-                        filter={ { type: 'SelectFilter', options: pType }}
+                        filterFormatted dataFormat={ enumFormatter } formatExtraData={ hType }
+                        filter={ { type: 'SelectFilter', options: hType }}
                         >Hitnost
                         </TableHeaderColumn>
                         <TableHeaderColumn  columnTitle={ true }  dataField='createdDate' dataSort filter={ { type: 'TextFilter', delay: 500 } }>Datum kreiranja</TableHeaderColumn>

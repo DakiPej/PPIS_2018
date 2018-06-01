@@ -47,7 +47,10 @@ class DodjelaIncidenta extends Component {
                 incidentId: this.props.data.id,
                 resolved: false
             })
-            .then(() => { alert("Uspjesno ste preuzeli incident!"); window.location = "/dashboard"; })
+            .then(() => {
+                alert("Uspjesno ste preuzeli incident!");
+                window.location = "/dashboard";
+            })
             .catch(this.handleError(this));
     }
 

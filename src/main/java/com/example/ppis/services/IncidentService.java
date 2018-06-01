@@ -204,18 +204,18 @@ public class IncidentService {
 		}
 	}
 
-	private String getIncidentStatus(RegisteredUser resolverUser, Boolean resolved, Boolean closed) {
-		String status = "svi";
-		if (closed == true)
-			status = "zatvoren";
-		else if (resolved == true)
-			status = "rijesen";
-		else if (resolverUser != null)
-			status = "u obradi";
-		else if (resolverUser == null)
-			status = "nedodijeljen";
-		return status;
-	}
+		private String getIncidentStatus(RegisteredUser resolverUser, Boolean resolved, Boolean closed) {
+			String status = "svi";
+			if (closed == true)
+				status = "zatvoren";
+			else if (resolved == true)
+				status = "rijesen";
+			else if (resolverUser != null)
+				status = "u obradi";
+			else if (resolverUser == null)
+				status = "nedodijeljen";
+			return status;
+		}
 
 	public <T> List<T> getUserIncidents(GetUserIncidentsForm getUserIncidentsForm) throws ServletException {
 		try {
@@ -503,6 +503,38 @@ public class IncidentService {
 			
 			return "The incident was successfully picked by the resolver" ;
 			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+
+	public List<Incident> adminUnassigned(){
+		try {
+			List<Incident> incidents = incidentDao.getAllByAdminIsNull();
+			return incidents;
+		} catch (Exception e) {
+			throw e;
+			//TODO: handle exception
+		
+		}
+	}
+	public List<Incident> getAllUnassignedByDepartments(String username)	{
+		try {
+			if(username == null || username.length() == 0 || !this.registeredUserDao.existsByUsername(username)) 
+				throw new IllegalArgumentException("The user is not specified or does not exist.") ;
+			RegisteredUser admin = this.registeredUserDao.findUserByUsername(username) ;
+			if(!admin.getUserType().getTypeName().equals("Administrator"))
+				throw new IllegalArgumentException("The user has not the permission to view the items.") ; 
+			return this.incidentDao.getIncidentsByDepartment(null) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public List<Incident> getUnassignedByResolvers(String username)	{
+		try {
+			Department department = this.registeredUserDao.getUserDepartment(username, this.registeredUserDao.findUserByUsername(username).getUserType()) ; 
+			return this.incidentDao.getAllByDepartmentNameAndResolverUserIsNull(department) ; 
 		} catch (Exception e) {
 			throw e ; 
 		}
