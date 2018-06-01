@@ -262,4 +262,16 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ;
 	}
+
+	public List<Incident> getAllByAdminIsNull(){
+		List<Incident> incidents ; 
+		
+		try {
+			incidents = this.repo.findAllByAdminIsNull(); 
+		} catch (Exception e) {
+			throw e ; 
+		}
+		
+		return incidents ;
+	}
 }

@@ -507,4 +507,14 @@ public class IncidentService {
 			throw e ; 
 		}
 	}
+
+	public List<Incident> adminUnassigned(){
+		try {
+			List<Incident> incidents = incidentDao.getAllByAdminIsNull();
+			return incidents;
+		} catch (Exception e) {
+			throw e;
+			//TODO: handle exception
+		}
+	}
 }

@@ -160,6 +160,15 @@ public class IncidentController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
+
+	@RequestMapping(value="/adminUnassigned", method=RequestMethod.GET)
+	public ResponseEntity adminUnassigned()	{
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(incidentService.adminUnassigned()) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
 	
 	@RequestMapping(value="resolverPick", method=RequestMethod.PUT)
 	public ResponseEntity resolverPick(@RequestBody final IncidentStatusUpdate info)	{
