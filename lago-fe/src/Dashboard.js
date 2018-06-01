@@ -9,6 +9,7 @@ import Zahtjevi from './Zahtjevi/Zahtjevi';
 import Incidenti from './Incidenti/Incidenti';
 import IncidentForm from './Incidenti/IncidentForm';
 import ZahtjevForm from './Zahtjevi/ZahtjevForm';
+import Izvjestaji from './Izvjestaji';
 
 
 
@@ -70,6 +71,11 @@ class Dashboard extends Component{
                     <span className="nav-title">Incidenti</span>
                   </SidebarItem>
                 </NavLink>,
+                <NavLink className="link" to="/dashboard/izvjestaji" activeClassName="active">
+                  <SidebarItem>
+                    <span className="nav-title">Izvještaji</span>
+                  </SidebarItem>
+                </NavLink>
               ];
               break;
             case 'Odjel':
@@ -127,6 +133,7 @@ class Dashboard extends Component{
                     <Route path="/dashboard/incidenti" component={Incidenti}/>
                     <Route path="/dashboard/nincidenti" component={NIncidenti}/>
                     <Route path="/dashboard/newIncident" component={IncidentForm}/>
+                    <Route path="/dashboard/izvjestaji" component={Izvjestaji}/>
                 </Switch>
                 </div>
                 </div>
