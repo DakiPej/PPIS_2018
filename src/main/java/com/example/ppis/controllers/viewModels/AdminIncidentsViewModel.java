@@ -47,9 +47,19 @@ public class AdminIncidentsViewModel{
         this.id = id;
         this.title = title;
         this.urgency = urgency;
-        this.createdDate = df.format(createdDate);
-        this.lastResolveDate = null; //df.format(lastResolveDate);
-        this.closedDate = df.format(closedDate);
+
+        if (createdDate != null) this.createdDate = df.format(createdDate);
+        else this.createdDate = "";
+        //this.createdDate =  df.format(createdDate);
+        
+        if (lastResolveDate != null) this.lastResolveDate = df.format(lastResolveDate);
+        else this.closedDate = "";
+        //this.lastResolveDate = null; //df.format(lastResolveDate);
+        
+        if (closedDate != null) this.closedDate = df.format(closedDate);
+        else this.closedDate = "";
+        //this.closedDate = df.format(lastResolveDate);
+
         this.serviceName = serviceName;
         this.status = status;
         this.creatorUsername = creatorUsername;

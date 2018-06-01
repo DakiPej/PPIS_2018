@@ -32,7 +32,7 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		try {
 			incidents = this.repo.findAllByAdmin(admin) ; 
 		} catch (Exception e) {
-			throw e ; 
+			throw e; 
 		}
 		
 		return incidents ; 
