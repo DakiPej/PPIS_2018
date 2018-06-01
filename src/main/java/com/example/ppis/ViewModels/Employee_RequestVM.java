@@ -57,7 +57,7 @@ public class Employee_RequestVM {
 		
 		if(request.getResolverUser() == null)	{
 			status = "nedodijeljen" ; 
-			resolver = "The request has not been picked by any resolver yet." ; 
+			resolver = "" ; 
 		}
 		else	{
 			status = "u obradi" ; 
@@ -71,7 +71,7 @@ public class Employee_RequestVM {
 		
 		if(request.getDepartment() != null)
 			departmentName = request.getDepartment().getDepartmentName() ; 
-		else departmentName = "Nije dodjeljen" ; 
+		else departmentName = "" ; 
 		
 		Employee_RequestVM vm = new Employee_RequestVM(
 										request.getId()
@@ -109,7 +109,7 @@ public class Employee_RequestVM {
 
 			if (requests.get(i).getResolverUser() == null) {
 				status = "nedodijeljen";
-				resolver = "The request has not been picked by any resolver yet.";
+				resolver = "";
 			} else {
 				status = "u obradi";
 				resolver = requests.get(i).getResolverUser().getUsername();
@@ -126,7 +126,7 @@ public class Employee_RequestVM {
 				String departmentName = "" ;
 			if(requests.get(i).getDepartment() != null)	
 				departmentName = requests.get(i).getDepartment().getDepartmentName() ;
-			else departmentName = "Nije dodjeljen." ;
+			else departmentName = "" ;
 			Employee_RequestVM element = new Employee_RequestVM(requests.get(i).getId(),
 					requests.get(i).getRegisteredUser().getUsername(), resolver
 					// , admin
