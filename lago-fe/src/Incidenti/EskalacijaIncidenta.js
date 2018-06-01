@@ -168,7 +168,7 @@ class EskalacijaIncidenta extends Component {
                                 </Col> : null}
                         </Row>
                         <Row>
-                            {this.props.data.escalation === false ? <Col md={6} xsOffset={3}>
+                            {this.props.data.escalation === false  && this.props.data.status !== "nedodijeljen" ? <Col md={6} xsOffset={3}>
                                 <Button className="btn-block btn-lg" bsStyle="danger" bsSize="large"
                                     onClick={() => this.setState({ show: true })} >
                                     Predloži eskalaciju
@@ -178,7 +178,7 @@ class EskalacijaIncidenta extends Component {
                         </Row>
                         <br />
                     </Panel> : null}
-                {role === 'Odjel' && this.props.data.escalation === false ? <div>
+                {role === 'Odjel' && this.props.data.escalation === false && this.props.data.status !== "nedodijeljen" ? <div>
                     <Modal
                         isOpen={this.state.show}
                         toggle={this.toggle}>

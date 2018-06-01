@@ -4,6 +4,7 @@ import { Collapse } from 'reactstrap';
 import axios from 'axios';
 import DodjelaIncidenta from './DodjelaIncidenta';
 import EskalacijaIncidenta from './EskalacijaIncidenta';
+import Poruke from './Poruke';
 
 class Incident extends Component {
 
@@ -114,6 +115,11 @@ class Incident extends Component {
 
                     <EskalacijaIncidenta data={this.state.data}/>
 
+                    {
+                        //PORUKE
+                    }
+
+                    <Poruke Id={this.state.id}/>
 
 
                 </div>
