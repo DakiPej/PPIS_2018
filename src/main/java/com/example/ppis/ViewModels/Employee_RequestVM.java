@@ -48,6 +48,49 @@ public class Employee_RequestVM {
 
 	}
 
+	public Employee_RequestVM convert(Request request)	{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		
+		String status ; 
+		String closedDate ; 
+		String resolver ; 
+		
+		if(request.getResolverUser() == null)	{
+			status = "nedodijeljen" ; 
+			resolver = "The request has not been picked by any resolver yet." ; 
+		}
+		else	{
+			status = "u obradi" ; 
+			resolver = request.getResolverUser().getUsername() ; 
+		}
+		if(request.getClosed()) status = "zatvoren" ; 
+		if(request.getClosedDate() != null) closedDate = df.format(request.getClosedDate()) ; 
+		else closedDate = "Not closed" ; 
+		
+		String departmentName = "" ; 
+		
+		if(request.getDepartment() != null)
+			departmentName = request.getDepartment().getDepartmentName() ; 
+		else departmentName = "Nije dodjeljen" ; 
+		
+		Employee_RequestVM vm = new Employee_RequestVM(
+										request.getId()
+										, request.getRegisteredUser().getUsername()
+										, resolver
+										, request.getTitle()
+										, request.getDescription()
+										, request.getUrgency()
+										, request.getContactMethod().getContactMethodName()
+										, request.getContactInfo()
+										, status
+										, df.format(request.getCreatedDate())
+										, closedDate
+										, departmentName
+									) ; 
+		
+		return vm ; 
+		
+	}
 	public List<Employee_RequestVM> convertToVM(List<Request> requests) {
 
 		List<Employee_RequestVM> requestVMs = new ArrayList<Employee_RequestVM>();

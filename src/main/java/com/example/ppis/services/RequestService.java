@@ -580,8 +580,8 @@ public class RequestService {
 	public Request getRequest(long requestId, String username) {
 		try {
 			Request request;
-			if (requestId < 0 || this.requestDao.existsById(requestId) || username == null || username.length() == 0
-					|| this.registeredUserDao.existsByUsername(username))
+			if (requestId < 0 || !this.requestDao.existsById(requestId) || username == null || username.length() == 0
+					|| !this.registeredUserDao.existsByUsername(username))
 				throw new IllegalArgumentException(
 						"The request id is either a negative number or the request does not exist or the user is unspecified or the user does not exist.");
 

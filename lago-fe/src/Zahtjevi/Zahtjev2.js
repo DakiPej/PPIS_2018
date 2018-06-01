@@ -19,20 +19,23 @@ class Zahtjev extends Component {
     }
 
     getZahtjevi= () => {
-        console.log("htttp://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id);
-        axios.get("htttp://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id)
-            .then(this.handleSuccessZahtjevi(this))
-            .catch(this.handleError(this));
+        console.log("POZIVAM METODU SA SLJEDECIM PARAMETRIMA .... USERNAME = " + sessionStorage.getItem("username") + "   .....  ID JE = " + this.props.match.params.id) ;
+        console.log("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id);
+        axios.get("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id)
+            .then(this.handleSuccessZahtjevi)
+            .catch(this.handleError);
     }
 
     handleSuccessZahtjevi = (response) => {
-
+        console.log("USPJELO....") ;
+        console.log(response) ;  
         this.setState({
             data: response.data
         });
     }
 
     handleError = (error) => {
+        console.log("ZAHTJEV NE RADI.................  NIJE USPJELO....") ; 
         console.log(error);
     }
 

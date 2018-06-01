@@ -101,10 +101,24 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}	
+	
 	@RequestMapping(value="/{username}/{requestId}", method=RequestMethod.GET)
+	public ResponseEntity getOneRequest(@PathVariable("username") String username
+			, @PathVariable("requestId") long requestId)	{
+		try {
+
+			Request request = this.requestService.getRequest(requestId, username) ; 
+			
+			Employee_RequestVM vm = this.e_vmConverter.convert(request) ; 
+			return ResponseEntity.status(HttpStatus.OK).body(vm) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage()) ; 
+		}
+	}
+	/*@RequestMapping(value="/{username}/{requestId}", method=RequestMethod.GET)
 	public ResponseEntity getRequests(
 			@PathVariable("username") String username
-			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info*/)	{
+			, @PathVariable("requestId") Long requestId/*@RequestBody final RequestInformation info)	{
 		try {
 			if(requestId == -1)	{
 				List<Request> requests ;
@@ -133,7 +147,7 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
 		}
 	}
-
+			*/
 	@RequestMapping(value="/requestStatus/{username}/{requestId}/{workingOn}", method=RequestMethod.GET)
 	public ResponseEntity getRequestStatuses(
 			@PathVariable("username") String username
