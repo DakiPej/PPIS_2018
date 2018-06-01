@@ -89,7 +89,7 @@ class DodjelaIncidenta extends Component {
                         </Row>
                         <Row>
                             <Col md={12} style={{ textAlign: "right" }}>
-                                <Button type="submit" bsStyle="primary" className="pull-right" bsSize="lg" onClick={this.assignSuccess}>Dodijeli</Button>
+                                <Button type="submit" bsStyle="primary" className="btn-block btn-lg" bsSize="lg" onClick={this.assignSuccess}>Dodijeli</Button>
                             </Col>
                         </Row>
                     </FormGroup>
