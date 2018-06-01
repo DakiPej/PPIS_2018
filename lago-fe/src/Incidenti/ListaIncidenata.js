@@ -101,9 +101,9 @@ class ListaIncidenata extends Component{
             onRowClick: this.onRowClick
         };
         const pType ={
-            "Nizak":"Nizak",
-           "Srednji":"Srednji",
-            "Visok":"Visok"
+            1:"Nizak",
+           2:"Srednji",
+            3:"Visok"
         };
         const hType={
           1:"Niska hitnost",
