@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
+import com.example.ppis.models.Incident;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 import com.example.ppis.repositories.RequestRepository;
@@ -230,6 +231,17 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		}
 		
 		return requests ; 
+	}
+	public Request getRequestById(Long id) {
+		Request request; 
+		
+		try {
+			request = this.repo.findRequestById(id); 
+		} catch (Exception e) {
+			throw e; 
+		}
+		
+		return request;
 	}
 	
 	public List<Request> getRequestsByResolverUserAndTitle(RegisteredUser resolverUser, String title)	{

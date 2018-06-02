@@ -11,6 +11,7 @@ class Zahtjev extends Component {
 
     state = {
         data: {},
+        id: this.props.match.params.id,
         openOpis: false
     }
 
@@ -27,7 +28,7 @@ class Zahtjev extends Component {
 
     handleSuccessZahtjevi = (response) => {
         console.log("USPJELO....") ;
-        console.log(response) ;  
+        console.log(response) ;
         this.setState({
             data: response.data
         });
