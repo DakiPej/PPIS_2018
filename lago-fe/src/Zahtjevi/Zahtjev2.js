@@ -5,15 +5,29 @@ import { Collapse } from 'reactstrap';
 import DodjelaZahtjeva from './DodjelaZahtjeva';
 import EskalacijaZahtjeva from './EskalacijaZahtjeva';
 import Poruke from './Poruke';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 class Zahtjev extends Component {
 
     state = {
         data: {},
         id: this.props.match.params.id,
-        openOpis: false
+        openOpis: true
     }
+    printDocument = () => {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({orientation: 'portrait'});
+            pdf.text(this.state.data.title,50,20);
+            pdf.addImage(imgData, 'JPEG', 30, 30);
+            // pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+          })
+        ;
+      }
    /* odbijZatvaranje=(event)=> {
             event.preventDefault();
             axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
@@ -52,7 +66,7 @@ class Zahtjev extends Component {
 
         closeSucess=(response)=> {
             alert("Zahtjev je zatvoren");
-            this.getZahtjevi() ; 
+            this.getZahtjevi() ;
         }
 
     componentDidMount(){
@@ -91,13 +105,15 @@ class Zahtjev extends Component {
 
         return (
             <div className="panel panel-primary ">
+
                 <div className="panel-heading d-flex w-100 justify-content-between">
                     <h1 className="panel-title">{this.state.data.title}</h1>
-                    <Button bsSize="large">
+                    <Button bsSize="large" onClick={this.printDocument}>
                         <Glyphicon glyph="download-alt" />
                     </Button>
                 </div>
                 <div className="panel-body">
+                  <div id="divToPrint">
 
                     {
                         //PODACI
@@ -133,6 +149,7 @@ class Zahtjev extends Component {
                             </Panel.Body>
                         </Collapse>
                     </Panel>
+                    </div>
                     {this.state.data.status === 'u obradi' && role === 'Korisnik' ?
                        <Panel bsStyle="info" id="collapsible-panel-example-2">
                        <br/>

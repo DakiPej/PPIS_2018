@@ -90,7 +90,8 @@ class ListaZahtjeva extends Component {
           .then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF({orientation: 'landscape'});
-            pdf.addImage(imgData, 'JPEG', 0, 0);
+            pdf.text("Lista zahtjeva",50,20);
+            pdf.addImage(imgData, 'JPEG', 30, 30);
             // pdf.output('dataurlnewwindow');
             pdf.save("download.pdf");
           })
@@ -123,7 +124,7 @@ class ListaZahtjeva extends Component {
         const sType = {
             'nedodijeljen': 'Nedodijeljen',
             'u obradi': 'U obradi',
-            'rijesen': 'Rijesen',
+            'not closed': 'Nije zatvoren',
             'zatvoren': 'Zatvoren'
         }
         const eType = {
@@ -206,7 +207,7 @@ class ListaZahtjeva extends Component {
         }
 
         return (
-            <div >
+            <div id= "divToPrint"s>
                 <Panel bsStyle="primary">
                     <Panel.Heading>
                         <div class="d-flex w-100 justify-content-between">
@@ -216,7 +217,7 @@ class ListaZahtjeva extends Component {
                             </Button>
                         </div>
                     </Panel.Heading>
-                    <div id="divToPrint">
+                    <div >
                     {table}
                     </div>
                 </Panel>

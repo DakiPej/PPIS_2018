@@ -59,7 +59,7 @@ class ListaIncidenata extends Component{
           sortOrder
         });
     }
-    
+
 
     getIncidenti(){
 
@@ -96,7 +96,8 @@ class ListaIncidenata extends Component{
           .then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF({orientation: 'landscape'});
-            pdf.addImage(imgData, 'JPEG', 0, 0);
+            pdf.text("Lista incidenata",50,20);
+            pdf.addImage(imgData, 'JPEG', 30, 30);
             // pdf.output('dataurlnewwindow');
             pdf.save("download.pdf");
           })
@@ -235,17 +236,17 @@ class ListaIncidenata extends Component{
         }
 
         return(
-            <div >
+            <div id="divToPrint">
                 <Panel bsStyle="primary">
                     <Panel.Heading>
                         <div class="d-flex w-100 justify-content-between">
-                            <Panel.Title componentClass="h2">Lista zahtjeva </Panel.Title>
+                            <Panel.Title componentClass="h2">Lista incidenata </Panel.Title>
                             <Button onClick={this.printDocument}>
                                 <Glyphicon glyph="download-alt" />
                             </Button>
                         </div>
                     </Panel.Heading>
-                    <div id="divToPrint">
+                    <div >
                     {table}
                     </div>
                 </Panel>
@@ -257,4 +258,3 @@ class ListaIncidenata extends Component{
 }
 
 export default ListaIncidenata;
-

@@ -10,13 +10,14 @@ import {
     PATH_RESOLVE_INCIDENT, PATH_ASSIGN_RESOLVER, PATH_ESCALATION_RESOLVER,
     PATH_CLOSE_INCIDENT, PATH_INCIDENT_MESSAGE, PATH_GET_INCIDENT_MESSAGE, PATH_SEND_INCIDENT_MESSAGE
 } from '../globals';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 class Incident extends Component {
 
     state = {
         id: this.props.match.params.id,
         data: {},
-        openOpis: false,
+        openOpis: true,
     }
 
     componentWillMount() {
@@ -85,21 +86,36 @@ class Incident extends Component {
             openOpis: !this.state.openOpis
         });
     }
+    printDocument = () => {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({orientation: 'portrait'});
+            pdf.text(this.state.data.title,50,20);
+            pdf.addImage(imgData, 'JPEG', 30, 30);
+            // pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+          })
+        ;
+      }
+
 
     render() {
 
         let role = sessionStorage.getItem("rola");
         console.log(this.state.data);
         return (
-            <div className="panel panel-primary ">
+            <div  className="panel panel-primary ">
+
                 <div className="panel-heading d-flex w-100 justify-content-between">
                     <h1 className="panel-title">{this.state.data.title}</h1>
-                    <Button bsSize="large">
+                    <Button bsSize="large" onClick={this.printDocument}>
                         <Glyphicon glyph="download-alt" />
                     </Button>
                 </div>
                 <div className="panel-body">
-
+                  <div id="divToPrint">
                     {
                         // GLAVNI DIO INFORMACIJA O INCIDENTU
                     }
@@ -139,6 +155,7 @@ class Incident extends Component {
                             </Panel.Body>
                         </Collapse>
                     </Panel>
+                    </div>
                       <br/>
                     {this.state.data.status === 'rijesen' && role === 'Korisnik' ?
                        <Panel bsStyle="info" id="collapsible-panel-example-2">
