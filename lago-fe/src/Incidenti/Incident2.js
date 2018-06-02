@@ -37,13 +37,7 @@ class Incident extends Component {
 
         closeRejectSucess=(response) =>{
             alert("Incident je ponovno otvoren");
-            this.setState(prevState => ({
-                data:
-                    {
-                        ...prevState.data,
-                        status: "u obradi"
-                    }
-            }));
+            this.getIncident();
         }
         prihvatiZatvaranje=(event)=> {
             event.preventDefault();
@@ -60,13 +54,7 @@ class Incident extends Component {
 
         closeSucess=(response)=> {
             alert("Incident je zatvoren");
-            this.setState(prevState => ({
-                data:
-                    {
-                        ...prevState.data,
-                        status: "zatvoren"
-                    }
-            }));
+            this.getIncident();
         }
     getIncident = () => {
         axios.post('http://localhost:8080/incident/getIncidentDetail',
@@ -77,7 +65,6 @@ class Incident extends Component {
             .then(this.handleSuccess.bind(this))
             .catch(this.handleError.bind(this));
     }
-    ``
     handleSuccess = (response) => {
         this.setState({
             data: response.data

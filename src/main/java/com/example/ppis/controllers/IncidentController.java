@@ -80,7 +80,7 @@ public class IncidentController {
 	@PostMapping(value="/closeIncident")
 	public ResponseEntity closeIncident(@RequestBody @Valid CloseIncidentForm closeIncidentForm){
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(true);
+			return ResponseEntity.status(HttpStatus.OK).body(this.incidentService.closeIncident(closeIncidentForm));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
@@ -134,6 +134,7 @@ public class IncidentController {
 	@PostMapping(value="/resolve")
 	public ResponseEntity resolve(@RequestBody IncidentResolverForm assignIncidentResolverForm){
 		try {
+			System.out.println("USAO U POST METODU....");
 			return ResponseEntity.status(HttpStatus.OK).body(incidentService.resolveIncident(assignIncidentResolverForm));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
@@ -152,6 +153,10 @@ public class IncidentController {
 	@RequestMapping(value="resolve", method=RequestMethod.PUT)
 	public ResponseEntity resolveInc(@RequestBody final IncidentStatusUpdate info)	{
 		try {
+			
+			System.out.println("USERNAME JE : " + info.username);
+			System.out.println("INCIDENT ID JE : " + info.incidentId);
+			System.out.println("STATUS JE : " + info.resolved);
 			String response = "" ;
 			response = this.incidentService.resolveInc(info.username, info.incidentId, info.resolved) ;
 			

@@ -229,7 +229,17 @@ public class IncidentService {
 				for (Incident i : incidents) {
 					if (getUserIncidentsForm.getFilter().equals("svi") || getUserIncidentsForm.getFilter()
 							.equals(getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())))
-						userIncidents.add(new UserIncidentsViewModel(i.getId(), i.getTitle(), i.getCreatedDate(),i.getUrgency(), null,
+						/*userIncidents.add(new UserIncidentsViewModel(
+												i.getId()
+												, title
+												, createdDate
+												, urgency
+												, lastResolveDate
+												, closedDate
+												, serviceName
+												, status))
+						*/
+						userIncidents.add(new UserIncidentsViewModel(i.getId(), i.getTitle(), i.getCreatedDate(),i.getUrgency(), i.getLastResolvedDate(),
 								i.getClosedDate(), i.getServices().getServiceName(),
 								getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())));
 				}
@@ -262,7 +272,7 @@ public class IncidentService {
 							i.getUrgency(),
 							i.getPriority(), 
 							i.getCreatedDate(), 
-							null, 
+							i.getLastResolvedDate(), 
 							i.getClosedDate(),
 							i.getServices().getServiceName(),
 							getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()), 
@@ -283,7 +293,7 @@ public class IncidentService {
 							.equals(getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()))) {
 
 						DepartmentIncidentsViewModel departmentIncidentsViewModel = new DepartmentIncidentsViewModel(
-								i.getId(), i.getRegisteredUser().getUsername(),i.getTitle(), i.getPriority(), i.getCreatedDate(), null, i.getClosedDate(),
+								i.getId(), i.getRegisteredUser().getUsername(),i.getTitle(), i.getPriority(), i.getCreatedDate(), i.getLastResolvedDate(), i.getClosedDate(),
 								i.getServices().getServiceName(),
 								getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed()),
 								i.getEscalated());
@@ -332,7 +342,7 @@ public class IncidentService {
 
 					UserIncidentDetailsViewModel incidentDetail = new UserIncidentDetailsViewModel(incident.getId(),
 							incident.getTitle(), incident.getDescription(), incident.getUrgency(),
-							incident.getContactMethod().getContactMethodName(), incident.getCreatedDate(), null,
+							incident.getContactMethod().getContactMethodName(), incident.getCreatedDate(), incident.getLastResolvedDate(),
 							incident.getClosedDate(), incident.getServices().getServiceName(), getIncidentStatus(
 									incident.getResolverUser(), incident.getResolved(), incident.getClosed()));
 					return (T) incidentDetail;
@@ -346,13 +356,13 @@ public class IncidentService {
 					AdminIncidentDetailsViewModel incidentDetail = new AdminIncidentDetailsViewModel(incident.getId(),
 							incident.getRegisteredUser().getUsername(), resolverUsername, incident.getTitle(),
 							incident.getServices().getServiceName(), departmentName, incident.getDescription(),
-							incident.getUrgency(), incident.getPriority(), incident.getCreatedDate(), null,
+							incident.getUrgency(), incident.getPriority(), incident.getCreatedDate(), incident.getLastResolvedDate(),
 							incident.getClosedDate(), incident.getContactMethod().getContactMethodName(),
 							getIncidentStatus(incident.getResolverUser(), incident.getResolved(), incident.getClosed()),
 							incident.getEscalated());
 					return (T) incidentDetail;
 				} else {
-					DepartmentDetailsViewModel departmentDetailsViewModel = new DepartmentDetailsViewModel(incident.getId(), incident.getRegisteredUser().getUsername(), incident.getTitle(), incident.getServices().getServiceName(), incident.getDescription(), incident.getPriority(), incident.getCreatedDate(), null, incident.getClosedDate(), getIncidentStatus(incident.getResolverUser(), incident.getResolved(), incident.getClosed()), incident.getEscalated());
+					DepartmentDetailsViewModel departmentDetailsViewModel = new DepartmentDetailsViewModel(incident.getId(), incident.getRegisteredUser().getUsername(), incident.getTitle(), incident.getServices().getServiceName(), incident.getDescription(), incident.getPriority(), incident.getCreatedDate(), incident.getLastResolvedDate(), incident.getClosedDate(), getIncidentStatus(incident.getResolverUser(), incident.getResolved(), incident.getClosed()), incident.getEscalated());
 					return (T) departmentDetailsViewModel;
 				}
 			} 
@@ -363,10 +373,11 @@ public class IncidentService {
 		}
 	}
 
-	public void closeIncident(CloseIncidentForm closeIncidentForm) {
+	public boolean closeIncident(CloseIncidentForm closeIncidentForm) {
 		if (closeIncidentForm.getClose() == true) {
 			Incident incident = incidentDao.getIncidentById(closeIncidentForm.getId());
 			incident.setClosed(true);
+			incident.setClosedDate(new Date());
 			incidentDao.create(incident);
 		} else {
 			Incident incident = incidentDao.getIncidentById(closeIncidentForm.getId());
@@ -374,6 +385,7 @@ public class IncidentService {
 			incident.setLastResolvedDate(null);
 			incidentDao.create(incident);
 		}
+		return true ; 
 	}
 
 	public Boolean checkIfClosed(Long id) {
