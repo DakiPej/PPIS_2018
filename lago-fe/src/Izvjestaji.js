@@ -13,32 +13,58 @@ class Izvjestaji extends Component {
 
 
 		state = {
-				data: [["Blueberry", 44], ["Strawberry - 10", 23]],
+				data:[],
+				dataEsc:[],
         type:'',
         fromDate:'',
-        toDate:''
+        toDate:'',
+				ukupno: ''
     }
 
     getReport=(event)=>{
+      if (this.state.type==="incidenti"){
       // !!!!!!!!!!!!!! OVO JE ZA REPORT ZA INCIDENTE !!!!!!!!!!!!!!!!!!!
       axios.post("http://localhost:8080/incident/report", {
-        startDate: this.state.fromDate, 
+        startDate: this.state.fromDate,
         endDate: this.state.toDate
       }).then(this.handleSuccess)
-        .catch(this.handleError) ; 
-
+        .catch(this.handleError) ;
+}else if (this.state.type==="zahtjevi"){
       // !!!!!!!!!!!!!! OVO JE ZA REPORT ZA ZAHTJEVE !!!!!!!!!!!!!!!!!!!!
       axios.post("http://localhost:8080/requests/report", {
-        startDate: this.state.fromDate, 
+        startDate: this.state.fromDate,
         endDate: this.state.toDate
       }).then(this.handleSuccess)
-        .catch(this.handleError) ; 
-
+        .catch(this.handleError) ;
+}
     }
     handleSuccess=(response)=>{
-      console.log(response.data) ; 
-      //{[["Blueberry", 44], ["Strawberry - 10", 23]]}
+      console.log(response.data) ;
+			var objekat= response.data;
+			if (this.state.type==="zahtjevi")
+			{
+      this.setState({data: [
+				["Zatvoreno - " + objekat.closedNumber ,objekat.closedNumber],
+				["Nedodijeljeno - " + objekat.notWorkingOnNumber ,objekat.notWorkingOnNumber],
+				["U obradi - " + objekat.workingOnNumber ,objekat.workingOnNumber],
 
+			],ukupno: objekat.createdNumber,
+			dataEsc:[["Eskalirano - " + objekat.escalatedNumber ,objekat.escalatedNumber],
+			["Nije eskalirano - " + (objekat.createdNumber - objekat.escalatedNumber) ,objekat.createdNumber - objekat.escalatedNumber]]});
+		}
+		else if (this.state.type==="incidenti")
+		{
+
+      this.setState({data: [
+				["Zatvoreno - " + objekat.closedNumber ,objekat.closedNumber],
+				["Nedodijeljeno - " + objekat.notWorkingOnNumber ,objekat.notWorkingOnNumber],
+				["U obradi - " + objekat.workingOnNumber ,objekat.workingOnNumber],
+				["Riješeno - " + objekat.resolvedNumber ,objekat.resolvedNumber]
+			],ukupno: objekat.createdNumber,
+		dataEsc: [				["Eskalirano - " + objekat.escalatedNumber ,objekat.escalatedNumber],
+["Nije eskalirano - " + objekat.notEscalatedNumber ,objekat.notEscalatedNumber]]
+});
+		}
     }
     handleError=(e)=>{
       console.log(e);
@@ -47,6 +73,7 @@ class Izvjestaji extends Component {
     {
       this.setState({ [e.target.name]: e.target.value });
       console.log(e.target.value);
+
     }
   render(){
     return(
@@ -63,8 +90,8 @@ class Izvjestaji extends Component {
               <ControlLabel> Odaberite odjel </ControlLabel>
               <FormControl componentClass="select" name="type" onChange={this.handleChange} placeholder="Tip izvjestaja">
                   <option value="" selected disabled>Tip</option>
-                  <option value="zahtjev">Zahtjev</option>
-                  <option value="incident">Incident</option>
+                  <option value="zahtjevi">Zahtjev</option>
+                  <option value="incidenti">Incident</option>
               </FormControl>
               <br/>
                  <ControlLabel> Od: </ControlLabel>
@@ -82,9 +109,14 @@ class Izvjestaji extends Component {
                  <br/>
 
           </div>
-
-                <PieChart data={this.state.data} label={this.state.type} legend={true} legend="bottom"
-                suffix="%" messages={{empty: "Nema podataka"}} download={true} download={this.state.type}/>
+					<FormGroup>
+								 <ControlLabel> Izvještaj {this.state.type} bez eskalacije: </ControlLabel>
+                <PieChart data={this.state.data} label={this.state.type + " - "+this.state.ukupno} label={true} legend={true} legend="bottom"
+                 messages={{empty: "Nema podataka"}} download={true} download={this.state.type}/>
+								  <ControlLabel> Izvještaj {this.state.type} - eskalacija: </ControlLabel>
+								 <PieChart data={this.state.dataEsc} label={this.state.type + " - "+this.state.ukupno} label={true} legend={true} legend="bottom"
+									messages={{empty: "Nema podataka"}} download={true} download={this.state.type}/>
+									</FormGroup>
 
       </div>
       </div>
