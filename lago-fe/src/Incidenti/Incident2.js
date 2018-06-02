@@ -139,7 +139,7 @@ class Incident extends Component {
                             </Panel.Body>
                         </Collapse>
                     </Panel>
-
+                      <br/>
                     {this.state.data.status === 'rijesen' && role === 'Korisnik' ?
                        <Panel bsStyle="info" id="collapsible-panel-example-2">
                            <Row>
@@ -178,9 +178,9 @@ class Incident extends Component {
                     {
                         //PORUKE
                     }
-
-                    <Poruke Id={this.state.id}/>
-
+                    <br/>
+                    {this.props.tip !== 'Nedodijeljen'?
+                    <Poruke Id={this.state.id} />:null}
 
                 </div>
             </div>

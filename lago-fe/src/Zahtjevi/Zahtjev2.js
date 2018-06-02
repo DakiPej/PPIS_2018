@@ -14,6 +14,52 @@ class Zahtjev extends Component {
         id: this.props.match.params.id,
         openOpis: false
     }
+    odbijZatvaranje=(event)=> {
+            event.preventDefault();
+            axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
+                id: this.state.id,
+                username: sessionStorage.getItem("username"),
+                close: false
+            }
+            )
+                .then(this.closeRejectSucess.bind(this))
+                .catch(this.handleError.bind(this));
+
+        }
+
+        closeRejectSucess=(response) =>{
+            alert("Incident je ponovno otvoren");
+            this.setState(prevState => ({
+                data:
+                    {
+                        ...prevState.data,
+                        status: "u obradi"
+                    }
+            }));
+        }
+        prihvatiZatvaranje=(event)=> {
+            event.preventDefault();
+            axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
+                id: this.state.id,
+                username: sessionStorage.getItem("username"),
+                close: true
+            }
+            )
+                .then(this.closeSucess.bind(this))
+                .catch(this.handleError.bind(this));
+
+        }
+
+        closeSucess=(response)=> {
+            alert("Incident je zatvoren");
+            this.setState(prevState => ({
+                data:
+                    {
+                        ...prevState.data,
+                        status: "zatvoren"
+                    }
+            }));
+        }
 
     componentDidMount(){
         this.getZahtjevi();
@@ -92,6 +138,30 @@ class Zahtjev extends Component {
                             </Panel.Body>
                         </Collapse>
                     </Panel>
+                    {this.state.data.status === 'u obradi' && role === 'Korisnik' ?
+                       <Panel bsStyle="info" id="collapsible-panel-example-2">
+                       <br/>
+                           <Row>
+                               <br />
+                               <Col md={6} style={{ textAlign: "right" }} xsOffset={3}>
+                                   <Button type="submit" bsStyle="primary" className="btn-block btn-lg" onClick={this.odbijZatvaranje} bsSize="lg">
+                                       Otvori ponovo</Button>
+                                   <br />
+                               </Col>
+                           </Row>
+                           <Row>
+                               <Col md={6} xsOffset={3}>
+                                   <Button className="btn-block btn-lg" bsStyle="primary" bsSize="large"
+                                       onClick={this.prihvatiZatvaranje} >
+                                       Zatvori incident
+                </Button>
+                                   <br />
+                               </Col>
+                           </Row>
+                           <br />
+                       </Panel>
+                       : null}
+
 
                     {
                         //DODJELJIVANJE ZAHTJEVA
@@ -107,8 +177,8 @@ class Zahtjev extends Component {
                     {
                         //PORUKE
                     }
-
-                    <Poruke Id={this.state.id} />
+                    {this.props.tip !== 'Nedodijeljen'?
+                    <Poruke Id={this.state.id} />:null}
 
                 </div>
             </div>
