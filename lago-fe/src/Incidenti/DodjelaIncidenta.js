@@ -85,6 +85,7 @@ class DodjelaIncidenta extends Component {
                                     <option value="2">Srednji</option>
                                     <option value="3">Visok</option>
                                 </FormControl>
+                                <br />
                             </Col>
                         </Row>
                         <Row>

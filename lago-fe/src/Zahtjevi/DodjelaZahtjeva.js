@@ -67,10 +67,13 @@ class DodjelaZahtjeva extends Component {
                                     <option value="Odjel4">Odjel 4</option>
                                 </FormControl>
                                 <br />
+                                <br />
                             </Col>
                         </Row>
-                        <Row>
+                        
+                        <Row> 
                             <Col md={12} style={{ textAlign: "right" }}>
+                            <br />
                                 <Button type="submit" bsStyle="primary" className="btn-block btn-lg" bsSize="lg" onClick={this.assignReq}>Dodijeli</Button>
                             </Col>
                         </Row>

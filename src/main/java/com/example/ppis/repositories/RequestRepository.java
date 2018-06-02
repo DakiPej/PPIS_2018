@@ -40,4 +40,6 @@ public interface RequestRepository extends CrudRepository<Request, Long>{
 	public Request findRequestById(Long id);
 	
 	public List<Request> findAllByResolverUserAndTitle(RegisteredUser resolverUser, String title); 
+	
+	//public int countByCreatedDateGreaterThan
 }

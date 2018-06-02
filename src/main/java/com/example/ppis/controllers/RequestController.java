@@ -392,4 +392,21 @@ public class RequestController {
 			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage()) ; 
 		}
 	}
+	
+	private static class CloseRequestBody	{
+		public long requestId ; 
+		public String username ; 
+	}
+	
+	@RequestMapping(value="/close", method=RequestMethod.POST)
+	public ResponseEntity closeRequest(@RequestBody final CloseRequestBody info)	{
+	try {
+		String response = "" ; 
+		response = this.requestService.closeRequest(info.requestId, info.username) ;
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+	} catch (Exception e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+	}	
+	}
 }

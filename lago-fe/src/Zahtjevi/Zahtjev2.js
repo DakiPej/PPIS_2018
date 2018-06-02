@@ -14,7 +14,7 @@ class Zahtjev extends Component {
         id: this.props.match.params.id,
         openOpis: false
     }
-    odbijZatvaranje=(event)=> {
+   /* odbijZatvaranje=(event)=> {
             event.preventDefault();
             axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
                 id: this.state.id,
@@ -25,9 +25,9 @@ class Zahtjev extends Component {
                 .then(this.closeRejectSucess.bind(this))
                 .catch(this.handleError.bind(this));
 
-        }
+        }*/
 
-        closeRejectSucess=(response) =>{
+        /*closeRejectSucess=(response) =>{
             alert("Incident je ponovno otvoren");
             this.setState(prevState => ({
                 data:
@@ -36,13 +36,13 @@ class Zahtjev extends Component {
                         status: "u obradi"
                     }
             }));
-        }
+        }*/
         prihvatiZatvaranje=(event)=> {
             event.preventDefault();
-            axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
-                id: this.state.id,
+            axios.post("http://localhost:8080/requests/close" /*PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT*/, {
+                requestId: this.state.id,
                 username: sessionStorage.getItem("username"),
-                close: true
+                //close: true
             }
             )
                 .then(this.closeSucess.bind(this))
@@ -51,14 +51,8 @@ class Zahtjev extends Component {
         }
 
         closeSucess=(response)=> {
-            alert("Incident je zatvoren");
-            this.setState(prevState => ({
-                data:
-                    {
-                        ...prevState.data,
-                        status: "zatvoren"
-                    }
-            }));
+            alert("Zahtjev je zatvoren");
+            this.getZahtjevi() ; 
         }
 
     componentDidMount(){
@@ -93,6 +87,7 @@ class Zahtjev extends Component {
     render() {
 
         let role = sessionStorage.getItem("rola");
+        console.log(this.props.tip);
 
         return (
             <div className="panel panel-primary ">
@@ -116,7 +111,7 @@ class Zahtjev extends Component {
                                 <ListGroupItem header="Hitnost">{this.state.data.urgency}</ListGroupItem>
                             </Col>
                             <Col md={4} lg={4}>
-                                {role === 'Administrator' && this.props.tip !== 'Nedodjeljen' ? <ListGroupItem header="Odjel">{this.state.data.departmentName}</ListGroupItem> : ""}
+                                {role === 'Administrator' && this.props.tip !== 'Nedodijeljen' ? <ListGroupItem header="Odjel">{this.state.data.departmentName}</ListGroupItem> : ""}
                                 <ListGroupItem header="Status">{this.state.data.status}</ListGroupItem>
                             </Col>
                             <Col md={4} lg={4}>
@@ -141,19 +136,19 @@ class Zahtjev extends Component {
                     {this.state.data.status === 'u obradi' && role === 'Korisnik' ?
                        <Panel bsStyle="info" id="collapsible-panel-example-2">
                        <br/>
-                           <Row>
+                           {/* <Row>
                                <br />
                                <Col md={6} style={{ textAlign: "right" }} xsOffset={3}>
                                    <Button type="submit" bsStyle="primary" className="btn-block btn-lg" onClick={this.odbijZatvaranje} bsSize="lg">
                                        Otvori ponovo</Button>
                                    <br />
                                </Col>
-                           </Row>
+                           </Row> */}
                            <Row>
                                <Col md={6} xsOffset={3}>
                                    <Button className="btn-block btn-lg" bsStyle="primary" bsSize="large"
                                        onClick={this.prihvatiZatvaranje} >
-                                       Zatvori incident
+                                       Zatvori zahtjev
                 </Button>
                                    <br />
                                </Col>
@@ -177,7 +172,9 @@ class Zahtjev extends Component {
                     {
                         //PORUKE
                     }
-                    {this.props.tip !== 'Nedodijeljen'?
+
+
+                    {this.state.data.status != 'nedodijeljen'?
                     <Poruke Id={this.state.id} />:null}
 
                 </div>
