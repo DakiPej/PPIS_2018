@@ -45,7 +45,7 @@ public class UserIncidentDetailsViewModel{
         //this.createdDate =  df.format(createdDate);
         
         if (lastResolveDate != null) this.lastResolveDate = df.format(lastResolveDate);
-        else this.closedDate = "";
+        else this.lastResolveDate = "";
         //this.lastResolveDate = null; //df.format(lastResolveDate);
         
         if (closedDate != null) this.closedDate = df.format(closedDate);
@@ -78,7 +78,7 @@ public class UserIncidentDetailsViewModel{
     											, i.getUrgency()
     											, i.getContactMethod().getContactMethodName()
     											, i.getCreatedDate()
-    											, null
+    											, i.getLastResolvedDate()
     											, i.getClosedDate()
     											, i.getServices().getServiceName()
     											, getIncidentStatus(i.getResolverUser(), i.getResolved(), i.getClosed())

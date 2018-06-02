@@ -58,6 +58,7 @@ public class Request {
     @Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
 	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date closedDate;
 	

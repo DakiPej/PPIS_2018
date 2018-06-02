@@ -46,7 +46,7 @@ public class DepartmentIncidentsViewModel{
         //this.createdDate =  df.format(createdDate);
         
         if (lastResolveDate != null) this.lastResolveDate = df.format(lastResolveDate);
-        else this.closedDate = "";
+        else this.lastResolveDate = "";
         //this.lastResolveDate = null; //df.format(lastResolveDate);
         
         if (closedDate != null) this.closedDate = df.format(closedDate);

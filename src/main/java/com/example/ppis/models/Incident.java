@@ -62,6 +62,9 @@ public class Incident {
 	private Date createdDate;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastResolvedDate ; 
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date closedDate;
 	
 	@Column(columnDefinition="BIT")
@@ -240,5 +243,13 @@ public class Incident {
 	}
 	public void setAdmin(RegisteredUser admin)	{
 		this.admin = admin ;
+	}
+
+	public Date getLastResolvedDate() {
+		return lastResolvedDate;
+	}
+
+	public void setLastResolvedDate(Date lastResolvedDate) {
+		this.lastResolvedDate = lastResolvedDate;
 	}
 }

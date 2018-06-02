@@ -371,6 +371,7 @@ public class IncidentService {
 		} else {
 			Incident incident = incidentDao.getIncidentById(closeIncidentForm.getId());
 			incident.setResolved(false);
+			incident.setLastResolvedDate(null);
 			incidentDao.create(incident);
 		}
 	}
@@ -433,6 +434,7 @@ public class IncidentService {
 			else if(!i.getResolverUser().getUsername().equals(ru.getUsername())) throw new ServletException("Incident ne pripada korisniku");
 
 			i.setResolved(true);
+			i.setLastResolvedDate(new Date());
 			incidentDao.create(i);
 			return true;
 		} catch (Exception e) {
@@ -461,6 +463,9 @@ public class IncidentService {
 				throw new IllegalArgumentException("The user does not have the permission to resolve this incident") ; 
 			
 			incident.setResolved(resolved);
+			if(resolved)
+				incident.setLastResolvedDate(new Date());
+			else incident.setLastResolvedDate(null);
 			this.incidentDao.create(incident) ; 
 			
 			if(resolved)	
