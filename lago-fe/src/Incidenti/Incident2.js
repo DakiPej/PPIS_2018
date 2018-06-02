@@ -5,6 +5,11 @@ import axios from 'axios';
 import DodjelaIncidenta from './DodjelaIncidenta';
 import EskalacijaIncidenta from './EskalacijaIncidenta';
 import Poruke from './Poruke';
+import {
+    PATH_BASE, PATH_INCIDENTS, PATH_ONE_INCIDENT, PATH_ESCALATION_ADMIN, PATH_ASSIGN_ADMIN,
+    PATH_RESOLVE_INCIDENT, PATH_ASSIGN_RESOLVER, PATH_ESCALATION_RESOLVER,
+    PATH_CLOSE_INCIDENT, PATH_INCIDENT_MESSAGE, PATH_GET_INCIDENT_MESSAGE, PATH_SEND_INCIDENT_MESSAGE
+} from '../globals';
 
 class Incident extends Component {
 
@@ -17,7 +22,52 @@ class Incident extends Component {
     componentWillMount() {
         this.getIncident();
     }
+    odbijZatvaranje=(event)=> {
+            event.preventDefault();
+            axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
+                id: this.state.id,
+                username: sessionStorage.getItem("username"),
+                close: false
+            }
+            )
+                .then(this.closeRejectSucess.bind(this))
+                .catch(this.handleError.bind(this));
 
+        }
+
+        closeRejectSucess=(response) =>{
+            alert("Incident je ponovno otvoren");
+            this.setState(prevState => ({
+                data:
+                    {
+                        ...prevState.data,
+                        status: "u obradi"
+                    }
+            }));
+        }
+        prihvatiZatvaranje=(event)=> {
+            event.preventDefault();
+            axios.post(PATH_BASE + PATH_INCIDENTS + PATH_CLOSE_INCIDENT, {
+                id: this.state.id,
+                username: sessionStorage.getItem("username"),
+                close: true
+            }
+            )
+                .then(this.closeSucess.bind(this))
+                .catch(this.handleError.bind(this));
+
+        }
+
+        closeSucess=(response)=> {
+            alert("Incident je zatvoren");
+            this.setState(prevState => ({
+                data:
+                    {
+                        ...prevState.data,
+                        status: "zatvoren"
+                    }
+            }));
+        }
     getIncident = () => {
         axios.post('http://localhost:8080/incident/getIncidentDetail',
             {
@@ -27,7 +77,7 @@ class Incident extends Component {
             .then(this.handleSuccess.bind(this))
             .catch(this.handleError.bind(this));
     }
-
+    ``
     handleSuccess = (response) => {
         this.setState({
             data: response.data
@@ -102,6 +152,29 @@ class Incident extends Component {
                             </Panel.Body>
                         </Collapse>
                     </Panel>
+
+                    {this.state.data.status === 'rijesen' && role === 'Korisnik' ?
+                       <Panel bsStyle="info" id="collapsible-panel-example-2">
+                           <Row>
+                               <br />
+                               <Col md={6} style={{ textAlign: "right" }} xsOffset={3}>
+                                   <Button type="submit" bsStyle="primary" className="btn-block btn-lg" onClick={this.odbijZatvaranje} bsSize="lg">
+                                       Otvori ponovo</Button>
+                                   <br />
+                               </Col>
+                           </Row>
+                           <Row>
+                               <Col md={6} xsOffset={3}>
+                                   <Button className="btn-block btn-lg" bsStyle="primary" bsSize="large"
+                                       onClick={this.prihvatiZatvaranje} >
+                                       Zatvori incident
+                </Button>
+                                   <br />
+                               </Col>
+                           </Row>
+                           <br />
+                       </Panel>
+                       : null}
 
                     {
                         // DODJELA INCIDENTA

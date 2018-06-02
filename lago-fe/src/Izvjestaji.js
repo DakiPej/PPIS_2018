@@ -33,13 +33,14 @@ class Izvjestaji extends Component {
     handleChange=(e)=>
     {
       this.setState({ [e.target.name]: e.target.value });
+      console.log(e.target.value);
     }
   render(){
     return(
       <div>
       <div className="panel panel-primary ">
           <div className="panel-heading d-flex w-100 justify-content-between">
-              <h1 className="panel-title">{this.state.data.title}</h1>
+              <h1 className="panel-title">Izvještaji</h1>
               <Button bsSize="large">
                   <Glyphicon glyph="download-alt" />
               </Button>
