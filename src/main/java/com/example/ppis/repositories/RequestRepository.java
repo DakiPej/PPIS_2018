@@ -1,5 +1,6 @@
 package com.example.ppis.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -41,5 +42,9 @@ public interface RequestRepository extends CrudRepository<Request, Long>{
 	
 	public List<Request> findAllByResolverUserAndTitle(RegisteredUser resolverUser, String title); 
 	
-	//public int countByCreatedDateGreaterThan
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(Date start, Date end) ;
+	public int countByClosedDateGreaterThanEqualAndClosedDateLessThanEqual(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserNotNull(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserIsNull(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(Date start, Date end, boolean escalated) ; 
 }

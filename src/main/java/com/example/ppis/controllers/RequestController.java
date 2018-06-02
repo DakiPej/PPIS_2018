@@ -400,13 +400,27 @@ public class RequestController {
 	
 	@RequestMapping(value="/close", method=RequestMethod.POST)
 	public ResponseEntity closeRequest(@RequestBody final CloseRequestBody info)	{
-	try {
-		String response = "" ; 
-		response = this.requestService.closeRequest(info.requestId, info.username) ;
-		
-		return ResponseEntity.status(HttpStatus.OK).body(response) ; 
-	} catch (Exception e) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
-	}	
+		try {
+			String response = "" ; 
+			response = this.requestService.closeRequest(info.requestId, info.username) ;
+			
+			return ResponseEntity.status(HttpStatus.OK).body(response) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}	
+	}
+	
+	private static class ReportBody	{
+		public String startDate ; 
+		public String endDate ; 
+	}
+	@RequestMapping(value="/report", method=RequestMethod.POST)
+	public ResponseEntity getReport(@RequestBody final ReportBody info)	{
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(
+					this.requestService.getReport(info.startDate, info.endDate)) ; 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DOSLO JE DO GRESKE: " + e.getMessage()) ;
+		}
 	}
 }

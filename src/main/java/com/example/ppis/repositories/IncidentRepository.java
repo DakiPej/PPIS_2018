@@ -1,5 +1,6 @@
 package com.example.ppis.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -42,5 +43,13 @@ public interface IncidentRepository extends CrudRepository<Incident, Long>{
 
 	public List<Incident> findAllByDepartmentAndResolverUserIsNull(Department department);
 	public List<Incident> findAllByAdminIsNull();
+	
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(Date start, Date end) ;
+	public int countByClosedDateGreaterThanEqualAndClosedDateLessThanEqual(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserNotNull(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserIsNull(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(Date start, Date end, boolean escalated) ; 
+	public int countByLastResolvedDateGreaterThanEqualAndLastResolvedDateLessThanEqualAndLastResolvedDateNotNull(Date start, Date end) ; 
+	public int countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndLastResolvedDateIsNull(Date start, Date end) ; 
 	
 }

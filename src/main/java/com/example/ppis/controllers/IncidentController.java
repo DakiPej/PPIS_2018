@@ -224,6 +224,21 @@ public class IncidentController {
 		}
 	}
 	
+	private static class ReportBody	{
+		public String startDate ; 
+		public String endDate ; 
+	}
+	
+	@RequestMapping(value="/report", method=RequestMethod.POST)
+	public ResponseEntity getReport(@RequestBody final ReportBody info)	{
+		try {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(this.incidentService.getReport(info.startDate, info.endDate)) ;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()) ; 
+		}
+	}
+	
 	private static class IncidentStatusUpdate {
 		String username ; 
 		long incidentId ; 
@@ -255,5 +270,6 @@ public class IncidentController {
 		}
 		
 	}
+	
 
 }

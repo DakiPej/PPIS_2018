@@ -1,9 +1,11 @@
 package com.example.ppis.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.ppis.ViewModels.IncidentReport;
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
 import com.example.ppis.models.Incident;
@@ -274,4 +276,42 @@ public class IncidentDAO extends BaseDAO<Incident, IncidentRepository>{
 		
 		return incidents ;
 	}
+	public IncidentReport getReport(Date start, Date end)	{
+		try {
+			int createdNumber ; 
+			int closedNumber ; 
+			int notWorkingOnNumber ; 
+			int workingOnNumber ; 
+			int escalatedNumber ; 
+			int notEscalatedNumber ; 
+			int resolvedNumber ; 
+			int notResolvedNumber ; 
+			
+			System.out.println(start);
+			
+			createdNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(start, end);
+			closedNumber = this.repo.countByClosedDateGreaterThanEqualAndClosedDateLessThanEqual(start, end); 
+			notWorkingOnNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserIsNull(start, end) ;
+			workingOnNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserNotNull(start, end); 
+			escalatedNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(start, end,  true) ;
+			notEscalatedNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(start, end, false) ;
+			resolvedNumber = this.repo.countByLastResolvedDateGreaterThanEqualAndLastResolvedDateLessThanEqualAndLastResolvedDateNotNull(start, end) ;
+			notResolvedNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndLastResolvedDateIsNull(start, end) ;
+			
+			return new IncidentReport(createdNumber
+					, closedNumber
+					, notWorkingOnNumber
+					, workingOnNumber
+					, escalatedNumber
+					, notEscalatedNumber
+					, resolvedNumber
+					, notResolvedNumber) ;
+			
+			
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
 }

@@ -3,6 +3,7 @@ package com.example.ppis.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.example.ppis.controllers.viewModels.DepartmentIncidentsViewModel;
 import com.example.ppis.controllers.viewModels.UnassignedIncidentViewModel;
 import com.example.ppis.controllers.viewModels.UserIncidentDetailsViewModel;
 import com.example.ppis.controllers.viewModels.UserIncidentsViewModel;
+import com.example.ppis.ViewModels.IncidentReport;
 import com.example.ppis.controllers.forms.AssignIncidentForm;
 import com.example.ppis.controllers.forms.CloseIncidentForm;
 import com.example.ppis.controllers.forms.CreateIncidentForm;
@@ -570,6 +572,17 @@ public class IncidentService {
 		try {
 			Department department = this.registeredUserDao.getUserDepartment(username, this.registeredUserDao.findUserByUsername(username).getUserType()) ; 
 			return this.incidentDao.getAllByDepartmentNameAndResolverUserIsNull(department) ; 
+		} catch (Exception e) {
+			throw e ; 
+		}
+	}
+	
+	public IncidentReport getReport(String startDateString, String endDateString)	throws Exception {
+		try {
+			Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString) ; 
+			Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDateString) ; 
+			
+			return this.incidentDao.getReport(start, end) ; 
 		} catch (Exception e) {
 			throw e ; 
 		}

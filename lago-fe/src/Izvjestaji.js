@@ -20,10 +20,23 @@ class Izvjestaji extends Component {
     }
 
     getReport=(event)=>{
+      // !!!!!!!!!!!!!! OVO JE ZA REPORT ZA INCIDENTE !!!!!!!!!!!!!!!!!!!
+      axios.post("http://localhost:8080/incident/report", {
+        startDate: this.state.fromDate, 
+        endDate: this.state.toDate
+      }).then(this.handleSuccess)
+        .catch(this.handleError) ; 
 
+      // !!!!!!!!!!!!!! OVO JE ZA REPORT ZA ZAHTJEVE !!!!!!!!!!!!!!!!!!!!
+      axios.post("http://localhost:8080/requests/report", {
+        startDate: this.state.fromDate, 
+        endDate: this.state.toDate
+      }).then(this.handleSuccess)
+        .catch(this.handleError) ; 
 
     }
     handleSuccess=(response)=>{
+      console.log(response.data) ; 
       //{[["Blueberry", 44], ["Strawberry - 10", 23]]}
 
     }

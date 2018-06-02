@@ -1,5 +1,7 @@
 package com.example.ppis.services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.ppis.ViewModels.RequestReport;
 import com.example.ppis.dao.ContactMethodDAO;
 import com.example.ppis.dao.DepartmentDAO;
 import com.example.ppis.dao.RegisteredUserDAO;
@@ -694,6 +697,21 @@ public class RequestService {
 			return requests;
 		} catch (Exception e) {
 			throw e;
+		}
+	}
+	
+	public RequestReport getReport(String startDateString, String endDateString) throws Exception	{
+		try {
+			System.out.println("POCETNI DATUM JESTE - " + startDateString);
+			System.out.println("KRAJNJI DATUM JESTE - " + endDateString);
+			Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString) ; 
+			Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDateString) ; 
+			
+			return this.requestDao.getReport(start, end) ; 
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			throw e ; 
 		}
 	}
 }

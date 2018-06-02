@@ -1,9 +1,11 @@
 package com.example.ppis.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.ppis.ViewModels.RequestReport;
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
 import com.example.ppis.models.Incident;
@@ -255,5 +257,35 @@ public class RequestDAO extends BaseDAO<Request, RequestRepository>{
 		}
 		
 		return requests ; 
+	}
+	
+	public RequestReport getReport(Date start, Date end)	{
+		try {
+			int createdNumber ; 
+			int closedNumber ; 
+			int notWorkingOnNumber ; 
+			int workingOnNumber ; 
+			int escalatedNumber ; 
+			int notEscalatedNumber ; 
+			
+			System.out.println(start);
+			
+			createdNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(start, end);
+			closedNumber = this.repo.countByClosedDateGreaterThanEqualAndClosedDateLessThanEqual(start, end); 
+			notWorkingOnNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserIsNull(start, end) ;
+			workingOnNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndResolverUserNotNull(start, end); 
+			escalatedNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(start, end,  true) ;
+			notEscalatedNumber = this.repo.countByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndEscalated(start, end, false) ;
+			
+			return new RequestReport(createdNumber
+									, closedNumber
+									, notWorkingOnNumber
+									, workingOnNumber
+									, escalatedNumber
+									, notEscalatedNumber) ;
+			
+		} catch (Exception e) {
+			throw e ; 
+		}
 	}
 }
