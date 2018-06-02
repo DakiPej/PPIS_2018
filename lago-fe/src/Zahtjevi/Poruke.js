@@ -56,14 +56,14 @@ class Poruke extends Component {
         console.log(response.data);
         var id = this.props.Id;
         console.log(id);
-        var poruke = response.data.filter(poruka => poruka.incident.id == id);
-
+        var poruke = response.data.filter(poruka => poruka.request.id == id);
         this.setState({ poruke: poruke });
         console.log(poruke);
     }
 
     sendMessage = (event) => {
         event.preventDefault();
+        console.log( this.props.Id);
         console.log(this.state.receiver);
         axios.post("http://localhost:8080/requestMessages/send", {
             message: this.state.message,
@@ -80,6 +80,10 @@ class Poruke extends Component {
     handleSuccessSendMessage = () => {
         alert("Uspješno ste poslali poruku.");
         this.getMessages();
+    }
+    componentDidMount()
+    {
+      this.getMessages();
     }
 
     render() {

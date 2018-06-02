@@ -11,6 +11,7 @@ class Zahtjev extends Component {
 
     state = {
         data: {},
+        id: this.props.match.params.id,
         openOpis: false
     }
 
@@ -19,7 +20,6 @@ class Zahtjev extends Component {
     }
 
     getZahtjevi= () => {
-        console.log("POZIVAM METODU SA SLJEDECIM PARAMETRIMA .... USERNAME = " + sessionStorage.getItem("username") + "   .....  ID JE = " + this.props.match.params.id) ;
         console.log("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id);
         axios.get("http://localhost:8080/requests/" + sessionStorage.getItem("username")+"/"+this.props.match.params.id)
             .then(this.handleSuccessZahtjevi)
@@ -28,14 +28,13 @@ class Zahtjev extends Component {
 
     handleSuccessZahtjevi = (response) => {
         console.log("USPJELO....") ;
-        console.log(response) ;  
+        console.log(response) ;
         this.setState({
             data: response.data
         });
     }
 
     handleError = (error) => {
-        console.log("ZAHTJEV NE RADI.................  NIJE USPJELO....") ; 
         console.log(error);
     }
 
@@ -101,11 +100,10 @@ class Zahtjev extends Component {
                     <DodjelaZahtjeva data={this.state.data} />
 
                     {
-                        //ESKALACIJA ZAHTJEVA
+                        //ESKALACIJA ZAHTJEVA <EskalacijaZahtjeva data={this.state.data} />
                     }
 
-                    <EskalacijaZahtjeva data={this.state.data} />
-
+                    <br/>
                     {
                         //PORUKE
                     }

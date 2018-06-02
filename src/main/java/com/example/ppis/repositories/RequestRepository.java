@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.ppis.models.ContactMethod;
 import com.example.ppis.models.Department;
+import com.example.ppis.models.Incident;
 import com.example.ppis.models.RegisteredUser;
 import com.example.ppis.models.Request;
 
@@ -36,6 +37,7 @@ public interface RequestRepository extends CrudRepository<Request, Long>{
 	public List<Request> findAllByResolverUserAndContactMethod(RegisteredUser resolverUser, ContactMethod contactMethod);
 	
 	public List<Request> findAllByDepartment(Department department);
+	public Request findRequestById(Long id);
 	
 	public List<Request> findAllByResolverUserAndTitle(RegisteredUser resolverUser, String title); 
 }

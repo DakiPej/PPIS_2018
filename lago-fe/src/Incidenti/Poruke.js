@@ -81,6 +81,10 @@ class Poruke extends Component {
         alert("Uspješno ste poslali poruku.");
         this.getMessages();
     }
+    componentDidMount()
+    {
+      this.getMessages();
+    }
 
     render() {
 

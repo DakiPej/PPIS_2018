@@ -50,6 +50,7 @@ class DodjelaZahtjeva extends Component {
     render() {
 
         let role = sessionStorage.getItem("rola");
+        console.log(this.props.data);
 
         return(
             <div>

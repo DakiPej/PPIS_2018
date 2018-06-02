@@ -15,6 +15,8 @@ import {
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { bootstrapUtils } from 'react-bootstrap/lib/utils';
 import { PATH_BASE, PATH_REQUESTS } from '../globals';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 import axios from 'axios';
 
@@ -59,7 +61,7 @@ class ListaZahtjeva extends Component {
 
     getZahtjevi() {
         if (this.props.tip === "Nedodijeljeni") {
-            axios.get("http://localhost:8080/requests/unsigned/" + sessionStorage.getItem("username"))
+            axios.get("http://localhost:8080/requests/unassigned/" + sessionStorage.getItem("username"))
                 .then(this.handleSuccess.bind(this))
                 .catch(this.handleError.bind(this));
         }
@@ -74,13 +76,26 @@ class ListaZahtjeva extends Component {
     handleSuccess(response) {
         console.log(response.data);
         this.setState({
-            data:response.data
+            data: response.data
         });
     }
 
     handleError(error) {
         console.log(error);
     }
+
+    printDocument = () => {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({orientation: 'landscape'});
+            pdf.addImage(imgData, 'JPEG', 0, 0);
+            // pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+          })
+        ;
+      }
 
     render() {
 
@@ -94,26 +109,26 @@ class ListaZahtjeva extends Component {
             onRowClick: this.onRowClick
         };
 
-        const pType ={
-            1:"Nizak",
-           2:"Srednji",
-            3:"Visok"
+        const pType = {
+            1: "Nizak",
+            2: "Srednji",
+            3: "Visok"
         };
-        const hType={
-          1:"Niska hitnost",
-          2:"Srednja hitnost",
-          3:"Visoka hitnost",
+        const hType = {
+            1: "Niska hitnost",
+            2: "Srednja hitnost",
+            3: "Visoka hitnost",
         }
 
         const sType = {
-            'nedodijeljen':'Nedodijeljen',
-            'u obradi':'U obradi',
-            'rijesen':'Rijesen',
-            'zatvoren':'Zatvoren'
+            'nedodijeljen': 'Nedodijeljen',
+            'u obradi': 'U obradi',
+            'rijesen': 'Rijesen',
+            'zatvoren': 'Zatvoren'
         }
         const eType = {
-            'true':'Da',
-            'false':'Ne'
+            'true': 'Da',
+            'false': 'Ne'
         }
 
         switch (this.role) {
@@ -127,7 +142,7 @@ class ListaZahtjeva extends Component {
                         <TableHeaderColumn dataField='urgency' dataSort
                             filterFormatted dataFormat={enumFormatter} formatExtraData={hType}
                             filter={{ type: 'SelectFilter', options: hType }}
-                        >Prioritet
+                        >Hitnost
                         </TableHeaderColumn>
                         <TableHeaderColumn dataField='createdDate' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Datum prijave</TableHeaderColumn>
                         <TableHeaderColumn dataField='closedDate' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Datum rješavanja</TableHeaderColumn>
@@ -162,11 +177,11 @@ class ListaZahtjeva extends Component {
                         <BootstrapTable data={this.state.data} options={options}>
                             <TableHeaderColumn isKey dataField='id' dataSort hidden>#</TableHeaderColumn>
                             <TableHeaderColumn dataField='title' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Naslov</TableHeaderColumn>
-                            <TableHeaderColumn dataField='creatroName' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Korisnik</TableHeaderColumn>
+                            <TableHeaderColumn dataField='creatorUsername' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Korisnik</TableHeaderColumn>
                             <TableHeaderColumn dataField='urgency' dataSort
-                                filterFormatted dataFormat={enumFormatter} formatExtraData={pType}
-                                filter={{ type: 'SelectFilter', options: pType }}
-                            >Prioritet
+                                filterFormatted dataFormat={enumFormatter} formatExtraData={hType}
+                                filter={{ type: 'SelectFilter', options: hType }}
+                            >Hitnost
                       </TableHeaderColumn>
                             <TableHeaderColumn dataField='createdDate' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Datum prijave</TableHeaderColumn>
                         </BootstrapTable>;
@@ -175,7 +190,7 @@ class ListaZahtjeva extends Component {
                         <BootstrapTable data={this.state.data} options={options}>
                             <TableHeaderColumn hidden isKey dataField='id' dataSort>#</TableHeaderColumn>
                             <TableHeaderColumn dataField='title' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Naslov</TableHeaderColumn>
-                            <TableHeaderColumn dataField='creatorName' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Prijavio</TableHeaderColumn>
+                            <TableHeaderColumn dataField='creatorUsername' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Prijavio</TableHeaderColumn>
                             <TableHeaderColumn dataField='urgency' dataSort
                                 filterFormatted dataFormat={enumFormatter} formatExtraData={hType}
                                 filter={{ type: 'SelectFilter', options: hType }}
@@ -183,7 +198,7 @@ class ListaZahtjeva extends Component {
                   </TableHeaderColumn>
                             <TableHeaderColumn dataField='createdDate' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Datum prijave</TableHeaderColumn>
                             <TableHeaderColumn dataField='closedDate' dataSort filter={{ type: 'TextFilter', delay: 500 }}>Datum rješavanja</TableHeaderColumn>
-                            <TableHeaderColumn dataFieldKorisnik='status' dataSort
+                            <TableHeaderColumn dataField='status' dataSort
                                 filterFormatted dataFormat={enumFormatter} formatExtraData={sType}
                                 filter={{ type: 'SelectFilter', options: sType }}
                             >Status</TableHeaderColumn>
@@ -191,17 +206,19 @@ class ListaZahtjeva extends Component {
         }
 
         return (
-            <div>
+            <div >
                 <Panel bsStyle="primary">
                     <Panel.Heading>
                         <div class="d-flex w-100 justify-content-between">
                             <Panel.Title componentClass="h2">Lista zahtjeva </Panel.Title>
-                            <Button >
+                            <Button onClick={this.printDocument}>
                                 <Glyphicon glyph="download-alt" />
                             </Button>
                         </div>
                     </Panel.Heading>
+                    <div id="divToPrint">
                     {table}
+                    </div>
                 </Panel>
             </div>
         );

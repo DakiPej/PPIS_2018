@@ -46,14 +46,14 @@ public class RequestMessage {
 	public RequestMessage (RegisteredUser sender
 			, RegisteredUser receiver
 			, Request request
-			, String message
+			, String message,Date date
 			)	{
 		
 		this.sender = sender ;
 		this.receiver = receiver ; 
 		this.request = request ; 
 		this.message = message ; 
-		this.date = new Date() ; 
+		this.date = date; 
 	}
 	public Long getId() {
 		return id;

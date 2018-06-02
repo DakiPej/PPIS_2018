@@ -14,7 +14,8 @@ import {
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {bootstrapUtils} from 'react-bootstrap/lib/utils';
 import {PATH_BASE,PATH_INCIDENTS,PATH_INCIDENTS_GET,PATH_UN_INCIDENTS_GET} from '../globals';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import axios from 'axios';
 bootstrapUtils.addStyle(ListGroup, 'custom');
 
@@ -58,6 +59,7 @@ class ListaIncidenata extends Component{
           sortOrder
         });
     }
+    
 
     getIncidenti(){
 
@@ -87,6 +89,19 @@ class ListaIncidenata extends Component{
       this.setState({data:response.data});
       console.log(this.state.data);
     }
+
+    printDocument = () => {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({orientation: 'landscape'});
+            pdf.addImage(imgData, 'JPEG', 0, 0);
+            // pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+          })
+        ;
+      }
 
     handleError(error){
         console.log(error);
@@ -220,17 +235,19 @@ class ListaIncidenata extends Component{
         }
 
         return(
-            <div>
+            <div >
                 <Panel bsStyle="primary">
                     <Panel.Heading>
-                      <div class="d-flex w-100 justify-content-between">
-                        <Panel.Title componentClass="h2">Lista incidenata</Panel.Title>
-                        <Button >
-                          <Glyphicon glyph="download-alt" />
-                        </Button>
-                      </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <Panel.Title componentClass="h2">Lista zahtjeva </Panel.Title>
+                            <Button onClick={this.printDocument}>
+                                <Glyphicon glyph="download-alt" />
+                            </Button>
+                        </div>
                     </Panel.Heading>
-                        {table}
+                    <div id="divToPrint">
+                    {table}
+                    </div>
                 </Panel>
             </div>
         );
@@ -241,95 +258,3 @@ class ListaIncidenata extends Component{
 
 export default ListaIncidenata;
 
-// Backup if needed
-
-/*
-
-class IncidentItem extends Component{
-
-    constructor(props){
-        super(props);
-
-        this.state = {
-            id: props.item.id,
-            naslov: props.item.naslov,
-            datum: props.item.datum,
-            status: props.item.status,
-            odjel: props.item.odjel,
-            prioritet: props.item.prioritet,
-            odjel: props.item.odjel,
-            korisnik: props.item.korisnik
-        }
-
-        this.onSelectChange = this.onSelectChange.bind(this);
-    }
-
-    deleteIncident(){
-        alert("Incident je izbrisan!");
-        window.location.reload();
-    }
-
-    onSelectChange(e){
-        var selected = e.target.options.selectedIndex;
-        console.log(e.target.name + ' ' + e.target.options[selected].value);
-        this.setState({[e.target.name]:e.target.options[selected].value});
-    }
-
-    render(){
-
-        //var date = new Date(this.state.datum);
-
-        var incident = null;
-        var rola = "Korisnik";
-
-        switch (rola){
-            case "Korisnik":
-                incident =
-                        <tr>
-                            <td>{this.state.id}</td>
-                            <td>{this.state.naslov}</td>
-                            <td>{this.state.datum}</td>
-                            <td>{this.state.status}</td>
-                            <td><Button bsStyle="danger" onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="trash" /></Button></td>
-                        </tr>
-                break;
-            case "Administrator":
-                incident =
-                        <tr>
-                            <td >{this.state.id}</td>
-                            <td>{this.state.korisnik}</td>
-                            <td>{this.state.naslov}</td>
-                            <td>{this.state.datum}</td>
-                            <td>{this.state.status}</td>
-                            <td>
-                            <FormGroup controlId="formControlsSelect">
-                                <FormControl componentClass="select" name="odjel" placeholder="Odjel" onChange={this.onSelectChange}>
-                                    <option value="Odjel 1">Odjel 1</option>
-                                    <option value="Odjel 2">Odjel 2</option>
-                                    <option value="Odjel 3">Odejl 3</option>
-                                </FormControl>
-                            </FormGroup>
-                            </td>
-                            <td>
-                            <FormGroup controlId="formControlsSelect">
-                                <FormControl componentClass="select" name="prioritet" placeholder="Prioritet" onChange={this.onSelectChange}>
-                                    <option value="Visok">Visok</option>
-                                    <option value="Normalan">Normalan</option>
-                                    <option value="Nizak">Nizak</option>
-                                </FormControl>
-                            </FormGroup>
-                            </td>
-                            <td><Button bsStyle="info" style={{width:"100%"}} onClick={this.deleteIncident.bind(this)}><Glyphicon glyph="eye-open" style={{color:"white", fontSize:"18px"}} /></Button></td>
-                        </tr>
-            break;
-        }
-
-
-        return(
-            incident
-        );
-    }
-
-}
-
-*/
