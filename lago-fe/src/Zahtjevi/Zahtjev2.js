@@ -20,7 +20,7 @@ class Zahtjev extends Component {
         html2canvas(input)
           .then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({orientation: 'portrait'});
+            const pdf = new jsPDF({orientation: 'landscape'});
             pdf.text(this.state.data.title,50,20);
             pdf.addImage(imgData, 'JPEG', 30, 30);
             // pdf.output('dataurlnewwindow');
